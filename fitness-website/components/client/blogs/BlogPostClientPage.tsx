@@ -12,9 +12,11 @@ import {
   AlertCircle,
   Play,
   Loader2,
+  ExternalLink,
 } from "lucide-react";
 import Link from "next/link";
 import { useBlogDetails } from "@/hooks/client/use-blog-details";
+import BlogCard from "@/components/client/blogs/BlogCard";
 
 interface BlogPostClientPageProps {
   blogId: string;
@@ -68,6 +70,11 @@ const BlogPostClientPage = React.memo<BlogPostClientPageProps>(
       return renderVideo(blog.videoUrl, true);
     }, [blog?.videoUrl, renderVideo]);
 
+    const videoEmbedSrcNoAutoplay = useMemo(() => {
+      if (!blog?.videoUrl) return "";
+      return renderVideo(blog.videoUrl, false);
+    }, [blog?.videoUrl, renderVideo]);
+
     const getYouTubeId = (url: string) => {
       if (!url) return null;
       const match = url.match(
@@ -81,12 +88,28 @@ const BlogPostClientPage = React.memo<BlogPostClientPageProps>(
       return vid ? `https://img.youtube.com/vi/${vid}/hqdefault.jpg` : null;
     }, [blog?.videoUrl]);
 
+    const summaryText = useMemo(() => {
+      if (!blog) return "";
+      if (blog.excerpt?.trim()) return blog.excerpt.trim();
+      return String(blog.content || "")
+        .replace(/<[^>]+>/g, " ")
+        .replace(/\s+/g, " ")
+        .trim();
+    }, [blog]);
+
+    const readTime = useMemo(() => {
+      if (!blog) return "1 min read";
+      const plainText = `${blog.excerpt || ""} ${String(blog.content || "").replace(/<[^>]+>/g, " ")}`;
+      const words = plainText.trim().split(/\s+/).filter(Boolean).length;
+      return `${Math.max(1, Math.ceil(words / 180))} min read`;
+    }, [blog]);
+
     if (loading) {
       return (
         <div className="min-h-screen bg-slate-50 pt-20">
           <div className="flex items-center justify-center min-h-screen">
             <div className="flex items-center space-x-3">
-              <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
+              <Loader2 className="h-8 w-8 animate-spin text-primary" />
               <span className="text-gray-700 text-lg font-medium">
                 Loading blog post...
               </span>
@@ -112,12 +135,12 @@ const BlogPostClientPage = React.memo<BlogPostClientPageProps>(
                 <Button
                   onClick={() => router.back()}
                   variant="outline"
-                  className="border-gray-200 text-blue-700 hover:bg-gray-50"
+                  className="border-slate-200 bg-white text-primary hover:bg-primary/5"
                 >
                   Go Back
                 </Button>
                 <Link href="/blog">
-                  <Button className="bg-blue-600 hover:bg-blue-700 text-white">
+                  <Button className="bg-primary hover:bg-primary/90 text-white">
                     Browse All Blogs
                   </Button>
                 </Link>
@@ -129,91 +152,237 @@ const BlogPostClientPage = React.memo<BlogPostClientPageProps>(
     }
 
     return (
-      <div className="min-h-screen bg-slate-50">
+      <div className="min-h-screen bg-[#F8F9FA]">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
           <Button
             variant="ghost"
             onClick={() => router.push("/blog")}
-            className="px-0 text-blue-700 hover:text-blue-800"
+            className="rounded-full px-4 text-primary hover:bg-primary/5 hover:text-primary"
           >
             <ArrowLeft className="h-4 w-4 mr-2" /> Back to articles
           </Button>
         </div>
 
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <Card className="overflow-hidden bg-white border border-gray-100 rounded-2xl shadow-xl">
-            <div className="relative h-[400px] bg-gradient-to-br from-gray-50 via-white to-blue-50 flex items-center justify-center">
-              {blog.featuredImage ? (
-                <img
-                  src={getImageUrl(blog.featuredImage) || ""}
-                  alt={blog.title}
-                  className="w-full h-full object-cover"
-                  loading="lazy"
-                  decoding="async"
-                  onError={(e) => {
-                    try {
-                      (e.currentTarget as HTMLImageElement).src =
-                        "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
-                    } catch { }
-                  }}
-                />
-              ) : (
-                <div className="text-center">
-                  <BookOpen className="h-20 w-20 text-primary mx-auto mb-4" />
-                  <p className="text-gray-600 font-medium text-lg">
-                    Featured Article
-                  </p>
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-16">
+          <Card className="overflow-hidden rounded-[2rem] border border-slate-200/80 bg-white shadow-[0_24px_80px_rgba(15,23,42,0.10)]">
+            <div className="grid gap-0 lg:grid-cols-[1.05fr_0.95fr]">
+              <div className="relative min-h-[300px] overflow-hidden bg-gradient-to-br from-slate-100 via-white to-primary/5 lg:min-h-[520px]">
+                {blog.featuredImage ? (
+                  <img
+                    src={getImageUrl(blog.featuredImage) || ""}
+                    alt={blog.title}
+                    className="w-full h-full object-cover"
+                    loading="lazy"
+                    decoding="async"
+                    onError={(e) => {
+                      try {
+                        (e.currentTarget as HTMLImageElement).src =
+                          "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
+                      } catch {}
+                    }}
+                  />
+                ) : (
+                  <div className="flex h-full items-center justify-center">
+                    <BookOpen className="h-20 w-20 text-primary" />
+                  </div>
+                )}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
+                <div className="absolute left-6 top-6">
+                  <Badge className="border-0 bg-white/95 px-4 py-2 text-sm font-medium text-slate-900 shadow-sm">
+                    {blogStats.categoryName}
+                  </Badge>
                 </div>
-              )}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-black/0 to-transparent" />
-              <div className="absolute top-6 left-6">
-                <Badge className="bg-primary text-white border-0 px-4 py-2 text-sm font-medium">
-                  {blogStats.categoryName}
-                </Badge>
               </div>
+
+              <CardContent className="flex flex-col justify-between p-6 sm:p-8 lg:p-10">
+                <div className="space-y-6">
+                  <div className="flex flex-wrap items-center gap-3 text-sm text-slate-500">
+                    <span className="inline-flex items-center gap-1.5 rounded-full bg-slate-50 px-3 py-1.5">
+                      <Calendar className="h-4 w-4 text-primary" />
+                      {blogStats.formattedDate}
+                    </span>
+                    <span className="inline-flex items-center gap-1.5 rounded-full bg-slate-50 px-3 py-1.5">
+                      <BookOpen className="h-4 w-4 text-primary" />
+                      {readTime}
+                    </span>
+                  </div>
+
+                  <div className="space-y-4">
+                    <p className="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">
+                      Balqis Journal
+                    </p>
+                    <h1 className="text-4xl font-bold leading-tight text-slate-950 lg:text-5xl break-words">
+                      {blog.title}
+                    </h1>
+                    {summaryText && (
+                      <p className="text-base leading-8 text-slate-600 sm:text-lg">
+                        {summaryText}
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                <div className="mt-8 flex flex-wrap gap-3">
+                  {blogStats.hasVideo && (
+                    <>
+                      <Button
+                        className="rounded-full bg-primary px-6 text-white shadow-sm hover:bg-primary/90"
+                        onClick={onWatchClick}
+                      >
+                        <Play className="mr-2 h-4 w-4" />
+                        Watch Video
+                      </Button>
+                      {blog.videoUrl && (
+                        <a
+                          href={blog.videoUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-5 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 hover:text-primary transition-colors"
+                        >
+                          <ExternalLink className="h-4 w-4" />
+                          Open video link
+                        </a>
+                      )}
+                    </>
+                  )}
+                  <Button
+                    variant="outline"
+                    onClick={() => router.push("/blog")}
+                    className="rounded-full border-slate-200 bg-white px-6 text-slate-800 hover:bg-slate-50"
+                  >
+                    Browse more articles
+                  </Button>
+                </div>
+              </CardContent>
             </div>
-            <CardContent className="p-8">
-              <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6 leading-tight break-all hyphens-auto">
-                {blog.title}
-              </h1>
-              <div className="flex items-center gap-4 text-gray-600 mb-6">
-                <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                  <Calendar className="h-5 w-5 text-blue-600" />
-                </div>
-                <span className="font-medium text-lg">
-                  {blogStats.formattedDate}
-                </span>
-              </div>
-              {blog.excerpt && !blog.content && (
-                <p className="text-lg text-gray-600 mb-8 leading-relaxed font-medium break-all hyphens-auto">
-                  {blog.excerpt}
-                </p>
-              )}
-              {blogStats.hasVideo && (
-                <Button
-                  className="font-medium py-3 px-6 group bg-blue-600 hover:bg-blue-700 text-white"
-                  onClick={onWatchClick}
-                >
-                  <Play className="mr-2 h-4 w-4" />
-                  Watch Video
-                </Button>
-              )}
-              {/* Blog Content */}
-              {blog.content && (
-                <div
-                  className="mt-10 text-gray-800 leading-7 space-y-4 break-all hyphens-auto overflow-x-hidden"
-                  dangerouslySetInnerHTML={{ __html: blog.content }}
-                />
-              )}
-            </CardContent>
           </Card>
+
+          {blogStats.hasVideo && videoEmbedSrcNoAutoplay && (
+            <Card className="mt-6 overflow-hidden rounded-[1.75rem] border border-slate-200/80 bg-white shadow-sm">
+              <CardContent className="p-5 sm:p-6">
+                <div className="mb-4 flex items-center justify-between gap-4">
+                  <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.22em] text-primary">
+                    <Play className="h-3.5 w-3.5" />
+                    Watch Video
+                  </div>
+                  {blog.videoUrl && (
+                    <a
+                      href={blog.videoUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-primary transition-colors"
+                    >
+                      <ExternalLink className="h-3.5 w-3.5" />
+                      Open original
+                    </a>
+                  )}
+                </div>
+                <div className="aspect-video w-full overflow-hidden rounded-xl bg-primary/5">
+                  <iframe
+                    className="h-full w-full"
+                    src={videoEmbedSrcNoAutoplay}
+                    title={`${blog.title} – video`}
+                    loading="lazy"
+                    referrerPolicy="strict-origin-when-cross-origin"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowFullScreen
+                  />
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          <div className="mt-8 grid gap-8 lg:grid-cols-[minmax(0,1fr)_300px]">
+            <Card className="rounded-[1.75rem] border border-slate-200/80 bg-white shadow-sm">
+              <CardContent className="p-6 sm:p-8 lg:p-10">
+                <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.22em] text-primary">
+                  Article body
+                </div>
+                {blog.content ? (
+                  <div
+                    className="prose prose-slate max-w-none prose-headings:text-slate-950 prose-p:text-slate-700 prose-a:text-primary prose-strong:text-slate-900 prose-img:rounded-2xl prose-img:shadow-sm overflow-x-hidden break-words"
+                    dangerouslySetInnerHTML={{ __html: blog.content }}
+                  />
+                ) : (
+                  <p className="text-base leading-8 text-slate-700 break-words">
+                    {summaryText}
+                  </p>
+                )}
+              </CardContent>
+            </Card>
+
+            <div className="space-y-6 lg:sticky lg:top-24 lg:self-start">
+              <Card className="rounded-[1.75rem] border border-slate-200/80 bg-white shadow-sm">
+                <CardContent className="p-6 space-y-5">
+                  <div className="space-y-1">
+                    <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-400">
+                      Article snapshot
+                    </p>
+                    <h2 className="text-xl font-bold text-slate-950">
+                      Quick overview
+                    </h2>
+                  </div>
+
+                  <div className="space-y-3 text-sm">
+                    <div className="flex items-center justify-between gap-4">
+                      <span className="text-slate-500">Category</span>
+                      <span className="font-medium text-slate-900 text-right">
+                        {blogStats.categoryName}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between gap-4">
+                      <span className="text-slate-500">Published</span>
+                      <span className="font-medium text-slate-900 text-right">
+                        {blogStats.formattedDate}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between gap-4">
+                      <span className="text-slate-500">Reading time</span>
+                      <span className="font-medium text-slate-900 text-right">
+                        {readTime}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between gap-4">
+                      <span className="text-slate-500">Video</span>
+                      <span className="font-medium text-slate-900 text-right">
+                        {blogStats.hasVideo ? "Available" : "Not included"}
+                      </span>
+                    </div>
+                  </div>
+
+                  {blogStats.hasVideo && (
+                    <div className="space-y-2">
+                      <Button
+                        className="w-full rounded-full bg-primary text-white hover:bg-primary/90"
+                        onClick={onWatchClick}
+                      >
+                        <Play className="mr-2 h-4 w-4" />
+                        Watch in player
+                      </Button>
+                      {blog?.videoUrl && (
+                        <a
+                          href={blog.videoUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center justify-center gap-1.5 text-sm text-slate-500 hover:text-primary transition-colors"
+                        >
+                          <ExternalLink className="h-3.5 w-3.5" />
+                          Open original link
+                        </a>
+                      )}
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </div>
+          </div>
         </div>
 
         {/* Video Modal */}
         {showVideoModal && blog?.videoUrl && (
           <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
             <div className="bg-white border border-gray-100 rounded-2xl shadow-2xl w-full max-w-4xl overflow-hidden">
-              <div className="aspect-video w-full bg-blue-50">
+              <div className="aspect-video w-full bg-primary/5">
                 {loadVideo && videoEmbedSrc ? (
                   <iframe
                     className="w-full h-full rounded-lg"
@@ -239,8 +408,8 @@ const BlogPostClientPage = React.memo<BlogPostClientPageProps>(
                         decoding="async"
                       />
                     ) : (
-                      <div className="w-full h-full flex items-center justify-center p-6 bg-blue-100">
-                        <Play className="w-10 h-10 text-blue-700" />
+                      <div className="w-full h-full flex items-center justify-center p-6 bg-primary/10">
+                        <Play className="w-10 h-10 text-primary" />
                       </div>
                     )}
                     <div className="absolute inset-0 bg-black/50" />
@@ -257,7 +426,7 @@ const BlogPostClientPage = React.memo<BlogPostClientPageProps>(
                 <Button
                   variant="outline"
                   onClick={handleCloseModal}
-                  className="border-gray-200 text-blue-700 hover:text-blue-800 hover:bg-gray-50"
+                  className="border-slate-200 bg-white text-primary hover:text-primary/80 hover:bg-primary/5"
                 >
                   Close
                 </Button>
@@ -267,65 +436,30 @@ const BlogPostClientPage = React.memo<BlogPostClientPageProps>(
         )}
 
         {relatedBlogs.length > 0 && (
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
-            <div className="text-center mb-12">
-              <h3 className="text-3xl font-bold text-gray-900 mb-3">
-                Related Articles
-              </h3>
-              <div className="w-24 h-1 bg-gradient-to-r from-primary mx-auto rounded-full"></div>
+          <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
+            <div className="mb-8 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-400">
+                  Keep reading
+                </p>
+                <h3 className="mt-2 text-3xl font-bold tracking-tight text-slate-950">
+                  Related articles
+                </h3>
+              </div>
+              <p className="text-sm text-slate-500">
+                More entries from the journal that pair well with this topic.
+              </p>
             </div>
-            <div className="grid md:grid-cols-3 gap-8">
+            <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
               {relatedBlogs.map((p) => (
-                <Card
+                <BlogCard
                   key={p.id}
-                  className="overflow-hidden group bg-white border border-gray-100 hover:border-gray-200 rounded-2xl transition-all duration-300 shadow-md hover:shadow-xl hover:-translate-y-1"
-                >
-                  <div className="h-48 bg-gradient-to-br from-gray-50 to-blue-50 flex items-center justify-center overflow-hidden relative">
-                    {p.featuredImage ? (
-                      <img
-                        src={getImageUrl(p.featuredImage) || ""}
-                        alt={p.title}
-                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                        loading="lazy"
-                        decoding="async"
-                        onError={(e) => {
-                          try {
-                            (e.currentTarget as HTMLImageElement).src =
-                              "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
-                          } catch { }
-                        }}
-                      />
-                    ) : (
-                      <BookOpen className="h-12 w-12 text-primary" />
-                    )}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/5 via-transparent to-transparent" />
-                  </div>
-                  <CardContent className="p-6">
-                    <div className="mb-3">
-                      <Badge
-                        variant="outline"
-                        className="text-xs border-primary/20 text-primary bg-primary/10"
-                      >
-                        {blogStats.categoryName}
-                      </Badge>
-                    </div>
-                    <h4 className="font-bold text-gray-900 line-clamp-2 mb-2 group-hover:text-blue-700 transition-colors">
-                      {p.title}
-                    </h4>
-                    <p className="text-sm text-gray-600 line-clamp-2 mb-4">
-                      {p.excerpt}
-                    </p>
-                    <Link
-                      href={`/blog/${p.id}`}
-                      className="text-blue-700 hover:text-blue-800 font-medium transition-colors"
-                    >
-                      Read More →
-                    </Link>
-                  </CardContent>
-                </Card>
+                  blog={p}
+                  categoryName={getCategoryName(p.categoryId)}
+                />
               ))}
             </div>
-          </div>
+          </section>
         )}
       </div>
     );

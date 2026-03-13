@@ -12,18 +12,23 @@ const BlogGrid = React.memo<BlogGridProps>(
   ({ blogs, loading = false, featured = false, onCategoryClick }) => {
     if (loading) {
       return (
-        <div className="grid gap-8">
+        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
           {[...Array(3)].map((_, i) => (
-            <Card key={i} className="border-0 shadow-md bg-white">
+            <Card
+              key={i}
+              className="border-0 shadow-md bg-white overflow-hidden rounded-[1.75rem]"
+            >
               <CardHeader className="p-0">
-                <Skeleton className="w-full h-48 rounded-t-lg" />
+                <Skeleton className="aspect-[4/3] w-full" />
               </CardHeader>
-              <CardContent className="p-6">
+              <CardContent className="p-5">
                 <Skeleton className="h-6 w-3/4 mb-2" />
                 <Skeleton className="h-4 w-1/2 mb-4" />
-                <div className="flex items-center justify-between">
-                  <Skeleton className="h-8 w-16" />
-                  <Skeleton className="h-10 w-32" />
+                <Skeleton className="h-4 w-full mb-2" />
+                <Skeleton className="h-4 w-11/12 mb-4" />
+                <div className="flex items-center justify-between pt-4">
+                  <Skeleton className="h-4 w-20" />
+                  <Skeleton className="h-10 w-28 rounded-full" />
                 </div>
               </CardContent>
             </Card>
@@ -53,7 +58,7 @@ const BlogGrid = React.memo<BlogGridProps>(
     }
 
     return (
-      <div className="grid gap-8">
+      <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
         {blogs.map((blog, index) => (
           <BlogCard
             key={`${blog.id || blog.title || "blog"}-${index}`}

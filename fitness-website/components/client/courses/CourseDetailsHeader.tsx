@@ -16,11 +16,17 @@ export default function CourseDetailsHeader({
 
   const imageUrl = getProxyImageUrl(course.image_url || course.featuredImage);
   const hasImage = imageUrl && imageUrl !== "/placeholder.svg";
+  const summary = course.excerpt || course.description;
+  const hasQuickStats = Boolean(
+    (course.modules && course.modules.length > 0) ||
+    course.duration ||
+    course.instructor,
+  );
 
   return (
-    <div className="mb-8">
+    <div className="space-y-4">
       {/* Breadcrumb */}
-      <nav className="flex items-center text-sm text-gray-500 mb-6 overflow-x-auto whitespace-nowrap pb-2">
+      <nav className="flex items-center text-sm text-gray-500 overflow-x-auto whitespace-nowrap pb-2">
         <Link
           href="/"
           className="hover:text-primary transition-colors flex items-center"
@@ -40,11 +46,13 @@ export default function CourseDetailsHeader({
 
       {/* Hero: Image + Course Info */}
       <div
-        className={`grid gap-6 ${hasImage ? "md:grid-cols-5" : "md:grid-cols-1"}`}
+        className={`overflow-hidden rounded-3xl border border-slate-100 bg-white shadow-sm ${hasImage ? "grid md:grid-cols-5" : "block"}`}
       >
         {/* Course Image */}
         {hasImage && (
-          <div className="md:col-span-2 relative aspect-[4/3] md:aspect-auto md:min-h-[260px] rounded-2xl overflow-hidden">
+          <div
+            className={`md:col-span-2 relative aspect-[4/3] md:aspect-auto overflow-hidden bg-slate-100 ${summary || hasQuickStats ? "md:min-h-[280px]" : "md:min-h-[220px]"}`}
+          >
             <Image
               src={imageUrl}
               alt={course.title}
@@ -58,7 +66,7 @@ export default function CourseDetailsHeader({
 
         {/* Course Info */}
         <div
-          className={`flex flex-col justify-center gap-3 ${hasImage ? "md:col-span-3" : ""}`}
+          className={`flex flex-col justify-center gap-3 p-5 sm:p-6 lg:p-7 ${hasImage ? "md:col-span-3 md:border-l border-slate-100" : ""}`}
         >
           <div className="flex flex-wrap gap-2 items-center">
             {course.categoryName && (
@@ -76,32 +84,32 @@ export default function CourseDetailsHeader({
             )}
           </div>
 
-          <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 leading-tight">
+          <h1 className="text-2xl md:text-3xl lg:text-[2.35rem] font-bold text-gray-900 leading-tight break-words">
             {course.title}
           </h1>
 
-          {course.excerpt && (
+          {summary && (
             <p className="text-base text-gray-600 leading-relaxed line-clamp-3">
-              {course.excerpt}
+              {summary}
             </p>
           )}
 
           {/* Quick Stats Row */}
-          <div className="flex flex-wrap items-center gap-4 mt-1 text-sm text-gray-500">
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2 pt-1 text-sm text-gray-500">
             {course.modules && course.modules.length > 0 && (
-              <span className="flex items-center gap-1.5">
+              <span className="flex items-center gap-1.5 rounded-full bg-slate-50 px-3 py-1.5">
                 <BookOpen className="w-4 h-4" />
                 {course.modules.length} modules
               </span>
             )}
             {course.duration && (
-              <span className="flex items-center gap-1.5">
+              <span className="flex items-center gap-1.5 rounded-full bg-slate-50 px-3 py-1.5">
                 <Clock className="w-4 h-4" />
                 {course.duration}
               </span>
             )}
             {course.instructor && (
-              <span className="flex items-center gap-1.5">
+              <span className="flex items-center gap-1.5 rounded-full bg-slate-50 px-3 py-1.5">
                 <Users className="w-4 h-4" />
                 {course.instructor}
               </span>

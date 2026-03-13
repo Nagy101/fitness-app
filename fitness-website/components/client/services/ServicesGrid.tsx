@@ -35,12 +35,12 @@ export default function ServicesGrid({ services }: ServicesGridProps) {
         return (
           <Card
             key={key}
-            className={`relative overflow-hidden transition-all duration-300 hover:shadow-xl group border-muted bg-card flex flex-col ${
-              isPopular ? "border-primary ring-1 ring-primary" : ""
+            className={`group relative overflow-hidden shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 bg-white rounded-lg border-0 flex flex-col h-full ${
+              isPopular ? "ring-1 ring-primary" : ""
             }`}
           >
             {isPopular && (
-              <div className="absolute top-4 right-4 z-10">
+              <div className="absolute top-3 left-3 z-20">
                 <Badge
                   variant="default"
                   className="bg-primary text-primary-foreground"
@@ -49,76 +49,91 @@ export default function ServicesGrid({ services }: ServicesGridProps) {
                 </Badge>
               </div>
             )}
-            <div className="h-48 relative overflow-hidden bg-muted">
-              {service.image ? (
-                <Image
-                  src={getProxyImageUrl(service.image)}
-                  alt={service.title}
-                  fill
-                  unoptimized
-                  className="object-cover transition-transform duration-500 group-hover:scale-105"
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center bg-secondary">
-                  <Dumbbell className="h-12 w-12 text-muted-foreground/30" />
+
+            <CardHeader className="p-0 relative">
+              <Link href={`/services/${service.id}`}>
+                <div className="relative aspect-video overflow-hidden cursor-pointer">
+                  {service.image ? (
+                    <Image
+                      src={
+                        getProxyImageUrl(service.image) || "/placeholder.svg"
+                      }
+                      alt={service.title}
+                      fill
+                      unoptimized
+                      style={{ objectFit: "cover" }}
+                      className="group-hover:scale-105 transition-transform duration-300"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center bg-secondary">
+                      <Dumbbell className="h-12 w-12 text-muted-foreground/30" />
+                    </div>
+                  )}
+                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
+                  <div className="absolute bottom-3 left-3">
+                    <Badge
+                      variant="secondary"
+                      className="bg-white/90 text-foreground"
+                    >
+                      {service.category}
+                    </Badge>
+                  </div>
                 </div>
-              )}
-              <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent" />
-              <div className="absolute bottom-4 left-4 right-4 flex justify-between items-end">
-                <Badge
-                  variant="secondary"
-                  className="backdrop-blur-md bg-background/50"
-                >
-                  {service.category}
-                </Badge>
-              </div>
-            </div>
-            <CardHeader>
+              </Link>
+            </CardHeader>
+
+            <CardHeader className="p-4 pb-1.5">
               <CardTitle
-                className="text-xl group-hover:text-primary transition-colors text-foreground line-clamp-2 break-all"
+                className="text-lg font-bold text-foreground group-hover:text-primary transition-colors line-clamp-2 break-words leading-snug"
                 title={service.title}
               >
                 {service.title}
               </CardTitle>
               <CardDescription
-                className="line-clamp-2 text-muted-foreground break-all"
+                className="text-sm text-muted-foreground line-clamp-1 leading-relaxed break-words"
                 title={service.description}
               >
                 {service.description}
               </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4 flex-1 flex flex-col">
-              <div className="flex items-center text-sm text-muted-foreground">
+
+            <CardContent className="px-4 pb-4 pt-0 flex flex-col flex-1">
+              <div className="flex items-center text-sm text-muted-foreground mb-2.5">
                 <Clock className="w-4 h-4 mr-2 text-primary flex-shrink-0" />
                 <span className="truncate" title={service.duration}>
                   {service.duration}
                 </span>
               </div>
-              <ul className="space-y-2 mb-4 flex-1">
-                {features.map((feature, i) => (
-                  <li
-                    key={i}
-                    className="flex items-center text-sm text-muted-foreground"
-                  >
-                    <span className="w-1.5 h-1.5 rounded-full bg-primary mr-2" />
-                    {feature}
-                  </li>
-                ))}
-              </ul>
-              <div className="pt-4 mt-auto border-t border-border flex items-center justify-between">
-                <div>
-                  <div className="text-sm text-muted-foreground">
+
+              {features.length > 0 && (
+                <ul className="space-y-1.5 mb-3">
+                  {features.map((feature, i) => (
+                    <li
+                      key={i}
+                      className="flex items-center text-sm text-muted-foreground"
+                    >
+                      <span className="w-1.5 h-1.5 rounded-full bg-primary mr-2" />
+                      {feature}
+                    </li>
+                  ))}
+                </ul>
+              )}
+
+              <div className="pt-3 mt-auto border-t border-border flex items-center justify-between gap-3">
+                <div className="shrink-0">
+                  <div className="text-xs text-muted-foreground">
                     Starting from
                   </div>
-                  <div className="text-2xl font-bold text-primary">
+                  <div className="text-xl font-bold text-primary">
                     {priceText}
                   </div>
                 </div>
+
                 <Button
                   asChild
                   size="sm"
-                  className="bg-primary hover:bg-primary/90 text-primary-foreground"
+                  className="h-10 px-4 text-sm font-semibold rounded-md shadow-sm hover:shadow-md transition-all duration-300 bg-blue-600 hover:bg-blue-700 text-white"
                 >
                   <Link href={`/services/${service.id}`}>
                     View Details

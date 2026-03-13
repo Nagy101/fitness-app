@@ -56,7 +56,7 @@ const ProductCard = React.memo<ProductCardProps>(
       <Card className="group overflow-hidden shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 bg-white rounded-lg border-0 flex flex-col h-full">
         <CardHeader className="p-0 relative">
           <Link href={`/products/${product.product_id}`}>
-            <div className="relative aspect-square overflow-hidden cursor-pointer">
+            <div className="relative aspect-[4/3] overflow-hidden cursor-pointer">
               <Image
                 src={getProxyImageUrl(product.image_url) || "/placeholder.svg"}
                 alt={product.name}
@@ -98,8 +98,8 @@ const ProductCard = React.memo<ProductCardProps>(
           )}
         </CardHeader>
 
-        <CardContent className="p-4 flex flex-col h-full">
-          <div className="mb-4">
+        <CardContent className="p-4 flex flex-col flex-1">
+          <div className="mb-3">
             <Link href={`/products/${product.product_id}`}>
               <CardTitle className="text-lg font-bold text-foreground mb-2 break-words whitespace-normal group-hover:text-primary transition-colors cursor-pointer leading-snug">
                 {product.name}
@@ -113,7 +113,7 @@ const ProductCard = React.memo<ProductCardProps>(
             </CardDescription>
           </div>
 
-          <div className="space-y-3">
+          <div className="space-y-2.5">
             <div className="flex items-center justify-between">
               <span className="text-lg font-semibold text-primary">
                 {priceNumber !== null
@@ -135,7 +135,7 @@ const ProductCard = React.memo<ProductCardProps>(
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-3  mt-auto">
+          <div className="grid grid-cols-2 gap-2.5 mt-auto">
             <Link
               href={`/products/${product.product_id}`}
               className="col-span-2"
