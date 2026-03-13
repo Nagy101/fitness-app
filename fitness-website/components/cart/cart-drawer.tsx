@@ -182,8 +182,10 @@ export function CartDrawer() {
                 </span>
               </div>
               <div>
-                <Button className="w-full bg-primary" onClick={closeCart}>
-                  <Link href="/checkout">Proceed to Checkout</Link>
+                <Button asChild className="w-full bg-primary">
+                  <Link href="/checkout" onClick={closeCart}>
+                    Proceed to Checkout
+                  </Link>
                 </Button>
               </div>
             </div>

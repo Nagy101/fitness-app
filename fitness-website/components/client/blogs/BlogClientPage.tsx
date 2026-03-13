@@ -124,7 +124,7 @@ const UnifiedPagination = React.memo<PaginationProps>(
             size="sm"
             onClick={() => onPageChange(currentPage - 1)}
             disabled={currentPage === 1}
-            className="border-gray-300 hover:bg-blue-50 hover:border-blue-300 disabled:opacity-50 transition-colors"
+            className="border-gray-300 bg-white hover:bg-primary/5 hover:border-primary/30 disabled:opacity-50 transition-colors"
           >
             <ChevronLeft className="w-4 h-4 mr-1" />
             <span className="hidden sm:inline">Prev</span>
@@ -141,7 +141,7 @@ const UnifiedPagination = React.memo<PaginationProps>(
                     variant={currentPage === page ? "default" : "outline"}
                     size="sm"
                     onClick={() => onPageChange(page as number)}
-                    className={`min-w-[36px] h-9 transition-all ${currentPage === page ? "bg-blue-600 hover:bg-blue-700 text-white shadow-sm" : "border-gray-300 hover:bg-blue-50 hover:border-blue-300"}`}
+                    className={`min-w-[36px] h-9 transition-all ${currentPage === page ? "bg-primary hover:bg-primary/90 text-white shadow-sm" : "border-gray-300 bg-white hover:bg-primary/5 hover:border-primary/30"}`}
                   >
                     {page}
                   </Button>
@@ -154,7 +154,7 @@ const UnifiedPagination = React.memo<PaginationProps>(
             size="sm"
             onClick={() => onPageChange(currentPage + 1)}
             disabled={currentPage === totalPages}
-            className="border-gray-300 hover:bg-blue-50 hover:border-blue-300 disabled:opacity-50 transition-colors"
+            className="border-gray-300 bg-white hover:bg-primary/5 hover:border-primary/30 disabled:opacity-50 transition-colors"
           >
             <span className="hidden sm:inline">Next</span>
             <ChevronRight className="w-4 h-4 ml-1" />
@@ -226,7 +226,7 @@ const BlogClientPage = React.memo<BlogPageProps>(
       return (
         <div className="flex items-center justify-center min-h-[50vh]">
           <div className="flex items-center space-x-3">
-            <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
+            <Loader2 className="h-8 w-8 animate-spin text-primary" />
             <span className="text-gray-700 text-lg font-medium">
               Loading blog content...
             </span>
@@ -251,7 +251,7 @@ const BlogClientPage = React.memo<BlogPageProps>(
               <div className="space-y-3">
                 <Button
                   onClick={handleRefresh}
-                  className="px-6 bg-blue-600 hover:bg-blue-700"
+                  className="px-6 bg-primary hover:bg-primary/90"
                 >
                   Retry Loading
                 </Button>
@@ -267,45 +267,59 @@ const BlogClientPage = React.memo<BlogPageProps>(
 
     return (
       <>
-        {featuredPost && (
-          <BlogHeroSection
-            featuredPost={featuredPost}
-            onCategoryClick={handleCategorySelect}
-          />
-        )}
-
-        {/* Filter Section */}
-        <BlogFilterSection
-          selectedCategory={selectedCategory}
-          searchTerm={searchTerm}
-          sortBy={sortBy}
-          categories={categoryStats}
-          onCategoryChange={handleCategorySelect}
-          onSearchChange={setSearchTerm}
-          onSortChange={setSortBy}
-          loading={loading}
+        <BlogHeroSection
+          featuredPost={featuredPost}
+          onCategoryClick={handleCategorySelect}
         />
 
-        {/* Blog Posts Grid */}
-        <section className="py-16 bg-white">
+        <section className="bg-[linear-gradient(180deg,#ffffff_0%,#fbfaf7_100%)] py-12 sm:py-14 lg:py-16">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12 space-y-3">
-              <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
-                {selectedCategory
-                  ? `Articles in ${selectedCategory}`
-                  : "Latest Articles"}
-              </h2>
-              <div className="w-28 h-1 bg-gradient-to-r from-blue-600 via-indigo-500 to-purple-500 mx-auto rounded-full"></div>
-              <p className="text-muted-foreground text-lg">
-                {filteredBlogs.length} article
-                {filteredBlogs.length !== 1 ? "s" : ""} found
-              </p>
+            <BlogFilterSection
+              selectedCategory={selectedCategory}
+              searchTerm={searchTerm}
+              sortBy={sortBy}
+              categories={categoryStats}
+              onCategoryChange={handleCategorySelect}
+              onSearchChange={setSearchTerm}
+              onSortChange={setSortBy}
+              loading={loading}
+            />
+
+            <div className="mb-8 mt-10 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+              <div className="space-y-2">
+                <p className="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">
+                  Blog archive
+                </p>
+                <h2 className="text-3xl font-bold tracking-tight text-slate-950 sm:text-4xl">
+                  {selectedCategory
+                    ? `${selectedCategory} stories`
+                    : "Latest articles and practical reads"}
+                </h2>
+                <p className="text-base text-slate-600">
+                  {filteredBlogs.length} article
+                  {filteredBlogs.length !== 1 ? "s" : ""} available
+                </p>
+              </div>
+
+              {(searchTerm || selectedCategory) && (
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setSearchTerm("");
+                    handleCategorySelect("");
+                    setSortBy("latest");
+                  }}
+                  className="rounded-full border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
+                >
+                  Clear current view
+                </Button>
+              )}
             </div>
 
             {filteredBlogs.length === 0 && !loading ? (
-              <div className="text-center py-20">
-                <div className="w-24 h-24 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <AlertCircle className="h-12 w-12 text-blue-600" />
+              <div className="rounded-[2rem] border border-slate-200 bg-white py-20 text-center shadow-sm">
+                <div className="w-24 h-24 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <AlertCircle className="h-12 w-12 text-primary" />
                 </div>
                 <h3 className="text-2xl font-bold text-foreground mb-3">
                   {searchTerm || selectedCategory
@@ -322,9 +336,10 @@ const BlogClientPage = React.memo<BlogPageProps>(
                   onClick={() => {
                     setSearchTerm("");
                     handleCategorySelect("");
+                    setSortBy("latest");
                     handleRefresh();
                   }}
-                  className="border-blue-200 text-blue-700 hover:bg-blue-50 hover:text-blue-800"
+                  className="border-slate-200 bg-white text-primary hover:bg-primary/5 hover:text-primary"
                 >
                   {searchTerm || selectedCategory ? "Clear Filters" : "Refresh"}
                 </Button>

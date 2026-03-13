@@ -56,15 +56,15 @@ export default function CourseDetailsInfo({ course }: CourseDetailsInfoProps) {
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       {/* Course Features — compact horizontal strip */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2.5">
         {courseFeatures.map((feature, index) => (
           <Card
             key={index}
-            className="border-gray-100 shadow-sm text-center py-4 px-2"
+            className="border-gray-100 shadow-sm text-center py-3 px-2"
           >
-            <feature.icon className="w-5 h-5 text-primary mx-auto mb-1.5" />
+            <feature.icon className="w-4.5 h-4.5 text-primary mx-auto mb-1" />
             <p className="text-xs text-muted-foreground">{feature.label}</p>
             <p className="text-sm font-semibold text-foreground">
               {feature.value}
@@ -75,13 +75,13 @@ export default function CourseDetailsInfo({ course }: CourseDetailsInfoProps) {
 
       {/* Course Description */}
       <Card className="border-gray-100 shadow-sm">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-xl">
+        <CardHeader className="pb-3">
+          <CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
             <CheckCircle className="w-5 h-5 text-primary" />
             About This Course
           </CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="pt-0">
           <div className="prose prose-gray max-w-none">
             <p className="text-muted-foreground leading-relaxed break-words whitespace-pre-wrap">
               {course.description}

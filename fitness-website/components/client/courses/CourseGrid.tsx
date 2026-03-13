@@ -3,13 +3,19 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getProxyImageUrl } from "@/lib/images";
 import { formatNumber } from "@/lib/utils/format";
-import { Clock, Users, Star, Play, BookOpen, ChevronRight } from "lucide-react";
+import { Clock, Users, Star, BookOpen, ArrowRight } from "lucide-react";
 
 interface Course {
   course_id: number;
@@ -99,131 +105,109 @@ const CourseGrid = React.memo<CourseGridProps>(({ courses, loading }) => {
   }
 
   return (
-    <div className="space-y-4">
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {displayCourses.map((course, index) => (
-          <div key={String(course?.course_id ?? `course-${index}`)}>
-            <Card className="group hover:shadow-xl transition-all duration-300 border-0 shadow-md bg-white overflow-hidden h-full">
-              <CardHeader className="p-0">
-                <div className="relative overflow-hidden">
-                  <Image
-                    src={resolveCourseImage(course)}
-                    alt={
-                      course?.title && String(course.title).trim()
-                        ? String(course.title)
-                        : "Course image"
-                    }
-                    width={400}
-                    height={240}
-                    unoptimized
-                    className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
-                    sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
-                    priority={index < 3}
-                    onError={(e) => {
-                      const img = e.currentTarget as HTMLImageElement;
-                      img.onerror = null;
-                      img.src = "/placeholder.svg";
-                    }}
-                  />
-
-                  {/* Overlay with level badge */}
-                  <div className="absolute top-4 left-4">
-                    <Badge
-                      variant="secondary"
-                      className="bg-white/90 text-gray-800 font-medium"
-                    >
-                      {course.level || "All Levels"}
-                    </Badge>
-                  </div>
-
-                  {/* Price badge */}
-                  <div className="absolute top-4 right-4">
-                    <Badge className="bg-primary text-white font-bold">
-                      {formatNumber(course.price)} EGP
-                    </Badge>
-                  </div>
-
-                  {/* Play button overlay */}
-                  <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                    <div className="w-16 h-16 bg-white/90 rounded-full flex items-center justify-center">
-                      <Play className="w-6 h-6 text-primary ml-1" />
-                    </div>
-                  </div>
-                </div>
-              </CardHeader>
-
-              <CardContent className="p-6 flex flex-col h-full">
-                {/* Course Title */}
-                <h3 className="text-xl font-bold text-foreground mb-2 line-clamp-2 group-hover:text-primary transition-colors">
-                  {course.title}
-                </h3>
-
-                {/* Inline quick details link (fallback CTA) */}
-                <div className="mb-3">
-                  <Link
-                    href={`/courses/${course.course_id}`}
-                    className="text-sm text-primary hover:underline inline-flex items-center"
+    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {displayCourses.map((course, index) => (
+        <Card
+          key={String(course?.course_id ?? `course-${index}`)}
+          className="group relative overflow-hidden shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 bg-white rounded-lg border-0 flex flex-col h-full"
+        >
+          <CardHeader className="p-0 relative">
+            <Link href={`/courses/${course.course_id}`}>
+              <div className="relative aspect-[4/3] overflow-hidden cursor-pointer">
+                <Image
+                  src={resolveCourseImage(course) || "/placeholder.svg"}
+                  alt={
+                    course?.title && String(course.title).trim()
+                      ? String(course.title)
+                      : "Course image"
+                  }
+                  fill
+                  unoptimized
+                  style={{ objectFit: "cover" }}
+                  className="group-hover:scale-105 transition-transform duration-300"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+                  priority={index < 6}
+                />
+                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
+                <div className="absolute bottom-3 left-3">
+                  <Badge
+                    variant="secondary"
+                    className="bg-white/90 text-foreground"
                   >
-                    View details
-                    <ChevronRight className="w-3 h-3 ml-1" />
-                  </Link>
+                    {course.level || "All Levels"}
+                  </Badge>
                 </div>
+              </div>
+            </Link>
+          </CardHeader>
 
-                {/* Instructor */}
-                {course.instructor && (
-                  <p className="text-sm text-muted-foreground mb-3">
-                    by {course.instructor}
-                  </p>
-                )}
+          <CardHeader className="p-4 pb-1.5">
+            <CardTitle
+              className="text-lg font-bold text-foreground group-hover:text-primary transition-colors line-clamp-2 break-words leading-snug"
+              title={course.title}
+            >
+              {course.title}
+            </CardTitle>
+            <CardDescription
+              className="text-sm text-muted-foreground line-clamp-2 leading-relaxed break-words"
+              title={course.description}
+            >
+              {course.description}
+            </CardDescription>
+          </CardHeader>
 
-                {/* Description */}
-                <p className="text-muted-foreground text-sm mb-4 line-clamp-3 flex-grow">
-                  {course.description}
-                </p>
+          <CardContent className="px-4 pb-4 pt-0 flex flex-col flex-1">
+            {course.instructor && (
+              <p className="text-sm text-muted-foreground mb-2.5">
+                by {course.instructor}
+              </p>
+            )}
 
-                {/* Course Stats */}
-                <div className="flex items-center gap-4 text-sm text-muted-foreground mb-4">
-                  {course.duration && (
-                    <div className="flex items-center gap-1">
-                      <Clock className="w-4 h-4" />
-                      <span>{course.duration}</span>
-                    </div>
-                  )}
-
-                  {course.students_count && (
-                    <div className="flex items-center gap-1">
-                      <Users className="w-4 h-4" />
-                      <span>{formatNumber(course.students_count)}</span>
-                    </div>
-                  )}
-
-                  {course.rating && course.rating > 0 && (
-                    <div className="flex items-center gap-1">
-                      <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                      <span>{course.rating}</span>
-                    </div>
-                  )}
+            <div className="flex items-center gap-4 text-sm text-muted-foreground mb-3">
+              {course.duration && (
+                <div className="flex items-center gap-1.5 min-w-0">
+                  <Clock className="w-4 h-4 text-primary shrink-0" />
+                  <span className="truncate">{course.duration}</span>
                 </div>
+              )}
 
-                {/* Action Button */}
-                <div className="mt-4 pt-4 border-t border-gray-100">
-                  <Button
-                    asChild
-                    className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors"
-                  >
-                    <Link
-                      href={`/courses/${course.course_id}`}
-                      className="block"
-                    >
-                      View Course Details
-                    </Link>
-                  </Button>
+              {course.students_count && (
+                <div className="flex items-center gap-1.5">
+                  <Users className="w-4 h-4 text-primary" />
+                  <span>{formatNumber(course.students_count)}</span>
                 </div>
-              </CardContent>
-            </Card>
-          </div>
-        ))}
-      </div>
+              )}
+
+              {course.rating && course.rating > 0 && (
+                <div className="flex items-center gap-1.5">
+                  <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                  <span>{course.rating}</span>
+                </div>
+              )}
+            </div>
+
+            <div className="pt-3 mt-auto border-t border-border flex items-center justify-between gap-3">
+              <div className="shrink-0">
+                <div className="text-xs text-muted-foreground">Price</div>
+                <div className="text-xl font-bold text-primary">
+                  {formatNumber(course.price)} EGP
+                </div>
+              </div>
+
+              <Button
+                asChild
+                size="sm"
+                className="h-10 px-4 text-sm font-semibold rounded-md shadow-sm hover:shadow-md transition-all duration-300 bg-blue-600 hover:bg-blue-700 text-white"
+              >
+                <Link href={`/courses/${course.course_id}`}>
+                  View Details
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      ))}
     </div>
   );
 });

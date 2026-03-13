@@ -170,10 +170,10 @@ const CourseEnrollmentSection = React.memo<CourseEnrollmentSectionProps>(
     };
 
     return (
-      <div className="space-y-6">
+      <div className="space-y-4">
         {/* Price Card */}
-        <Card className="border-gray-100 shadow-lg">
-          <CardHeader className="text-center pb-4">
+        <Card className="border-gray-100 shadow-sm">
+          <CardHeader className="text-center pb-3">
             <div className="text-4xl font-bold text-foreground mb-2">
               {formatNumber(course.price)} EGP
             </div>
@@ -266,7 +266,7 @@ const CourseEnrollmentSection = React.memo<CourseEnrollmentSectionProps>(
             <Separator />
 
             {/* Quick Stats */}
-            <div className="space-y-3">
+            <div className="space-y-2.5">
               <div className="flex items-center justify-between text-sm">
                 <span className="text-muted-foreground">Students Enrolled</span>
                 <span className="font-semibold">

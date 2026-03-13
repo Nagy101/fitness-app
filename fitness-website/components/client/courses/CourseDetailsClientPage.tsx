@@ -24,7 +24,7 @@ const CourseDetailsClientPage = React.memo<CourseDetailsClientPageProps>(
   ({ courseId }) => {
     const router = useRouter();
 
-    const { state, actions, handleEnrollment } = useCourseDetails(courseId);
+    const { state, handleEnrollment } = useCourseDetails(courseId);
 
     const { getCourseRequestStatus } = useCourseRequests();
 
@@ -41,18 +41,6 @@ const CourseDetailsClientPage = React.memo<CourseDetailsClientPageProps>(
     const handleCoursesRedirect = useCallback(() => {
       router.push("/courses");
     }, [router]);
-
-    // Memoized calculations
-    const courseStats = useMemo(
-      () => ({
-        hasModules: state.course?.modules && state.course.modules.length > 0,
-        isEnrolled: isSubscribed,
-        enrollmentStatus: status,
-        courseTitle: state.course?.title || "",
-        moduleCount: state.course?.modules?.length || 0,
-      }),
-      [state.course, isSubscribed, status],
-    );
 
     const courseForHeader = useMemo(() => {
       if (!state.course) return null;
@@ -138,7 +126,7 @@ const CourseDetailsClientPage = React.memo<CourseDetailsClientPageProps>(
 
     return (
       <div className="min-h-screen bg-slate-50 pt-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
           {/* Back Button */}
           <Button
             variant="outline"
@@ -149,39 +137,29 @@ const CourseDetailsClientPage = React.memo<CourseDetailsClientPageProps>(
             Back to Courses
           </Button>
 
-          {/* Course Header (Image + Title) */}
-          {courseForHeader && <CourseDetailsHeader course={courseForHeader} />}
-
-          {/* Mobile Enrollment CTA — visible only on small screens, above content */}
-          <div className="lg:hidden mb-6">
-            <CourseEnrollmentSection
-              course={state.course}
-              onEnrollment={handleEnrollment}
-            />
-          </div>
-
-          {/* Course Details Grid */}
-          <div className="grid lg:grid-cols-3 gap-8 mb-12 items-start">
-            {/* Main Content */}
-            <div className="lg:col-span-2 space-y-8">
+          <div className="grid gap-5 mb-8 items-start lg:grid-cols-[minmax(0,2fr)_340px]">
+            <div className="space-y-4 min-w-0">
+              {courseForHeader && (
+                <CourseDetailsHeader course={courseForHeader} />
+              )}
               <CourseDetailsInfo course={state.course} />
-              <CourseModulesSection
-                modules={state.course.modules || []}
-                courseId={courseId}
-                isEnrolled={courseStats.isEnrolled}
-                enrollmentStatus={courseStats.enrollmentStatus}
+            </div>
+
+            <div className="lg:sticky lg:top-24">
+              <CourseEnrollmentSection
+                course={state.course}
+                onEnrollment={handleEnrollment}
               />
             </div>
+          </div>
 
-            {/* Sidebar — hidden on mobile (shown above instead), sticky on desktop */}
-            <div className="hidden lg:block lg:col-span-1">
-              <div className="sticky top-24">
-                <CourseEnrollmentSection
-                  course={state.course}
-                  onEnrollment={handleEnrollment}
-                />
-              </div>
-            </div>
+          <div className="mb-8">
+            <CourseModulesSection
+              modules={state.course.modules || []}
+              courseId={courseId}
+              isEnrolled={isSubscribed}
+              enrollmentStatus={status}
+            />
           </div>
         </div>
       </div>

@@ -180,6 +180,24 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   }, [state.items]);
 
   useEffect(() => {
+    // Only rehydrate cart if a user session exists.
+    // If localStorage has cart data but no session token, the user has logged out
+    // (session storage is cleared on tab close) so we discard the stale cart.
+    let hasSession = false;
+    try {
+      hasSession = !!(
+        sessionStorage.getItem("token") || sessionStorage.getItem("user")
+      );
+    } catch {}
+
+    if (!hasSession) {
+      // No active session — clear any leftover cart data and bail out
+      try {
+        localStorage.removeItem("cart");
+      } catch {}
+      return;
+    }
+
     const savedCart = localStorage.getItem("cart");
     if (savedCart) {
       try {
@@ -221,14 +239,9 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   }, [state.items, state.total]);
 
   const addItem = useCallback((item: Omit<CartItem, "quantity">) => {
-    // Check stock and current quantity before dispatching
-    const items = itemsRef.current;
-    const existing = items.find((it) => norm(it.id) === norm(item.id));
-    const currentQty = existing ? existing.quantity : 0;
-    const nextQty = currentQty + 1;
-
-    if (typeof item.stock === "number" && nextQty > item.stock) {
-      toast.error(`Sorry, only ${item.stock} items available in stock`, {
+    // Binary availability model: product is either in stock or out of stock.
+    if (typeof item.stock === "number" && item.stock <= 0) {
+      toast.error("Sorry, this product is out of stock", {
         id: `stock-${norm(item.id)}`,
       });
       return;
@@ -256,6 +269,17 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       dispatch({ type: "REMOVE_ITEM", payload: id });
       return;
     }
+
+    const existing = itemsRef.current.find(
+      (item) => norm(item.id) === norm(id),
+    );
+    if (existing && typeof existing.stock === "number" && existing.stock <= 0) {
+      toast.error("Sorry, this product is out of stock", {
+        id: `stock-${norm(id)}`,
+      });
+      return;
+    }
+
     dispatch({ type: "UPDATE_QUANTITY", payload: { id, quantity } });
   }, []);
 

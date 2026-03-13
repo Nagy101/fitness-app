@@ -150,26 +150,15 @@ const ProductDetailsInfo = React.memo<ProductDetailsInfoProps>(
               </span>
               <Badge
                 variant={
-                  Number.isFinite(product.stock_quantity)
-                    ? product.stock_quantity > 10
-                      ? "secondary"
-                      : product.stock_quantity > 0
-                        ? "outline"
-                        : "destructive"
-                    : "secondary"
+                  product.stock_quantity > 0 ? "secondary" : "destructive"
                 }
-                className={`px-3 py-1 font-medium ${
-                  !Number.isFinite(product.stock_quantity) ||
+                className={`px-3 py-1 font-medium border-none ${
                   product.stock_quantity > 0
-                    ? "bg-emerald-100 text-emerald-700 hover:bg-emerald-100 border-none"
+                    ? "bg-emerald-100 text-emerald-700 hover:bg-emerald-100"
                     : ""
                 }`}
               >
-                {!Number.isFinite(product.stock_quantity)
-                  ? "In stock"
-                  : product.stock_quantity > 0
-                    ? `${product.stock_quantity} units left`
-                    : "Out of stock"}
+                {product.stock_quantity > 0 ? "In stock" : "Out of stock"}
               </Badge>
             </div>
           </div>

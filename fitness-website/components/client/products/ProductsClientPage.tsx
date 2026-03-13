@@ -189,6 +189,7 @@ const ProductsClientPage = React.memo<ProductsClientPageProps>(() => {
         name: product.name,
         price: product.price,
         image: imagePath,
+        stock: Number(product.stock_quantity),
         category:
           categories.find((cat) => cat.category_id === product.category_id)
             ?.name || "Unknown",

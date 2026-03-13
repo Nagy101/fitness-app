@@ -105,7 +105,7 @@ export default function ServiceDetailsPage() {
         try {
           token =
             sessionStorage.getItem("token") || localStorage.getItem("token");
-        } catch { }
+        } catch {}
         if (!token) {
           setRequestStatus("none");
           return;
@@ -201,7 +201,7 @@ export default function ServiceDetailsPage() {
       try {
         token =
           sessionStorage.getItem("token") || localStorage.getItem("token");
-      } catch { }
+      } catch {}
       if (!token) {
         setSubmitError("You must be logged in to book.");
         return;
@@ -374,7 +374,7 @@ export default function ServiceDetailsPage() {
 
           <div className="space-y-6">
             <div className="space-y-3">
-              <h1 className="text-3xl font-bold tracking-tight text-foreground">
+              <h1 className="text-3xl font-bold tracking-tight text-foreground break-all">
                 {service.title}
               </h1>
               <div className="flex items-center gap-3 flex-wrap">
@@ -461,7 +461,7 @@ export default function ServiceDetailsPage() {
                 <h2 className="text-lg font-semibold mb-2">
                   About this service
                 </h2>
-                <p className="text-muted-foreground leading-relaxed whitespace-pre-line">
+                <p className="text-muted-foreground leading-relaxed whitespace-pre-line break-all">
                   {service.description}
                 </p>
               </div>
