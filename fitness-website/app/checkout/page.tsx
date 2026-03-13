@@ -1,0 +1,404 @@
+"use client";
+
+import type React from "react";
+
+import { useState, useCallback, useMemo } from "react";
+import { useRouter } from "next/navigation";
+import Image from "next/image";
+import { getProxyImageUrl } from "@/lib/images";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
+import { useCart } from "@/contexts/cart-context";
+import type { CartItem } from "@/contexts/cart-context";
+import { ArrowLeft } from "lucide-react";
+import axios from "axios";
+import { API_CONFIG } from "@/config/api";
+import { useAuth } from "@/contexts/auth-context";
+
+// Removed detailed form fields; this page now focuses on summary + submit.
+
+export default function CheckoutPage() {
+  const { state, clearCart, getCartTotal, getCartCount } = useCart();
+  const items = state.items;
+  const total = getCartTotal();
+  const itemCount = getCartCount();
+  const router = useRouter();
+  const [isProcessing, setIsProcessing] = useState(false);
+  const { user } = useAuth();
+  const [promoCode, setPromoCode] = useState("");
+
+  // Memoized calculations for better performance
+  const orderCalculations = useMemo(() => {
+    const shipping = total > 50 ? 0 : 9.99;
+    const tax = total * 0.08;
+    const discountPercent =
+      promoCode.trim().toUpperCase() === "DISCOUNT10" ? 10 : 0;
+    const preDiscountTotal = total + shipping + tax;
+    const finalTotal = preDiscountTotal * (1 - discountPercent / 100);
+
+    return {
+      shipping,
+      tax,
+      discountPercent,
+      preDiscountTotal,
+      finalTotal,
+    };
+  }, [total, promoCode]);
+
+  const orderStats = useMemo(
+    () => ({
+      itemCount,
+      totalItems: items.length,
+      hasItems: items.length > 0,
+      isValidOrder: items.length > 0 && user,
+    }),
+    [items, itemCount, user],
+  );
+
+  // Memoized handlers for better performance
+  const handleSubmit = useCallback(
+    async (e: React.FormEvent) => {
+      e.preventDefault();
+      if (!user) {
+        alert("Please login to complete your order.");
+        router.push("/auth/login");
+        return;
+      }
+
+      if (items.length === 0) return;
+
+      setIsProcessing(true);
+      try {
+        const token =
+          typeof window !== "undefined"
+            ? sessionStorage.getItem("token")
+            : null;
+        const ORDERS_API = API_CONFIG.USER_FUNCTIONS.orders;
+
+        // Prepare one order per cart item to match the backend table shape
+        const purchaseDate = new Date();
+        const formattedDate = `${purchaseDate.getFullYear()}-${String(purchaseDate.getMonth() + 1).padStart(2, "0")}-${String(
+          purchaseDate.getDate(),
+        ).padStart(2, "0")} 00:00:00`;
+
+        const requests = items.map((item: CartItem) => {
+          const original_total = item.price * item.quantity;
+          const itemNet =
+            original_total * (1 - orderCalculations.discountPercent / 100);
+          const payload = {
+            user_id: user.id,
+            product_id: item.id,
+            purchase_date: formattedDate,
+            quantity: item.quantity,
+            original_total: Number(original_total.toFixed(2)),
+            discount_value: orderCalculations.discountPercent,
+            net_total: Number(itemNet.toFixed(2)),
+            promo_code_used: promoCode || "",
+            status: "pending",
+          };
+
+          return axios.post(ORDERS_API.create, payload, {
+            headers: {
+              "Content-Type": "application/json",
+              ...(token ? { Authorization: `Bearer ${token}` } : {}),
+            },
+          });
+        });
+
+        await Promise.all(requests);
+
+        // Clear cart and redirect to success page
+        clearCart();
+        router.push("/checkout/success");
+      } catch (error) {
+        // Silent error handling
+      } finally {
+        setIsProcessing(false);
+      }
+    },
+    [user, items, orderCalculations, promoCode, router, clearCart],
+  );
+
+  const handlePromoChange = useCallback((value: string) => {
+    setPromoCode(value);
+  }, []);
+
+  if (items.length === 0) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+          <div className="text-center space-y-6">
+            <h1 className="text-3xl font-bold text-gray-900">
+              Your cart is empty
+            </h1>
+            <p className="text-lg text-gray-600">
+              Add some items to your cart before checking out.
+            </p>
+            <Button asChild size="lg" className="bg-blue-600 hover:bg-blue-700">
+              <Link href="/products">
+                <ArrowLeft className="h-4 w-4 mr-2" />
+                Continue Shopping
+              </Link>
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <div className="mb-8">
+          <Button asChild variant="ghost" className="mb-4">
+            <Link href="/products">
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Continue Shopping
+            </Link>
+          </Button>
+          <div className="flex items-center gap-3 flex-wrap">
+            <h1 className="text-3xl font-bold text-slate-900">
+              Checkout
+            </h1>
+            <span className="rounded-md px-2 py-1 text-xs font-medium bg-slate-100 text-slate-900 border border-slate-200">
+              {itemCount} {itemCount === 1 ? "item" : "items"}
+            </span>
+          </div>
+          <p className="mt-2 text-sm text-slate-500">
+            Review your items and complete the payment via InstaPay.
+          </p>
+        </div>
+
+        {/* Stepper */}
+        <div aria-label="Checkout progress" className="mb-8 hidden sm:block">
+          <ol className="grid grid-cols-3 gap-4" role="list">
+            <li className="flex items-center gap-2">
+              <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-blue-600 text-white text-xs font-semibold">
+                1
+              </span>
+              <span className="text-sm font-semibold text-slate-900">
+                Cart
+              </span>
+            </li>
+            <li className="flex items-center gap-2 opacity-50">
+              <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-slate-200 text-slate-600 text-xs font-semibold">
+                2
+              </span>
+              <span className="text-sm font-semibold text-slate-500">
+                Details
+              </span>
+            </li>
+            <li className="flex items-center gap-2 opacity-50">
+              <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-slate-200 text-slate-600 text-xs font-semibold">
+                3
+              </span>
+              <span className="text-sm font-semibold text-slate-500">
+                Payment
+              </span>
+            </li>
+          </ol>
+        </div>
+
+        <form onSubmit={handleSubmit}>
+          <div className="grid lg:grid-cols-3 gap-6">
+            {/* Left: Payment Form/CTA */}
+            <div className="lg:col-span-2 space-y-6">
+              <Card className="bg-white border-none shadow-lg">
+                <CardHeader>
+                  <CardTitle className="text-2xl text-slate-900">
+                    Pay with InstaPay
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="rounded-lg border border-slate-200 p-4">
+                    <div className="flex flex-col sm:flex-row items-start justify-between gap-4">
+                      <div className="space-y-1">
+                        <p className="text-sm text-slate-500">
+                          Complete your payment securely via InstaPay.
+                        </p>
+                        <div className="text-sm text-slate-900">
+                          <span className="font-medium">Recipient:</span>{" "}
+                          <span>shehab_1@instapay</span>
+                        </div>
+                      </div>
+                      <div className="shrink-0 rounded-md px-2 py-1 text-xs font-medium bg-blue-50 text-blue-600 border border-blue-200">
+                        InstaPay
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-3 items-end gap-4 p-4 bg-slate-50 rounded-xl border border-slate-100">
+                    <div className="md:col-span-2">
+                      <p className="text-sm text-slate-500">
+                        Amount due
+                      </p>
+                      <p className="text-3xl font-bold leading-tight text-blue-600 mt-1">
+                        {orderCalculations.finalTotal.toFixed(2)} EGP
+                      </p>
+                      <p className="text-xs mt-1 text-slate-500">
+                        Includes taxes, shipping, and discounts
+                      </p>
+                    </div>
+                    <Button
+                      asChild
+                      size="lg"
+                      className="w-full bg-blue-600 hover:bg-blue-700 shadow-md hover:shadow-lg transition-all"
+                    >
+                      <Link
+                        href="https://ipn.eg/S/shehab_1/instapay/2MI6ho"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label="Pay with InstaPay"
+                      >
+                        Pay with InstaPay
+                      </Link>
+                    </Button>
+                  </div>
+
+                  <div className="rounded-md bg-slate-50/50 border border-slate-200 p-4">
+                    <p className="text-xs font-semibold mb-2 text-slate-900">
+                      How it works
+                    </p>
+                    <ol className="list-decimal list-inside space-y-1 text-xs text-slate-500">
+                      <li>Click "Pay with InstaPay" to generate your payment link</li>
+                      <li>Complete the exact transfer amount in your InstaPay app</li>
+                      <li>Hold onto your transaction reference receipt for support</li>
+                    </ol>
+                  </div>
+                  <p className="text-xs text-slate-400 text-center pt-2">
+                    Powered by InstaPay. The link opens in a new tab securely.
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Right: Summary */}
+            <div className="lg:sticky lg:top-6 space-y-6 h-max">
+              <Card className="bg-white border-none shadow-lg">
+                <CardHeader>
+                  <CardTitle className="text-2xl text-slate-900">
+                    Order Summary
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  {/* Items List */}
+                  <div className="divide-y divide-slate-100 max-h-[300px] overflow-y-auto pr-2">
+                    {items.map((item: CartItem) => (
+                      <div
+                        key={item.id}
+                        className="flex items-center gap-4 py-3 first:pt-0 last:pb-0"
+                      >
+                        <div className="relative w-14 h-14 rounded-lg overflow-hidden border border-slate-100 shadow-sm shrink-0">
+                          <Image
+                            src={getProxyImageUrl(item.image) || "/placeholder.svg"}
+                            alt={item.name}
+                            fill
+                            unoptimized
+                            className="object-cover"
+                            sizes="56px"
+                          />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="font-medium text-sm text-slate-900 truncate">
+                            {item.name}
+                          </p>
+                          <p className="text-xs text-slate-500 mt-0.5">
+                            Qty: {item.quantity}
+                          </p>
+                        </div>
+                        <p className="font-semibold text-sm text-slate-900 shrink-0">
+                          {(item.price * item.quantity).toFixed(2)} EGP
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+
+                  <Separator className="bg-slate-100" />
+
+                  {/* Promo Code */}
+                  <div className="space-y-3">
+                    <Label htmlFor="promo" className="text-slate-700">Promo Code</Label>
+                    <div className="flex gap-2">
+                      <Input
+                        id="promo"
+                        placeholder="Enter promo code"
+                        value={promoCode}
+                        onChange={(e) => handlePromoChange(e.target.value)}
+                        className="bg-slate-50 border-slate-200"
+                        aria-label="Promo code input"
+                      />
+                      <Button
+                        type="button"
+                        variant="secondary"
+                        disabled={!promoCode}
+                        className="bg-slate-100 text-slate-900 hover:bg-slate-200"
+                      >
+                        Apply
+                      </Button>
+                    </div>
+                    {orderCalculations.discountPercent > 0 && (
+                      <p className="text-xs font-medium text-green-600 animate-in fade-in slide-in-from-top-1">
+                        ✓ Discount applied: {orderCalculations.discountPercent}% off
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Totals Breakdown */}
+                  <div className="space-y-3 rounded-xl border border-slate-100 bg-slate-50/80 p-5 mt-2">
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm text-slate-500">
+                        Subtotal <span className="text-xs">({itemCount} items)</span>
+                      </span>
+                      <span className="text-sm font-medium text-slate-900">
+                        {total.toFixed(2)} EGP
+                      </span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm text-slate-500">Shipping</span>
+                      <span className="text-sm font-medium text-slate-900">
+                        {orderCalculations.shipping === 0
+                          ? <span className="text-green-600 font-semibold">FREE</span>
+                          : `${orderCalculations.shipping.toFixed(2)} EGP`}
+                      </span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm text-slate-500">Estimated Tax</span>
+                      <span className="text-sm font-medium text-slate-900">
+                        {orderCalculations.tax.toFixed(2)} EGP
+                      </span>
+                    </div>
+
+                    {orderCalculations.discountPercent > 0 && (
+                      <div className="flex justify-between items-center text-green-600 pt-1">
+                        <span className="text-sm">Discount</span>
+                        <span className="text-sm font-medium">
+                          - {(orderCalculations.preDiscountTotal - orderCalculations.finalTotal).toFixed(2)} EGP
+                        </span>
+                      </div>
+                    )}
+
+                    <Separator className="my-3 bg-slate-200" />
+
+                    <div className="flex justify-between items-end">
+                      <div>
+                        <span className="block text-base font-bold text-slate-900">Total</span>
+                        <span className="block text-xs text-slate-500">Including strictly required fees</span>
+                      </div>
+                      <span className="text-2xl font-black text-blue-600 tracking-tight">
+                        {orderCalculations.finalTotal.toFixed(2)} EGP
+                      </span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}
