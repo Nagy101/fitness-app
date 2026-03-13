@@ -33,32 +33,42 @@ class UserController extends AbstractController{
         "user" => $user
     ]);
   }
-  public function updateProfile(){
+public function updateProfile(){
     // $this->requireLogin();
 
-    $data = json_decode(file_get_contents("php://input"),true);
-    // $allowFields = ['name','phone','address','gender'];
+    $data = json_decode(file_get_contents("php://input"), true);
+    
     if (!$data || !is_array($data)) {
       return $this->sendError("Invalid data", 422);
     }
+    
     $decoded = $this->getUserFromToken();
     $email = $decoded['email'];
     if (!$email) {
       return $this->sendError("Unauthorized", 401);
     }
 
-    $isUpdated = $this ->userModel
-                        ->updateUserInfoByEmail($email,$data);
+    // 🔴 التعديل السحري هنا: تشفير الباسورد لو تم إرساله
+    if (isset($data['password']) && !empty($data['password'])) {
+        $data['password'] = password_hash($data['password'], PASSWORD_BCRYPT);
+    }
+
+    // نصيحة أمنية: يفضل جداً ترجع تفعل الـ $allowFields عشان تمنع أي حد يعدل الـ email أو role
+    // وتعمل فلترة للـ $data قبل ما تبعتها للـ Model.
+
+    $isUpdated = $this->userModel->updateUserInfoByEmail($email, $data);
+    
     if($isUpdated){
       $newUser = $this->userModel->getUserInfoByEmail($email);
-      unset($newUser['password']);
+      unset($newUser['password']); // خطوة ممتازة عشان متطبعش الباسورد في الـ JSON
       return $this->json([
         "status" => "success",
         "message" => "updated Successfully",
         "user" => $newUser
       ]);
     }
-    return $this->sendError("Error While Updating Data",400);
+    
+    return $this->sendError("Error While Updating Data", 400);
   }
   public function AllSubscribedCourses(){
     $user = $this->getUserFromToken();
