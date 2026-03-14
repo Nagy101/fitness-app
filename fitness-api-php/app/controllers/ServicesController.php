@@ -29,20 +29,24 @@
     }
 
     public function singleService($id){
-      $Service = $this->serviceModel
-              ->getServiceById($id);
+      // استخراج بيانات المستخدم من التوكن لضمان جلب حالته هو فقط
+      $decoded = $this->getUserFromToken();
+      $userId = $decoded['id']; // أو حسب ما أنت مسميها في التوكن
+
+      $Service = $this->serviceModel->getServiceById($id, $userId);
+      
       if($Service === false){
-        $this->sendError("Error During Find Service");
-        return;
+        return $this->sendError("Error During Find Service");
       }
-        // نشيل admin_id من كل Service
-        unset($Service['admin_id']);
+      
+      // نشيل admin_id من كل Service
+      unset($Service['admin_id']);
 
       return $this->json([
         "status" => "success",
         "Service" => $Service
       ]);
-    }
+  }
 
       public function searchService(){
       $data = json_decode(file_get_contents("php://input"),true);

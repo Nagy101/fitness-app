@@ -137,12 +137,12 @@ class Notifications {
             ->delete()
             ->where('notification_id', '=', $id)
             ->excute();
-
           $this->db->delete()
-          ->where('notification_id', '=', $id)
-          ->excute();
+            ->where('notification_id', '=', $id)
+            ->excute();
+            return true;
         } catch (Exception $e) {
-            var_dump($e->getMessage());
+            // var_dump($e->getMessage());
             return false;
         }
     }

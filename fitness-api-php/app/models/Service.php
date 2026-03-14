@@ -18,13 +18,22 @@ class Service{
       return false;
     }
   }
-  public function getServiceById($id){
+  public function getServiceById($id, $userId = null){
     try{
-      return $this->db
-                  ->select()
-                  ->where("service_id" , "=",$id)
+      $query = $this->db
+                    ->select()
+                    ->where("service_id" , "=",$id);
+      
+      // التأكد من جلب طلب هذا المستخدم تحديداً (لمنع تداخل البيانات)
+      if ($userId) {
+          $query->andWhere("user_id", "=", $userId);
+      }
+
+      // 🔴 التعديل السحري: الترتيب التنازلي لجلب أحدث حالة (سواء باستخدام id أو created_at)
+      return $query->orderBy("id") 
                   ->getRow();
     }catch(Exception $e){
+      error_log($e->getMessage());
       return false;
     }
   }

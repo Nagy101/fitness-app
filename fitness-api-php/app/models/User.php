@@ -104,17 +104,19 @@ class User {
     }
   }
 
-  public function updateUserInfoByEmail($email,$data){
+  public function updateUserInfoByEmail($email, $data){
     try{
       if(empty($data)){
         return false;
       }
       $this->db
           ->update($data)
-          ->where("email","=",$email)
-          ->excute();
+          ->where("email", "=", $email)
+          ->excute(); 
+          
       return true;
-    }catch(Exception $e){
+    } catch(Exception $e){
+      error_log($e->getMessage()); 
       return false;
     }
   }
