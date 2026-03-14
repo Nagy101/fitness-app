@@ -6,43 +6,62 @@ import {
   ArrowRight,
   TrendingUp,
   Dumbbell,
-  Flame,
-  Zap,
-  Trophy,
+  Sparkles,
   Heart,
+  ShieldCheck,
+  Users,
 } from "lucide-react";
 
 export default function HeroSection() {
   return (
-    <section className="relative py-20 lg:py-32 bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
+    <section className="relative overflow-hidden bg-[linear-gradient(180deg,#ffffff_0%,#f7fbff_48%,#f4fbf5_100%)] pb-20 pt-16 lg:pb-28 lg:pt-24">
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute left-[-10%] top-4 h-72 w-72 rounded-full bg-primary/10 blur-3xl" />
+        <div className="absolute right-[-8%] top-0 h-96 w-96 rounded-full bg-secondary/10 blur-3xl" />
+      </div>
+
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="grid items-center gap-14 lg:grid-cols-[0.95fr_1.05fr] lg:gap-10">
           <div className="space-y-8">
-            <div className="space-y-4">
-              <Badge style={{ backgroundColor: "#32CD32", color: "#FFFFFF" }}>
-                #1 Fitness Platform
+            <div className="space-y-5">
+              <Badge className="rounded-full border border-primary/15 bg-white px-4 py-2 text-xs font-semibold uppercase tracking-[0.22em] text-primary shadow-sm hover:bg-white">
+                <Sparkles className="mr-2 h-3.5 w-3.5" />
+                Calm, guided fitness
               </Badge>
-              <h1
-                className="text-4xl lg:text-6xl font-bold leading-tight"
-                style={{ color: "#212529" }}
-              >
-                Transform Your
-                <span style={{ color: "#007BFF" }}> Body</span>,
-                <span style={{ color: "#32CD32" }}> Mind</span> & Life
+              <h1 className="max-w-2xl text-4xl font-bold leading-[1.05] tracking-tight text-slate-950 sm:text-5xl lg:text-6xl">
+                A quieter, more thoughtful way to build
+                <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+                  {" "}
+                  strength and balance
+                </span>
+                .
               </h1>
-              <p className="text-xl max-w-lg" style={{ color: "#6C757D" }}>
-                Join thousands of fitness enthusiasts on their journey to a
-                healthier, stronger, and more confident version of themselves.
+              <p className="max-w-xl text-lg leading-8 text-slate-600">
+                Discover expert-led programs, supportive products, and practical
+                wellness guidance designed to feel elegant, steady, and
+                genuinely useful every day.
               </p>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-4">
+            <div className="flex flex-wrap gap-3 text-sm text-slate-600">
+              <span className="rounded-full border border-white/80 bg-white/90 px-4 py-2 shadow-sm">
+                Guided courses
+              </span>
+              <span className="rounded-full border border-white/80 bg-white/90 px-4 py-2 shadow-sm">
+                Trusted products
+              </span>
+              <span className="rounded-full border border-white/80 bg-white/90 px-4 py-2 shadow-sm">
+                Gentle progress tracking
+              </span>
+            </div>
+
+            <div className="flex flex-col gap-4 sm:flex-row">
               <Link href="/courses">
                 <Button
                   size="lg"
-                  className="text-lg px-8 bg-blue-600 hover:bg-blue-700 text-white inline-flex items-center"
+                  className="rounded-full bg-primary px-8 text-base text-white shadow-sm hover:bg-secondary"
                 >
-                  Start Your Journey
+                  Explore Programs
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
               </Link>
@@ -50,201 +69,165 @@ export default function HeroSection() {
                 <Button
                   size="lg"
                   variant="outline"
-                  className="text-lg px-8 inline-flex items-center"
+                  className="rounded-full border-slate-200 bg-white px-8 text-base text-slate-800 hover:bg-slate-50"
                 >
                   <Play className="mr-2 h-5 w-5" />
-                  Watch Demo
+                  Learn Our Approach
                 </Button>
               </Link>
             </div>
 
-            <div className="flex items-center space-x-8 pt-8">
-              <div className="text-center">
-                <div
-                  className="text-2xl font-bold"
-                  style={{ color: "#007BFF" }}
-                >
-                  50K+
-                </div>
-                <div className="text-sm" style={{ color: "#6C757D" }}>
-                  Happy Members
-                </div>
+            <div className="grid gap-4 sm:grid-cols-3">
+              <div className="rounded-[1.5rem] border border-white/80 bg-white/90 p-4 shadow-sm">
+                <div className="text-2xl font-bold text-slate-950">50K+</div>
+                <p className="mt-1 text-sm text-slate-600">
+                  Members building healthier routines
+                </p>
               </div>
-              <div className="text-center">
-                <div
-                  className="text-2xl font-bold"
-                  style={{ color: "#32CD32" }}
-                >
-                  200+
-                </div>
-                <div className="text-sm" style={{ color: "#6C757D" }}>
-                  Expert Trainers
-                </div>
+              <div className="rounded-[1.5rem] border border-white/80 bg-white/90 p-4 shadow-sm">
+                <div className="text-2xl font-bold text-slate-950">200+</div>
+                <p className="mt-1 text-sm text-slate-600">
+                  Experts supporting each phase
+                </p>
               </div>
-              <div className="text-center">
-                <div
-                  className="text-2xl font-bold"
-                  style={{ color: "#007BFF" }}
-                >
-                  4.9★
-                </div>
-                <div className="text-sm" style={{ color: "#6C757D" }}>
-                  User Rating
-                </div>
+              <div className="rounded-[1.5rem] border border-white/80 bg-white/90 p-4 shadow-sm">
+                <div className="text-2xl font-bold text-slate-950">4.9</div>
+                <p className="mt-1 text-sm text-slate-600">
+                  Average experience rating
+                </p>
               </div>
             </div>
           </div>
 
           <div className="relative">
-            <div className="relative">
-              {/* Gym illustration — pure CSS, zero network request, instant LCP */}
-              <div
-                className="rounded-2xl shadow-2xl w-full overflow-hidden"
-                style={{
-                  background:
-                    "linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #0f172a 100%)",
-                  minHeight: 480,
-                }}
-              >
-                {/* Top accent bar */}
-                <div
-                  className="h-2 w-full"
-                  style={{
-                    background: "linear-gradient(90deg, #007BFF, #32CD32)",
-                  }}
-                />
-
-                {/* Main content area */}
-                <div
-                  className="p-8 flex flex-col items-center justify-center gap-6"
-                  style={{ minHeight: 460 }}
-                >
-                  {/* Central dumbbell hero icon */}
-                  <div className="relative flex items-center justify-center">
-                    <div
-                      className="w-36 h-36 rounded-full flex items-center justify-center"
-                      style={{
-                        background: "rgba(0,123,255,0.15)",
-                        border: "2px solid rgba(0,123,255,0.4)",
-                      }}
-                    >
-                      <div
-                        className="w-24 h-24 rounded-full flex items-center justify-center"
-                        style={{
-                          background: "rgba(0,123,255,0.25)",
-                          border: "2px solid rgba(0,123,255,0.6)",
-                        }}
-                      >
-                        <Dumbbell
-                          className="h-12 w-12"
-                          style={{ color: "#007BFF" }}
-                        />
-                      </div>
-                    </div>
-                    {/* Orbiting badges */}
-                    <div
-                      className="absolute -top-4 -right-4 w-10 h-10 rounded-full flex items-center justify-center shadow-lg"
-                      style={{ background: "#32CD32" }}
-                    >
-                      <Flame className="h-5 w-5 text-white" />
-                    </div>
-                    <div
-                      className="absolute -bottom-4 -left-4 w-10 h-10 rounded-full flex items-center justify-center shadow-lg"
-                      style={{ background: "#007BFF" }}
-                    >
-                      <Zap className="h-5 w-5 text-white" />
-                    </div>
+            <div className="overflow-hidden rounded-[2rem] border border-white/80 bg-[linear-gradient(160deg,#0f172a_0%,#12314f_52%,#163b2a_100%)] shadow-[0_30px_90px_rgba(15,23,42,0.18)]">
+              <div className="h-1.5 w-full bg-[linear-gradient(90deg,#007BFF,#32CD32)]" />
+              <div className="grid gap-8 p-8 sm:p-10">
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <p className="text-xs font-semibold uppercase tracking-[0.24em] text-white/55">
+                      Wellness dashboard
+                    </p>
+                    <h2 className="mt-2 text-2xl font-semibold text-white sm:text-3xl">
+                      Designed for clarity, not pressure.
+                    </h2>
                   </div>
-
-                  {/* Stat pills row */}
-                  <div className="flex gap-4 flex-wrap justify-center">
-                    {[
-                      {
-                        icon: <Trophy className="h-4 w-4" />,
-                        label: "500+ Programs",
-                        color: "#FFC107",
-                      },
-                      {
-                        icon: <Heart className="h-4 w-4" />,
-                        label: "Live Coaching",
-                        color: "#FF5252",
-                      },
-                      {
-                        icon: <Zap className="h-4 w-4" />,
-                        label: "Fast Results",
-                        color: "#32CD32",
-                      },
-                    ].map(({ icon, label, color }) => (
-                      <div
-                        key={label}
-                        className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold text-white"
-                        style={{
-                          background: "rgba(255,255,255,0.1)",
-                          border: `1px solid ${color}40`,
-                          color,
-                        }}
-                      >
-                        {icon}
-                        <span style={{ color: "#fff" }}>{label}</span>
-                      </div>
-                    ))}
+                  <div className="rounded-full bg-white/10 p-3 text-white backdrop-blur">
+                    <Dumbbell className="h-6 w-6" />
                   </div>
+                </div>
 
-                  {/* Progress bars */}
-                  <div className="w-full max-w-xs space-y-3">
-                    {[
-                      { label: "Strength", pct: 92, color: "#007BFF" },
-                      { label: "Endurance", pct: 78, color: "#32CD32" },
-                      { label: "Flexibility", pct: 65, color: "#FFC107" },
-                    ].map(({ label, pct, color }) => (
-                      <div key={label}>
-                        <div
-                          className="flex justify-between text-xs mb-1"
-                          style={{ color: "rgba(255,255,255,0.7)" }}
-                        >
-                          <span>{label}</span>
-                          <span>{pct}%</span>
+                <div className="grid gap-4 sm:grid-cols-[1.2fr_0.8fr]">
+                  <div className="rounded-[1.5rem] border border-white/10 bg-white/8 p-5 backdrop-blur-sm">
+                    <div className="mb-5 flex items-center justify-between text-white/70">
+                      <span className="text-sm">Weekly rhythm</span>
+                      <span className="text-sm">Steady progress</span>
+                    </div>
+                    <div className="space-y-4">
+                      {[
+                        {
+                          label: "Strength",
+                          value: "92%",
+                          width: "92%",
+                          color: "bg-primary",
+                        },
+                        {
+                          label: "Recovery",
+                          value: "78%",
+                          width: "78%",
+                          color: "bg-secondary",
+                        },
+                        {
+                          label: "Mobility",
+                          value: "66%",
+                          width: "66%",
+                          color: "bg-white/70",
+                        },
+                      ].map((item) => (
+                        <div key={item.label}>
+                          <div className="mb-1.5 flex items-center justify-between text-sm text-white/75">
+                            <span>{item.label}</span>
+                            <span>{item.value}</span>
+                          </div>
+                          <div className="h-2 rounded-full bg-white/10">
+                            <div
+                              className={`h-2 rounded-full ${item.color}`}
+                              style={{ width: item.width }}
+                            />
+                          </div>
                         </div>
-                        <div
-                          className="h-2 rounded-full w-full"
-                          style={{ background: "rgba(255,255,255,0.1)" }}
-                        >
-                          <div
-                            className="h-2 rounded-full"
-                            style={{ width: `${pct}%`, background: color }}
-                          />
-                        </div>
-                      </div>
-                    ))}
+                      ))}
+                    </div>
                   </div>
 
-                  {/* Tagline */}
-                  <p
-                    className="text-center text-sm font-medium"
-                    style={{ color: "rgba(255,255,255,0.5)" }}
-                  >
-                    Your personal fitness journey starts here
+                  <div className="grid gap-4">
+                    <div className="rounded-[1.5rem] border border-white/10 bg-white/8 p-5 backdrop-blur-sm">
+                      <div className="mb-3 inline-flex rounded-full bg-secondary/20 p-2 text-secondary">
+                        <Heart className="h-4 w-4" />
+                      </div>
+                      <p className="text-sm text-white/65">
+                        Recovery-first structure
+                      </p>
+                      <p className="mt-2 text-lg font-semibold text-white">
+                        Smarter, calmer training flow
+                      </p>
+                    </div>
+                    <div className="rounded-[1.5rem] border border-white/10 bg-white/8 p-5 backdrop-blur-sm">
+                      <div className="mb-3 inline-flex rounded-full bg-primary/20 p-2 text-primary-foreground">
+                        <ShieldCheck className="h-4 w-4 text-white" />
+                      </div>
+                      <p className="text-sm text-white/65">
+                        Expert-led guidance
+                      </p>
+                      <p className="mt-2 text-lg font-semibold text-white">
+                        Clear instruction at every level
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex flex-wrap gap-3 text-sm text-white/80">
+                  <span className="rounded-full bg-white/10 px-4 py-2 backdrop-blur">
+                    Progress tracking
+                  </span>
+                  <span className="rounded-full bg-white/10 px-4 py-2 backdrop-blur">
+                    Tailored learning
+                  </span>
+                  <span className="rounded-full bg-white/10 px-4 py-2 backdrop-blur">
+                    Balanced wellness
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div className="absolute -bottom-6 left-6 hidden rounded-[1.5rem] border border-white/80 bg-white/95 p-5 shadow-[0_20px_50px_rgba(15,23,42,0.10)] sm:block">
+              <div className="flex items-center gap-3">
+                <div className="rounded-full bg-secondary/15 p-3 text-secondary">
+                  <TrendingUp className="h-5 w-5" />
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-slate-950">
+                    Quiet consistency wins
+                  </p>
+                  <p className="text-sm text-slate-500">
+                    Daily habits with less friction
                   </p>
                 </div>
               </div>
+            </div>
 
-              {/* Floating card */}
-              <div className="absolute -bottom-6 -left-6 bg-white p-6 rounded-xl shadow-lg">
-                <div className="flex items-center space-x-3">
-                  <div
-                    className="w-12 h-12 rounded-full flex items-center justify-center"
-                    style={{ backgroundColor: "#32CD32" }}
-                  >
-                    <TrendingUp className="h-6 w-6 text-white" />
-                  </div>
-                  <div>
-                    <div className="font-semibold" style={{ color: "#212529" }}>
-                      Progress Tracking
-                    </div>
-                    <div className="text-sm" style={{ color: "#6C757D" }}>
-                      Real-time analytics
-                    </div>
-                  </div>
+            <div className="absolute -right-4 top-10 hidden rounded-[1.5rem] border border-white/70 bg-white/95 p-4 shadow-[0_20px_50px_rgba(15,23,42,0.10)] lg:block">
+              <div className="flex items-center gap-3">
+                <div className="rounded-full bg-primary/10 p-3 text-primary">
+                  <Users className="h-5 w-5" />
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-slate-950">
+                    50K+ active members
+                  </p>
+                  <p className="text-sm text-slate-500">
+                    Trusted by a growing community
+                  </p>
                 </div>
               </div>
             </div>

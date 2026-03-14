@@ -61,10 +61,10 @@ const CourseGrid = React.memo<CourseGridProps>(({ courses, loading }) => {
           .map((_, index) => (
             <Card
               key={`skeleton-${index}`}
-              className="border-0 shadow-md bg-white"
+              className="border border-slate-200/80 shadow-sm bg-white rounded-[1.75rem] overflow-hidden"
             >
               <CardHeader className="p-0">
-                <Skeleton className="w-full h-48 rounded-t-lg" />
+                <Skeleton className="w-full h-52 rounded-none" />
               </CardHeader>
               <CardContent className="p-6">
                 <Skeleton className="h-6 w-3/4 mb-2" />
@@ -86,8 +86,8 @@ const CourseGrid = React.memo<CourseGridProps>(({ courses, loading }) => {
     return (
       <div className="text-center py-16">
         <div className="max-w-md mx-auto">
-          <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
-            <BookOpen className="w-12 h-12 text-gray-400" />
+          <div className="w-24 h-24 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6">
+            <BookOpen className="w-12 h-12 text-primary" />
           </div>
           <h3 className="text-xl font-semibold text-foreground mb-2">
             No courses available
@@ -96,7 +96,11 @@ const CourseGrid = React.memo<CourseGridProps>(({ courses, loading }) => {
             We're currently updating our course catalog. Please check back later
             for exciting new fitness courses!
           </p>
-          <Button variant="outline" onClick={() => window.location.reload()}>
+          <Button
+            variant="outline"
+            className="border-slate-200 bg-white hover:bg-slate-50"
+            onClick={() => window.location.reload()}
+          >
             Refresh Page
           </Button>
         </div>
@@ -109,7 +113,7 @@ const CourseGrid = React.memo<CourseGridProps>(({ courses, loading }) => {
       {displayCourses.map((course, index) => (
         <Card
           key={String(course?.course_id ?? `course-${index}`)}
-          className="group relative overflow-hidden shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 bg-white rounded-lg border-0 flex flex-col h-full"
+          className="group relative overflow-hidden border border-slate-200/80 shadow-sm hover:shadow-[0_18px_45px_rgba(15,23,42,0.10)] transition-all duration-300 transform hover:-translate-y-1 bg-white rounded-[1.75rem] flex flex-col h-full"
         >
           <CardHeader className="p-0 relative">
             <Link href={`/courses/${course.course_id}`}>
@@ -129,7 +133,7 @@ const CourseGrid = React.memo<CourseGridProps>(({ courses, loading }) => {
                   priority={index < 6}
                 />
                 <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
-                <div className="absolute bottom-3 left-3">
+                <div className="absolute top-3 left-3">
                   <Badge
                     variant="secondary"
                     className="bg-white/90 text-foreground"
@@ -137,11 +141,19 @@ const CourseGrid = React.memo<CourseGridProps>(({ courses, loading }) => {
                     {course.level || "All Levels"}
                   </Badge>
                 </div>
+                {course.rating && course.rating > 0 && (
+                  <div className="absolute top-3 right-3">
+                    <Badge className="bg-slate-900/80 text-white border-0">
+                      <Star className="w-3.5 h-3.5 mr-1 fill-yellow-400 text-yellow-400" />
+                      {course.rating}
+                    </Badge>
+                  </div>
+                )}
               </div>
             </Link>
           </CardHeader>
 
-          <CardHeader className="p-4 pb-1.5">
+          <CardHeader className="p-5 pb-2">
             <CardTitle
               className="text-lg font-bold text-foreground group-hover:text-primary transition-colors line-clamp-2 break-words leading-snug"
               title={course.title}
@@ -156,7 +168,7 @@ const CourseGrid = React.memo<CourseGridProps>(({ courses, loading }) => {
             </CardDescription>
           </CardHeader>
 
-          <CardContent className="px-4 pb-4 pt-0 flex flex-col flex-1">
+          <CardContent className="px-5 pb-5 pt-0 flex flex-col flex-1">
             {course.instructor && (
               <p className="text-sm text-muted-foreground mb-2.5">
                 by {course.instructor}
@@ -186,7 +198,7 @@ const CourseGrid = React.memo<CourseGridProps>(({ courses, loading }) => {
               )}
             </div>
 
-            <div className="pt-3 mt-auto border-t border-border flex items-center justify-between gap-3">
+            <div className="pt-4 mt-auto border-t border-border flex items-center justify-between gap-3">
               <div className="shrink-0">
                 <div className="text-xs text-muted-foreground">Price</div>
                 <div className="text-xl font-bold text-primary">
@@ -197,7 +209,7 @@ const CourseGrid = React.memo<CourseGridProps>(({ courses, loading }) => {
               <Button
                 asChild
                 size="sm"
-                className="h-10 px-4 text-sm font-semibold rounded-md shadow-sm hover:shadow-md transition-all duration-300 bg-blue-600 hover:bg-blue-700 text-white"
+                className="h-10 px-4 text-sm font-semibold rounded-full shadow-sm hover:shadow-md transition-all duration-300 bg-primary hover:bg-secondary text-white"
               >
                 <Link href={`/courses/${course.course_id}`}>
                   View Details

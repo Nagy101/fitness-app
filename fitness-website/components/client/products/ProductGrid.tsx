@@ -30,18 +30,20 @@ const ProductGrid = React.memo<ProductGridProps>(
             .map((_, index) => (
               <Card
                 key={`skeleton-${index}`}
-                className="border-0 shadow-md bg-white"
+                className="overflow-hidden rounded-[1.75rem] border border-slate-200/70 bg-white shadow-sm"
               >
                 <CardHeader className="p-0">
-                  <Skeleton className="w-full h-48 rounded-t-lg" />
+                  <Skeleton className="w-full h-52 rounded-none" />
                 </CardHeader>
-                <CardContent className="p-6">
-                  <Skeleton className="h-6 w-3/4 mb-2" />
-                  <Skeleton className="h-4 w-1/2 mb-4" />
+                <CardContent className="p-6 space-y-4">
+                  <Skeleton className="h-5 w-3/4" />
+                  <Skeleton className="h-4 w-full" />
+                  <Skeleton className="h-4 w-2/3" />
                   <div className="flex items-center justify-between">
                     <Skeleton className="h-8 w-16" />
-                    <Skeleton className="h-10 w-32" />
+                    <Skeleton className="h-9 w-24" />
                   </div>
+                  <Skeleton className="h-10 w-full" />
                 </CardContent>
               </Card>
             ))}
@@ -51,19 +53,23 @@ const ProductGrid = React.memo<ProductGridProps>(
 
     if (products.length === 0) {
       return (
-        <div className="col-span-full text-center py-20">
+        <div className="col-span-full rounded-[2rem] border border-dashed border-slate-300 bg-white/80 text-center py-16 sm:py-20">
           <div className="max-w-md mx-auto">
-            <div className="w-24 h-24 mx-auto mb-6 rounded-full bg-gray-100 flex items-center justify-center">
-              <Search className="w-10 h-10 text-gray-400" />
+            <div className="w-20 h-20 mx-auto mb-6 rounded-3xl bg-primary/10 text-primary flex items-center justify-center">
+              <Search className="w-9 h-9" />
             </div>
-            <h3 className="text-2xl font-bold text-foreground mb-3">
+            <h3 className="text-2xl font-bold text-slate-950 mb-3">
               No products found
             </h3>
-            <p className="text-muted mb-6">
+            <p className="text-slate-600 mb-6">
               Try adjusting your search terms or filters to find what you're
               looking for.
             </p>
-            <Button onClick={handleClearFilters} variant="outline">
+            <Button
+              onClick={handleClearFilters}
+              variant="outline"
+              className="rounded-xl border-slate-300 bg-white hover:bg-primary/5 hover:text-primary hover:border-primary/30"
+            >
               Clear Filters
             </Button>
           </div>

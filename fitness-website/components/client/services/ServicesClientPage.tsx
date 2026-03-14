@@ -99,7 +99,7 @@ const UnifiedPagination = React.memo<PaginationProps>(
             size="sm"
             onClick={() => onPageChange(currentPage - 1)}
             disabled={currentPage === 1}
-            className="border-gray-300 hover:bg-blue-50 hover:border-blue-300 disabled:opacity-50 transition-colors"
+            className="border-gray-300 bg-white hover:bg-primary/5 hover:border-primary/30 disabled:opacity-50 transition-colors"
           >
             <ChevronLeft className="w-4 h-4 mr-1" />
             <span className="hidden sm:inline">Prev</span>
@@ -116,7 +116,7 @@ const UnifiedPagination = React.memo<PaginationProps>(
                     variant={currentPage === page ? "default" : "outline"}
                     size="sm"
                     onClick={() => onPageChange(page as number)}
-                    className={`min-w-[36px] h-9 transition-all ${currentPage === page ? "bg-blue-600 hover:bg-blue-700 text-white shadow-sm" : "border-gray-300 hover:bg-blue-50 hover:border-blue-300"}`}
+                    className={`min-w-[36px] h-9 transition-all ${currentPage === page ? "bg-primary hover:bg-secondary text-white shadow-sm" : "border-gray-300 bg-white hover:bg-primary/5 hover:border-primary/30"}`}
                   >
                     {page}
                   </Button>
@@ -129,7 +129,7 @@ const UnifiedPagination = React.memo<PaginationProps>(
             size="sm"
             onClick={() => onPageChange(currentPage + 1)}
             disabled={currentPage === totalPages}
-            className="border-gray-300 hover:bg-blue-50 hover:border-blue-300 disabled:opacity-50 transition-colors"
+            className="border-gray-300 bg-white hover:bg-primary/5 hover:border-primary/30 disabled:opacity-50 transition-colors"
           >
             <span className="hidden sm:inline">Next</span>
             <ChevronRight className="w-4 h-4 ml-1" />
@@ -141,7 +141,7 @@ const UnifiedPagination = React.memo<PaginationProps>(
             value={pageSize.toString()}
             onValueChange={handlePageSizeChange}
           >
-            <SelectTrigger className="w-24 h-9 border-gray-300 hover:border-blue-300 transition-colors">
+            <SelectTrigger className="w-24 h-9 border-gray-300 bg-white hover:border-primary/30 transition-colors">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -198,7 +198,7 @@ export function ServicesClientPage({
     return (
       <div className="flex items-center justify-center min-h-[50vh]">
         <div className="flex items-center space-x-3">
-          <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
           <span className="text-gray-700 text-lg font-medium">
             Loading services...
           </span>
@@ -212,18 +212,21 @@ export function ServicesClientPage({
       {/* Plans */}
       <section
         id="plans"
-        className="py-16 bg-white"
+        className="py-10 bg-[linear-gradient(180deg,#ffffff_0%,#f8fbff_100%)]"
         aria-labelledby="plans-heading"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-10">
+          <div className="text-center mb-8">
+            <p className="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400 mb-2">
+              Service Archive
+            </p>
             <h2
               id="plans-heading"
-              className="text-3xl font-bold bg-gradient-to-r from-gray-900 via-blue-800 to-indigo-800 bg-clip-text text-transparent"
+              className="text-3xl sm:text-4xl font-bold tracking-tight text-slate-950"
             >
-              Plans & Pricing
+              Plans & programs built around real-life consistency
             </h2>
-            <p className="text-gray-600 text-lg">
+            <p className="mt-2 text-slate-600 text-lg">
               Simple, transparent pricing. Cancel anytime.
             </p>
           </div>
@@ -232,7 +235,7 @@ export function ServicesClientPage({
       {/* Services Grid */}
       <section
         id="services"
-        className="py-16 bg-slate-50"
+        className="py-12 bg-[linear-gradient(180deg,#ffffff_0%,#f8fafc_100%)]"
         aria-labelledby="services-list"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -254,7 +257,7 @@ export function ServicesClientPage({
                   <p className="text-gray-600 mb-6">{error}</p>
                   <Button
                     onClick={retryFetch}
-                    className="px-6 bg-blue-600 hover:bg-blue-700"
+                    className="px-6 bg-primary hover:bg-secondary"
                   >
                     Try Again
                   </Button>

@@ -1,5 +1,4 @@
 import React from "react";
-import { ContactForm } from "@/components/contact/contact-form";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -14,10 +13,12 @@ import {
   Phone,
   Mail,
   Clock,
-  MessageCircle,
   Users,
   Calendar,
+  Sparkles,
+  ArrowRight,
 } from "lucide-react";
+import Link from "next/link";
 
 // Static data extracted to prevent re-creation on render
 const CONTACT_INFO = [
@@ -52,13 +53,6 @@ const CONTACT_INFO = [
 ];
 
 const QUICK_ACTIONS = [
-  {
-    icon: MessageCircle,
-    title: "Live Chat",
-    description: "Get instant help from our support team",
-    action: "Start Chat",
-    available: true,
-  },
   {
     icon: Calendar,
     title: "Book Consultation",
@@ -100,21 +94,39 @@ const FAQS = [
 
 export default function ContactPage() {
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-[linear-gradient(180deg,#ffffff_0%,#f7fbff_48%,#f4fbf5_100%)]">
       {/* Hero Section */}
-      <section className="py-16">
+      <section className="relative overflow-hidden py-16 lg:py-20">
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute left-[-8%] top-0 h-72 w-72 rounded-full bg-primary/10 blur-3xl" />
+          <div className="absolute right-[-8%] top-8 h-80 w-80 rounded-full bg-secondary/10 blur-3xl" />
+        </div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div>
             <PageHeroText
               badge="Get In Touch"
               title="Contact"
               highlight="Us"
-              description="Have questions about our services or need help getting started? We're here to help you on your fitness journey."
-              badgeProps={{ className: "bg-blue-100 text-blue-800" }}
-              titleClassName="text-4xl lg:text-5xl font-bold mb-6 bg-gradient-to-r from-gray-900 via-blue-800 to-indigo-800 bg-clip-text text-transparent"
-              highlightClassName="text-blue-600"
-              descriptionClassName="text-gray-600"
+              description="Need help getting started or choosing the right plan? Reach out through the channel that feels easiest for you."
+              badgeProps={{
+                className:
+                  "rounded-full border border-primary/15 bg-white px-4 py-2 text-xs font-semibold uppercase tracking-[0.22em] text-primary shadow-sm hover:bg-white",
+              }}
+              titleClassName="text-4xl lg:text-5xl font-bold mb-6 bg-gradient-to-r from-slate-900 via-primary to-secondary bg-clip-text text-transparent"
+              highlightClassName="text-primary"
+              descriptionClassName="text-slate-600"
             />
+            <div className="mt-8 flex flex-wrap justify-center gap-3 text-sm text-slate-600">
+              <span className="rounded-full border border-white/80 bg-white/90 px-4 py-2 shadow-sm">
+                Fast response team
+              </span>
+              <span className="rounded-full border border-white/80 bg-white/90 px-4 py-2 shadow-sm">
+                Consultation-first approach
+              </span>
+              <span className="rounded-full border border-white/80 bg-white/90 px-4 py-2 shadow-sm">
+                Friendly support channels
+              </span>
+            </div>
           </div>
         </div>
       </section>
@@ -122,11 +134,19 @@ export default function ContactPage() {
       {/* Quick Actions */}
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.24em] text-slate-400">
+              Quick Actions
+            </p>
+            <h2 className="text-3xl font-bold tracking-tight text-slate-950">
+              Choose your next step
+            </h2>
+          </div>
           <div className="grid md:grid-cols-3 gap-6">
             {QUICK_ACTIONS.map((action, index) => (
               <Card
                 key={index}
-                className="border-0 shadow-lg hover:shadow-xl transition-shadow text-center"
+                className="border border-white/80 bg-white/90 shadow-sm hover:-translate-y-1 hover:shadow-[0_18px_45px_rgba(15,23,42,0.08)] transition-all text-center rounded-[1.5rem]"
               >
                 <CardContent className="p-6">
                   <div
@@ -142,7 +162,9 @@ export default function ContactPage() {
                   <p className="text-muted mb-4">{action.description}</p>
                   <Button
                     className={
-                      action.available ? "bg-primary hover:bg-primary/90" : ""
+                      action.available
+                        ? "rounded-full bg-primary hover:bg-secondary"
+                        : ""
                     }
                     disabled={!action.available}
                   >
@@ -156,18 +178,28 @@ export default function ContactPage() {
       </section>
 
       {/* Main Contact Section */}
-      <section className="py-16 bg-slate-50">
+      <section className="py-16 bg-slate-50/70">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-12">
-            {/* Contact Form */}
-            <ContactForm />
-
+          <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-8">
             {/* Contact Information */}
-            <div className="space-y-8">
-              <div className="grid gap-6">
-                {CONTACT_INFO.map((info, index) => (
-                  <Card key={index} className="border-0 shadow-lg">
-                    <CardContent className="p-6">
+            <div className="space-y-6">
+              <Card className="rounded-[1.75rem] border border-white/80 bg-white/90 shadow-sm">
+                <CardHeader>
+                  <CardTitle className="text-2xl text-slate-950 flex items-center gap-2">
+                    <Sparkles className="h-5 w-5 text-primary" />
+                    Reach us directly
+                  </CardTitle>
+                  <CardDescription>
+                    We removed the message form so you can contact us through
+                    quicker, clearer channels.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="grid gap-4">
+                  {CONTACT_INFO.map((info, index) => (
+                    <div
+                      key={index}
+                      className="rounded-2xl border border-white/80 bg-white/80 p-4"
+                    >
                       <div className="flex items-start space-x-4">
                         <div
                           className={`w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 ${info.bgColor}`}
@@ -175,25 +207,24 @@ export default function ContactPage() {
                           <info.icon className={`h-6 w-6 ${info.color}`} />
                         </div>
                         <div>
-                          <h4 className="font-semibold mb-2 text-foreground">
+                          <h4 className="font-semibold mb-1 text-slate-900">
                             {info.title}
                           </h4>
                           {info.details.map((detail, idx) => (
-                            <p key={idx} className="text-muted">
+                            <p key={idx} className="text-slate-600 leading-7">
                               {detail}
                             </p>
                           ))}
                         </div>
                       </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
+                    </div>
+                  ))}
+                </CardContent>
+              </Card>
 
-              {/* FAQ Section */}
-              <Card className="border-0 shadow-lg">
+              <Card className="rounded-[1.75rem] border border-white/80 bg-white/90 shadow-sm">
                 <CardHeader>
-                  <CardTitle className="text-foreground">
+                  <CardTitle className="text-slate-950">
                     Frequently Asked Questions
                   </CardTitle>
                   <CardDescription>
@@ -203,13 +234,62 @@ export default function ContactPage() {
                 <CardContent className="space-y-4">
                   {FAQS.map((faq, index) => (
                     <div key={index} className="space-y-2">
-                      <h4 className="font-medium text-foreground">
+                      <h4 className="font-medium text-slate-900">
                         {faq.question}
                       </h4>
-                      <p className="text-sm text-muted">{faq.answer}</p>
-                      {index < FAQS.length - 1 && <hr className="my-4" />}
+                      <p className="text-sm leading-7 text-slate-600">
+                        {faq.answer}
+                      </p>
+                      {index < FAQS.length - 1 && (
+                        <hr className="my-4 border-slate-200" />
+                      )}
                     </div>
                   ))}
+                </CardContent>
+              </Card>
+            </div>
+
+            <div className="space-y-6">
+              <Card className="rounded-[1.75rem] border border-white/80 bg-white/90 shadow-sm">
+                <CardHeader>
+                  <CardTitle className="text-slate-950">
+                    Need personal guidance?
+                  </CardTitle>
+                  <CardDescription>
+                    If you prefer, start with a consultation and we will guide
+                    you to the best plan.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  <Button
+                    asChild
+                    className="w-full rounded-full bg-primary hover:bg-secondary text-white"
+                  >
+                    <Link href="/services">
+                      Book Consultation
+                      <ArrowRight className="h-4 w-4 ml-2" />
+                    </Link>
+                  </Button>
+                  <Button
+                    asChild
+                    variant="outline"
+                    className="w-full rounded-full border-slate-200 bg-white hover:bg-slate-50"
+                  >
+                    <Link href="/courses">Browse Programs</Link>
+                  </Button>
+                </CardContent>
+              </Card>
+
+              <Card className="rounded-[1.75rem] border border-white/80 bg-[linear-gradient(180deg,#ffffff_0%,#f8fbff_100%)] shadow-sm">
+                <CardContent className="p-6">
+                  <h3 className="text-xl font-semibold text-slate-900 mb-2">
+                    Response Promise
+                  </h3>
+                  <p className="text-slate-600 leading-7">
+                    Most inquiries are answered within the same day during
+                    operating hours. For urgent support, phone is the fastest
+                    route.
+                  </p>
                 </CardContent>
               </Card>
             </div>
@@ -229,7 +309,7 @@ export default function ContactPage() {
             </p>
           </div>
 
-          <Card className="border-0 shadow-lg overflow-hidden">
+          <Card className="border border-white/80 bg-white/90 shadow-sm overflow-hidden rounded-[1.75rem]">
             <div className="h-96 bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
               <div className="text-center">
                 <MapPin className="h-16 w-16 text-primary mx-auto mb-4" />
@@ -239,7 +319,7 @@ export default function ContactPage() {
                 <p className="text-muted">
                   123 Fitness Street, Health City, HC 12345
                 </p>
-                <Button className="mt-4 bg-primary hover:bg-primary/90">
+                <Button className="mt-4 rounded-full bg-primary hover:bg-secondary">
                   Get Directions
                 </Button>
               </div>
@@ -249,7 +329,7 @@ export default function ContactPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 bg-gradient-to-r from-blue-600 to-indigo-600">
+      <section className="py-16 bg-[linear-gradient(135deg,#0f172a_0%,#12314f_55%,#1d4332_100%)]">
         <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl lg:text-4xl font-bold text-white mb-6">
             Ready to Start Your Fitness Journey?
@@ -261,14 +341,14 @@ export default function ContactPage() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button
               size="lg"
-              className="bg-white text-foreground hover:bg-gray-100"
+              className="bg-white text-slate-900 hover:bg-secondary hover:text-white rounded-full"
             >
               Start Free Trial
             </Button>
             <Button
               size="lg"
               variant="outline"
-              className="text-white border-white hover:bg-white hover:text-foreground bg-transparent"
+              className="text-white border-white/40 hover:bg-white hover:text-slate-900 bg-white/10 rounded-full"
             >
               Schedule Tour
             </Button>
