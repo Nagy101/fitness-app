@@ -25,10 +25,14 @@
       $userId = $user["id"];
 
       $userCourses = $this->requestModel->getRequestsByUserId($userId);
-      $userCoursesIds = array_column($userCourses,'course_id');
+      $approvedUserCourses = array_filter((array)$userCourses, function($req) {
+        return isset($req['status']) && strtolower((string)$req['status']) === 'approved';
+      });
+      $userCoursesIds = array_column($approvedUserCourses,'course_id');
 
       foreach ($Courses as &$course) {
         $course['is_subscribed'] = in_array($course['course_id'],$userCoursesIds);
+        $course['students_count'] = $this->requestModel->countApprovedByCourseId($course['course_id']);
       }
 
       if($Courses === false){
@@ -83,6 +87,7 @@
 
     // ضيف الموديولات للكورس
     $Course['modules'] = $modules;
+    $Course['students_count'] = $this->requestModel->countApprovedByCourseId($id);
 
     // تنسيق تاريخ الكورس
     if (!empty($Course['created_at'])) {

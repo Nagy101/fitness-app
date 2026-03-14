@@ -73,7 +73,23 @@ class User {
   public function Verifylogin($email,$Password){
     try{
       $user = $this->getUserInfoByEmail($email);
-      if(!$user || !password_verify($Password,$user['password'])){
+      if(!$user){
+        return false;
+      }
+
+      $storedPassword = (string)($user['password'] ?? '');
+      $isValid = password_verify($Password, $storedPassword);
+
+      // Backward compatibility: old accounts may have plain-text passwords stored.
+      if(!$isValid && $storedPassword !== '' && hash_equals($storedPassword, (string)$Password)){
+        $this->db
+            ->update(["password" => password_hash((string)$Password, PASSWORD_BCRYPT)])
+            ->where("user_id", "=", $user['user_id'])
+            ->excute();
+        $isValid = true;
+      }
+
+      if(!$isValid){
         return false;
       }
       return $user;

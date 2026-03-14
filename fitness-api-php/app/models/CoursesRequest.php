@@ -65,6 +65,7 @@ class CoursesRequest{
       return $this->db
                   ->select()
                   ->where("user_id","=",$userId)
+                  ->orderBy("request_id")
                   ->fetchAll();
     } catch(Exception $e){
       return false;
@@ -80,6 +81,25 @@ class CoursesRequest{
         return false;
       }
     }
+
+  public function countApprovedByCourseId($courseId){
+    try {
+      $rows = $this->db
+                  ->select()
+                  ->where("course_id", "=", $courseId)
+                  ->andWhere("status", "=", "approved")
+                  ->fetchAll();
+
+      if ($rows === false || !is_array($rows)) {
+        return 0;
+      }
+
+      return count($rows);
+    } catch(Exception $e) {
+      return 0;
+    }
+  }
+
   // update status or fields
   public function update($id,$data){
     try {

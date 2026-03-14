@@ -21,7 +21,22 @@ class AdminController extends AbstractController{
       }
       $admin = $this->adminModel
                     ->getAdminByEmail($data['email']);
-      if(empty($admin) || !$admin || !password_verify($data['password'],$admin['password'])){
+      if(empty($admin) || !$admin){
+        return $this->sendError("Wrong Email Or Password", 422);
+      }
+
+      $storedPassword = (string)($admin['password'] ?? '');
+      $isValid = password_verify($data['password'], $storedPassword);
+
+      // Backward compatibility: migrate legacy plain-text passwords on successful login.
+      if(!$isValid && $storedPassword !== '' && hash_equals($storedPassword, (string)$data['password'])){
+        $this->adminModel->updateAdmin($admin['admin_id'], [
+          'password' => password_hash((string)$data['password'], PASSWORD_BCRYPT)
+        ]);
+        $isValid = true;
+      }
+
+      if(!$isValid){
         return $this->sendError("Wrong Email Or Password", 422);
       }
       // var_dump($admin);

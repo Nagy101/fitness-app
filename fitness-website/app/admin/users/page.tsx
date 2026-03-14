@@ -2,6 +2,7 @@
 
 import React, { useState, useCallback } from "react";
 import dynamic from "next/dynamic";
+import { toast } from "sonner";
 import { Card, CardContent } from "@/components/ui/card";
 import { Users } from "lucide-react";
 import { AdminLayout } from "@/components/admin/admin-layout";
@@ -156,22 +157,8 @@ export default function UsersManagement() {
       return "Password is required for new accounts";
     }
 
-    const excludeId = editingItem
-      ? editingType === "user"
-        ? (editingItem as UserType).user_id
-        : (editingItem as AdminType).admin_id
-      : undefined;
-
-    if (checkEmailExists(formData.email, excludeId)) {
-      return "An account with this email already exists";
-    }
-
-    if (formData.phone && checkPhoneExists(formData.phone, excludeId)) {
-      return "An account with this phone number already exists";
-    }
-
     return null;
-  }, [formData, editingItem, editingType, checkEmailExists, checkPhoneExists]);
+  }, [formData, editingItem]);
 
   // Form submission handler
   const handleSubmit = useCallback(
@@ -180,6 +167,7 @@ export default function UsersManagement() {
 
       const validationError = validateForm();
       if (validationError) {
+        toast.error(validationError);
         return;
       }
 
@@ -195,7 +183,7 @@ export default function UsersManagement() {
         }
         resetForm();
       } catch (error) {
-        // Error handling is done in the hook
+        toast.error("Failed to submit account form. Please check the input and try again.");
       }
     },
     [formData, editingItem, editingType, validateForm, updateUser, addUser],

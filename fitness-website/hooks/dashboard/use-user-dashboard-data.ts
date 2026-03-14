@@ -50,6 +50,7 @@ interface SubscribedCourse {
 
 interface TrainingRequest {
   id: string;
+  service_id?: string;
   service_name?: string;
   trainer_name?: string;
   status: string;
@@ -104,7 +105,7 @@ export function useDashboardData(user: any) {
   const getAuthHeaders = useCallback(() => {
     let token: string | null = null;
     try {
-      token = localStorage.getItem("token") || sessionStorage.getItem("token");
+      token = sessionStorage.getItem("token");
     } catch {
       token = null;
     }
@@ -300,6 +301,63 @@ export function useDashboardData(user: any) {
 
       let normalizedTraining: TrainingRequest[] = [];
       let normalizedCourse: CourseRequest[] = [];
+
+      // Preferred dashboard endpoint with both training and course requests in one response
+      try {
+        const combinedResponse = await axios.get(
+          API_CONFIG.USER_FUNCTIONS.user.dashboardRequests,
+          { headers },
+        );
+
+        const root = combinedResponse.data?.data || combinedResponse.data || {};
+        const trainingData =
+          root?.training_requests ||
+          root?.trainingRequests ||
+          root?.training ||
+          [];
+        const courseData =
+          root?.course_requests ||
+          root?.courseRequests ||
+          root?.courses ||
+          [];
+
+        normalizedTraining = (
+          Array.isArray(trainingData) ? trainingData : []
+        ).map((raw: any) => {
+          const request = {
+            id: String(raw.id || raw.request_id || Math.random()),
+            service_id: raw.service_id ? String(raw.service_id) : undefined,
+            service_name: raw.service_name || raw.service?.name,
+            trainer_name: raw.trainer_name || raw.trainer?.name,
+            status: String(raw.status || "pending"),
+            created_at: String(raw.created_at || new Date().toISOString()),
+            start_date: raw.start_date,
+            end_date: raw.end_date,
+            notes: raw.notes,
+          } as TrainingRequest;
+          return request;
+        });
+
+        normalizedCourse = (Array.isArray(courseData) ? courseData : []).map(
+          (raw: any) => {
+            const request = {
+              id: String(raw.id || raw.request_id || Math.random()),
+              course_name: raw.course_name || raw.course?.title,
+              status: String(raw.status || "pending"),
+              created_at: String(raw.created_at || new Date().toISOString()),
+              approved_at: raw.approved_at,
+              notes: raw.notes,
+            } as CourseRequest;
+            return request;
+          },
+        );
+
+        setTrainingRequests(normalizedTraining);
+        setCourseRequests(normalizedCourse);
+        return;
+      } catch (combinedError: any) {
+        // Fallback to legacy endpoints below if combined endpoint is unavailable
+      }
 
       // Load training requests with error handling
       try {

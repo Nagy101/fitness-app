@@ -30,6 +30,41 @@ class Promo_Codes{
       return false;
     }
   }
+
+  public function validatePromoCode($promoCode){
+    try{
+      $promo = $this->getPromoByPromo($promoCode);
+      if($promo === false){
+        return false;
+      }
+      if(empty($promo)){
+        return [
+          "exists" => false,
+          "active" => false,
+          "expired" => false,
+          "promo" => null,
+        ];
+      }
+
+      $today = date("Y-m-d");
+      $startDate = isset($promo["start_date"]) ? substr((string)$promo["start_date"],0,10) : null;
+      $endDate = isset($promo["end_date"]) ? substr((string)$promo["end_date"],0,10) : null;
+
+      $isExpired = $endDate !== null && $endDate < $today;
+      $isNotStarted = $startDate !== null && $startDate > $today;
+      $isActive = !$isExpired && !$isNotStarted;
+
+      return [
+        "exists" => true,
+        "active" => $isActive,
+        "expired" => $isExpired,
+        "not_started" => $isNotStarted,
+        "promo" => $promo,
+      ];
+    }catch(Exception $e){
+      return false;
+    }
+  }
   public function getPromoCodeById($promoId){  
     try{
       return $this->db

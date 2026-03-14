@@ -9,6 +9,10 @@ class Service{
   public function __construct(){
     $this->db = new DB($this->tableName);
   }
+
+  /**
+   * @return array<int, array<string, mixed>>|false
+   */
   public function getAll(){
     try{
       return $this->db
@@ -18,22 +22,18 @@ class Service{
       return false;
     }
   }
-  public function getServiceById($id, $userId = null){
-    try{
-      $query = $this->db
-                    ->select()
-                    ->where("service_id" , "=",$id);
-      
-      // التأكد من جلب طلب هذا المستخدم تحديداً (لمنع تداخل البيانات)
-      if ($userId) {
-          $query->andWhere("user_id", "=", $userId);
-      }
 
-      // 🔴 التعديل السحري: الترتيب التنازلي لجلب أحدث حالة (سواء باستخدام id أو created_at)
-      return $query->orderBy("id") 
+  /**
+   * @param int|string $id
+   * @return array<string, mixed>|false
+   */
+  public function getServiceById($id){
+    try{
+      return $this->db
+                  ->select()
+                  ->where("service_id" , "=",$id)
                   ->getRow();
     }catch(Exception $e){
-      error_log($e->getMessage());
       return false;
     }
   }

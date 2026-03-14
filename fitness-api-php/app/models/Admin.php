@@ -24,17 +24,29 @@ class Admin{
   }
   public function addAdmin($data){
     try{
-      if(!$this->isExist($data["email"],"admins")){
-        // var_dump($data);
-        $this ->db
-              ->insert($data)
-              ->excute();
-        return true;
-      }else{
+      if(empty($data["email"]) || empty($data["name"]) || empty($data["password"])){
         return false;
       }
+      $email = strtolower(trim((string)$data["email"]));
+      if($this->isExist($email,"admins")){
+        return false;
+      }
+
+      $payload = $data;
+      $payload["email"] = $email;
+      $payload["name"] = trim((string)$data["name"]);
+      $payload["password"] = $this->hashPasswordIfNeeded((string)$data["password"]);
+      $payload["is_super_admin"] = 1;
+      if(!isset($payload["role"]) || trim((string)$payload["role"]) === ""){
+        $payload["role"] = "Admin";
+      }
+
+      $this ->db
+            ->insert($payload)
+            ->excute();
+      return true;
     }catch(Exception $e){
-      return $e;
+      return false;
     }
   }
   public function searchAdmin($keyword){
@@ -63,6 +75,10 @@ class Admin{
   }
   public function updateAdmin($id,$data){
     try{
+      if(isset($data["password"]) && trim((string)$data["password"]) !== ""){
+        $data["password"] = $this->hashPasswordIfNeeded((string)$data["password"]);
+      }
+      $data["is_super_admin"] = 1;
       $this->db
               ->update($data)
               ->where("admin_id","=",$id)
@@ -112,6 +128,18 @@ class Admin{
       return false;
     }
     return true;
+  }
+
+  private function hashPasswordIfNeeded($plainOrHash){
+    $password = (string)$plainOrHash;
+    if($password === ""){
+      return $password;
+    }
+    $info = password_get_info($password);
+    if(isset($info['algo']) && $info['algo'] !== 0){
+      return $password;
+    }
+    return password_hash($password, PASSWORD_BCRYPT);
   }
 }
 ?>

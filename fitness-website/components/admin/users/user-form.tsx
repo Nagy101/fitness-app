@@ -5,13 +5,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
   Dialog,
   DialogContent,
   DialogHeader,
@@ -128,28 +121,6 @@ export const UserForm = React.memo<UserFormProps>(({
                 className="h-11 border-slate-200 focus:border-indigo-500 focus:ring-indigo-500"
               />
             </div>
-            
-            {/* Role (for admins) */}
-            {(formData.user_type === "admin" || editingType === "admin") && (
-              <div className="space-y-2">
-                <label className="text-sm font-semibold text-slate-700">
-                  Admin Role
-                </label>
-                <Select
-                  value={formData.role}
-                  onValueChange={(val) => handleInputChange("role", val)}
-                  disabled={submitting}
-                >
-                  <SelectTrigger className="h-11 border-slate-200 focus:border-indigo-500 focus:ring-indigo-500">
-                    <SelectValue placeholder="Select role" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="admin">Admin</SelectItem>
-                    <SelectItem value="super_admin">Super Admin</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            )}
             
             {/* Password */}
             <div className="space-y-2">

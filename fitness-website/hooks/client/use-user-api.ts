@@ -2,13 +2,14 @@
 
 import { useCallback } from "react";
 import { toast } from "sonner";
+import { extractErrorMessage } from "@/lib/errors";
 
 export function useUserApi() {
   const getAuthHeaders = useCallback((withJson = true) => {
     let token: string | null = null;
     if (typeof window !== "undefined") {
       try {
-        token = localStorage.getItem("token") || sessionStorage.getItem("token");
+        token = sessionStorage.getItem("token");
       } catch {
         token = null;
       }
@@ -63,10 +64,16 @@ export function useUserApi() {
       }
       // Many endpoints use 404 to represent an empty state (e.g., no requests yet).
       // Treat it as a successful empty response to avoid noisy UI errors.
-      if (response.status === 404) {
+      if ((options.method || "GET").toUpperCase() === "GET" && response.status === 404) {
         return ({ status: "success", data: [] } as any) as T;
       }
-      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+
+      const parsedError = await parseResponse<any>(response);
+      const message = extractErrorMessage(
+        { message: parsedError?.message, data: parsedError },
+        `Request failed (${response.status})`,
+      );
+      throw new Error(message);
     }
 
     const result = await parseResponse<T>(response);

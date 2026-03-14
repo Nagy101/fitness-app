@@ -21,6 +21,7 @@ export const API_CONFIG = {
     user: {
       profile: `${BASE_URL}/user/getProfile`,
       updateProfile: `${BASE_URL}/user/updateProfile`,
+      dashboardRequests: `${BASE_URL}/user/myDashboardRequests`,
     },
     
     categories: {
@@ -75,6 +76,8 @@ export const API_CONFIG = {
       training: {
         create: `${BASE_URL}/TrainingRequests/create`,
         getMyRequests: `${BASE_URL}/TrainingRequests/getMyRequests`,
+        showMyRequest: (id: string) =>
+          `${BASE_URL}/TrainingRequests/showMyRequest/${id}`,
       },
       courses: {
         create: `${BASE_URL}/CoursesRequests/create`,

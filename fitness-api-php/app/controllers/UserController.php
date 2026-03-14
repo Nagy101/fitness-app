@@ -4,17 +4,20 @@ use App\Core\AbstractController;
 use App\models\User;
 use App\models\CoursesRequest;
 use App\models\Courses;
+use App\models\TrainingRequest;
 
 class UserController extends AbstractController{
   protected $userModel;
   protected $requestModel;
   protected $courseModel;
+  protected $trainingRequestModel;
 
   public function __construct(){
       parent::__construct();
       $this->userModel = new User();
       $this->requestModel = new CoursesRequest();
       $this->courseModel = new Courses();
+        $this->trainingRequestModel = new TrainingRequest();
   }
 
   public function getProfile(){
@@ -104,6 +107,42 @@ public function updateProfile(){
         "status" => "success",
         "message" => "Approved Courses Found",
         "data" => array_values($subscribedCourses)
+    ]);
+  }
+
+  public function myDashboardRequests(){
+    $user = $this->getUserFromToken();
+    $userId = $user['id'];
+
+    $trainingRequests = $this->trainingRequestModel->getRequestsByUserId($userId);
+    $courseRequests = $this->requestModel->getRequestsByUserId($userId);
+
+    if($trainingRequests === false || !is_array($trainingRequests)){
+      $trainingRequests = [];
+    }
+
+    if($courseRequests === false || !is_array($courseRequests)){
+      $courseRequests = [];
+    }
+
+    usort($trainingRequests, function($a, $b){
+      $aId = isset($a['request_id']) ? (int)$a['request_id'] : 0;
+      $bId = isset($b['request_id']) ? (int)$b['request_id'] : 0;
+      return $bId <=> $aId;
+    });
+
+    usort($courseRequests, function($a, $b){
+      $aId = isset($a['request_id']) ? (int)$a['request_id'] : 0;
+      $bId = isset($b['request_id']) ? (int)$b['request_id'] : 0;
+      return $bId <=> $aId;
+    });
+
+    return $this->json([
+      "status" => "success",
+      "data" => [
+        "training_requests" => array_values($trainingRequests),
+        "course_requests" => array_values($courseRequests)
+      ]
     ]);
   }
 }

@@ -103,8 +103,7 @@ export default function ServiceDetailsPage() {
       try {
         let token: string | null = null;
         try {
-          token =
-            sessionStorage.getItem("token") || localStorage.getItem("token");
+          token = sessionStorage.getItem("token");
         } catch {}
         if (!token) {
           setRequestStatus("none");
@@ -118,6 +117,10 @@ export default function ServiceDetailsPage() {
               "Content-Type": "application/json",
               Authorization: `Bearer ${token}`,
             },
+            body: JSON.stringify({
+              service_id: serviceId,
+              service_name: service?.title || "",
+            }),
             cache: "no-store",
           },
         );
@@ -132,13 +135,14 @@ export default function ServiceDetailsPage() {
             ? data
             : [];
 
-        // Determine request status from latest (no per-service scope, no active window check)
+        // Determine request status for this service only (latest matching request)
         const latest = list
           .slice()
           .sort(
             (a, b) =>
+              Number(b.request_id || b.id || 0) - Number(a.request_id || a.id || 0) ||
               new Date(b.created_at || 0).getTime() -
-              new Date(a.created_at || 0).getTime(),
+                new Date(a.created_at || 0).getTime(),
           )[0];
 
         if (!latest) {
@@ -156,7 +160,7 @@ export default function ServiceDetailsPage() {
       }
     };
     fetchMyRequests();
-  }, []);
+  }, [serviceId, service?.title]);
 
   const priceFormatted = useMemo(() => {
     const p = service?.price ?? 0;
@@ -199,8 +203,7 @@ export default function ServiceDetailsPage() {
       // get token
       let token: string | null = null;
       try {
-        token =
-          sessionStorage.getItem("token") || localStorage.getItem("token");
+        token = sessionStorage.getItem("token");
       } catch {}
       if (!token) {
         setSubmitError("You must be logged in to book.");

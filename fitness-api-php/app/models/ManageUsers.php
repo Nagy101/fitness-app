@@ -60,6 +60,9 @@ class ManageUsers {
   }
   public function updateUser($id,$data){
     try{
+      if(isset($data["password"]) && trim((string)$data["password"]) !== ""){
+        $data["password"] = $this->hashPasswordIfNeeded((string)$data["password"]);
+      }
       $this->db
               ->update($data)
               ->where("user_id","=",$id)
@@ -71,16 +74,57 @@ class ManageUsers {
   }
   public function addUser($data){
     try{
-      if(!$this->isExist($data["email"])){
-        $this->db
-        ->insert($data)->excute();
-        return true;
-      }else{
+      if(empty($data["email"]) || empty($data["name"]) || empty($data["password"])){
         return false;
       }
+
+      $email = strtolower(trim((string)$data["email"]));
+      if($this->isExist($email)){
+        return false;
+      }
+
+      $payload = $data;
+      $payload["email"] = $email;
+      $payload["name"] = trim((string)$data["name"]);
+      $payload["password"] = $this->hashPasswordIfNeeded((string)$data["password"]);
+
+      // Normalize incoming user type values from admin panel (e.g. user/customer)
+      $payload["user_type"] = $this->normalizeUserType($data["user_type"] ?? "");
+
+      $this->db
+        ->insert($payload)
+        ->excute();
+      return true;
     }catch(Exception $e){
-      return $e;
+      return false;
     }
+  }
+
+  private function normalizeUserType($value){
+    $normalized = strtolower(trim((string)$value));
+    if($normalized === "coach"){
+      return "Coach";
+    }
+    if($normalized === "trainee"){
+      return "Trainee";
+    }
+    // Admin UI currently sends "user" for regular users.
+    if($normalized === "user" || $normalized === "customer" || $normalized === ""){
+      return "Trainee";
+    }
+    return ucfirst($normalized);
+  }
+
+  private function hashPasswordIfNeeded($plainOrHash){
+    $password = (string)$plainOrHash;
+    if($password === ""){
+      return $password;
+    }
+    $info = password_get_info($password);
+    if(isset($info['algo']) && $info['algo'] !== 0){
+      return $password;
+    }
+    return password_hash($password, PASSWORD_BCRYPT);
   }
   public function isExist($email){
     try{

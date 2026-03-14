@@ -46,6 +46,19 @@ class TrainingRequest{
     }
   }
 
+  public function getRequestByIdForUser($reqId, $userId){
+    try {
+      return $this->db
+                  ->select()
+                  ->where("request_id", "=", $reqId)
+                  ->andWhere("user_id", "=", $userId)
+                  ->getRow();
+    } catch(Exception $e) {
+      var_dump($e->getMessage());
+      return false;
+    }
+  }
+
   // get request by id with all data of user
   public function showRequestDetails($id){
     try{
@@ -65,6 +78,7 @@ class TrainingRequest{
       return $this->db
                   ->select()
                   ->where("user_id","=",$userId)
+                  ->orderBy("request_id")
                   ->fetchAll();
     } catch(Exception $e){
       var_dump($e->getMessage());

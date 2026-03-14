@@ -8,8 +8,6 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Eye, EyeOff, Lock, Mail, Loader2 } from "lucide-react";
 import { API_CONFIG } from "@/config/api";
 
-const { BASE_URL: API_BASE } = API_CONFIG;
-
 export default function AdminLoginPage() {
   const [credentials, setCredentials] = useState({ email: "", password: "" });
   const [showPassword, setShowPassword] = useState(false);
@@ -48,8 +46,7 @@ export default function AdminLoginPage() {
     return true;
   }, [credentials]);
 
-  const handleLogin = useCallback(async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleLogin = useCallback(async () => {
 
     // Reset previous errors
     setError("");
@@ -62,13 +59,16 @@ export default function AdminLoginPage() {
     setIsLoading(true);
 
     try {
-      const response = await fetch(`${API_BASE}/admin/login`, {
+      const response = await fetch(API_CONFIG.ADMIN_FUNCTIONS.admins.login, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(credentials),
       });
 
-      const data = await response.json();
+      const contentType = response.headers.get("content-type") || "";
+      const data = contentType.includes("application/json")
+        ? await response.json()
+        : { message: "Invalid server response" };
 
       if (!response.ok) {
         throw new Error(data.message || "Login failed");
@@ -102,7 +102,14 @@ export default function AdminLoginPage() {
           </p>
         </div>
 
-        <form onSubmit={handleLogin} className="space-y-5">
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            void handleLogin();
+          }}
+          className="space-y-5"
+          noValidate
+        >
           {/* Email */}
           <div>
             <label htmlFor="email" className="block text-sm font-medium mb-1">
@@ -168,7 +175,12 @@ export default function AdminLoginPage() {
           )}
 
           {/* Submit Button */}
-          <Button type="submit" className="w-full" disabled={isLoading}>
+          <Button
+            type="button"
+            className="w-full"
+            disabled={isLoading}
+            onClick={() => void handleLogin()}
+          >
             {isLoading ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />

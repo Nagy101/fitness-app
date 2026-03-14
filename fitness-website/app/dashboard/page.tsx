@@ -64,6 +64,17 @@ const CoursesSection = dynamic(
     ),
   },
 );
+const TrainingRequestsSection = dynamic(
+  () =>
+    import("@/components/dashboard/TrainingRequestsSection").then(
+      (m) => m.TrainingRequestsSection,
+    ),
+  {
+    loading: () => (
+      <div className="h-64 bg-gray-100 animate-pulse rounded-lg" />
+    ),
+  },
+);
 const NotificationsSection = dynamic(
   () =>
     import("@/components/dashboard/NotificationsSection").then(
@@ -182,8 +193,7 @@ export default function DashboardPage() {
         setOrderDetailsError(null);
         let token: string | null = null;
         try {
-          token =
-            localStorage.getItem("token") || sessionStorage.getItem("token");
+          token = sessionStorage.getItem("token");
         } catch {
           token = null;
         }
@@ -478,9 +488,7 @@ export default function DashboardPage() {
                 let token: string | null = null;
                 if (typeof window !== "undefined") {
                   try {
-                    token =
-                      localStorage.getItem("token") ||
-                      sessionStorage.getItem("token");
+                    token = sessionStorage.getItem("token");
                   } catch {
                     token = null;
                   }
@@ -648,6 +656,7 @@ export default function DashboardPage() {
     loadOrders: (actions as any)?.loadOrders || (async () => { }),
     loadSubscribedCourses:
       (actions as any)?.loadSubscribedCourses || (async () => { }),
+    loadRequests: (actions as any)?.loadRequests || (async () => { }),
     loadNotifications: (actions as any)?.loadNotifications || (async () => { }),
     markNotificationAsRead:
       (actions as any)?.markNotificationAsRead || (async () => { }),
@@ -738,6 +747,12 @@ export default function DashboardPage() {
               isLoading={loading?.orders || false}
               onRefresh={safeActions.loadOrders}
               onViewDetails={openOrderDetails}
+            />
+
+            <TrainingRequestsSection
+              requests={trainingRequests}
+              isLoading={loading?.requests || false}
+              onRefresh={safeActions.loadRequests}
             />
 
             {/* Courses Section */}

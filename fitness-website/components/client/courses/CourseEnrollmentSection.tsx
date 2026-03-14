@@ -24,6 +24,7 @@ import { useAuth } from "@/contexts/auth-context";
 import { API_CONFIG } from "@/config/api";
 import { useUserApi } from "@/hooks/client/use-user-api";
 import { useCourseRequests } from "@/hooks/client/use-course-requests";
+import { extractErrorMessage } from "@/lib/errors";
 
 import {
   ShoppingCart,
@@ -163,7 +164,7 @@ const CourseEnrollmentSection = React.memo<CourseEnrollmentSectionProps>(
           throw new Error(data?.message || "Failed to create request");
         }
       } catch (err: any) {
-        toast.error(err?.message || "Failed to submit request");
+        toast.error(extractErrorMessage(err, "Failed to submit request"));
       } finally {
         setSubmitting(false);
       }

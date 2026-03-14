@@ -98,16 +98,24 @@ class ManageUsersController extends AbstractController{
       $this->requireSuperAdmin();
       $data = json_decode(file_get_contents("php://input"), true);
       if(empty($data)){
-        $this->sendError("All Fields Are Required");
+        return $this->sendError("All Fields Are Required", 422);
       }
+
+      $requiredFields = ["name", "email", "password"];
+      foreach ($requiredFields as $field) {
+        if (!isset($data[$field]) || trim((string)$data[$field]) === "") {
+          return $this->sendError("Field '$field' is required", 422);
+        }
+      }
+
       $added = $this->userModel->addUser($data);
       if ($added) {
         return $this->json([
           "status" => "success",
           "message" => "User added successfully"
-        ]);
+        ], 201);
       }
-      return $this->sendError("User already exists or error occurred");
+      return $this->sendError("User already exists or invalid data", 409);
     }
     public function filterByType() {
       $this->requireSuperAdmin();

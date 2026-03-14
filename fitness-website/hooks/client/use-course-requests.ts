@@ -37,10 +37,16 @@ export function useCourseRequests() {
   // Get request status for a specific course
   const getCourseRequestStatus = useCallback(
     (courseId: number) => {
-      const request = requests.find((req) => req.course_id === courseId);
+      const request = requests
+        .filter((req) => Number(req.course_id) === Number(courseId))
+        .sort((a, b) => {
+          const aTime = new Date(a.created_at || 0).getTime();
+          const bTime = new Date(b.created_at || 0).getTime();
+          return bTime - aTime;
+        })[0];
       return {
         isSubscribed: !!request,
-        status: request?.status || null,
+        status: request ? (String(request.status).toLowerCase() as any) : null,
         request: request || null,
       };
     },

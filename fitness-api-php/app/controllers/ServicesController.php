@@ -5,6 +5,7 @@
   use App\models\Service;
   
   class ServicesController extends AbstractController{
+    /** @var Service */
     private $serviceModel;
 
     public function __construct(){
@@ -13,9 +14,9 @@
     public function getAll(){
       $Services = $this->serviceModel->getAll();
       if($Services === false){
-        $this->sendError("Error During Get Services");
+        return $this->sendError("Error During Get Services");
       }elseif(empty($Services)){
-        $this->sendError("No Services Found",404);
+        return $this->sendError("No Services Found",404);
       }
       // نشيل admin_id من كل Service
       foreach ($Services as &$service) {
@@ -29,14 +30,12 @@
     }
 
     public function singleService($id){
-      // استخراج بيانات المستخدم من التوكن لضمان جلب حالته هو فقط
-      $decoded = $this->getUserFromToken();
-      $userId = $decoded['id']; // أو حسب ما أنت مسميها في التوكن
-
-      $Service = $this->serviceModel->getServiceById($id, $userId);
+      $Service = $this->serviceModel->getServiceById($id);
       
       if($Service === false){
         return $this->sendError("Error During Find Service");
+      } elseif (empty($Service)) {
+        return $this->sendError("No Service Found",404);
       }
       
       // نشيل admin_id من كل Service

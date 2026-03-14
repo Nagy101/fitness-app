@@ -42,10 +42,56 @@ class TrainingRequestsController extends AbstractController {
   public function getMyRequests(){
     $user = $this->getUserFromToken();
     $requests = $this->reqModel->getRequestsByUserId($user['id']);
+    $payload = json_decode(file_get_contents("php://input"), true) ?: [];
+
+    $hasServiceId = isset($payload['service_id']) && $payload['service_id'] !== "";
+    $serviceId = $hasServiceId ? (string)$payload['service_id'] : "";
+    $hasServiceName = isset($payload['service_name']) && trim((string)$payload['service_name']) !== "";
+    $serviceName = $hasServiceName ? strtolower(trim((string)$payload['service_name'])) : "";
+
+    if($hasServiceId || $hasServiceName){
+      $requests = array_values(array_filter((array)$requests, function($req) use ($hasServiceId, $serviceId, $hasServiceName, $serviceName) {
+        if(!is_array($req)){
+          return false;
+        }
+
+        $reqServiceId = isset($req['service_id']) ? (string)$req['service_id'] : "";
+        $reqServiceName = isset($req['service_name']) ? strtolower(trim((string)$req['service_name'])) : "";
+
+        if($hasServiceId && $reqServiceId !== ""){
+          return $reqServiceId === $serviceId;
+        }
+
+        if($hasServiceName && $reqServiceName !== ""){
+          return $reqServiceName === $serviceName;
+        }
+
+        return false;
+      }));
+    }
+
     if(!$requests || $requests === false){
       return $this->json(["status"=>"success","data"=>[]]);
     }
       return $this->json(["status"=>"success","data"=>$requests]);
+  }
+
+  public function showMyRequest($id){
+    if(!is_string($id) || !ctype_digit($id)){
+      return $this->sendError("Invalid request id", 422);
+    }
+
+    $user = $this->getUserFromToken();
+    $request = $this->reqModel->getRequestByIdForUser((int)$id, $user['id']);
+
+    if(!$request || $request === false){
+      return $this->sendError("Request not found", 404);
+    }
+
+    return $this->json([
+      "status" => "success",
+      "data" => $request
+    ]);
   }
 }
 ?>

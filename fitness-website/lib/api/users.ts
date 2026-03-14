@@ -86,6 +86,7 @@ export const usersApi = {
       address: formData.address?.trim() || "",
       password: formData.password,
       country: formData.country.trim(),
+      role: "Admin",
       is_super_admin: 1,
     } : {
       name: formData.name.trim(),
@@ -114,9 +115,9 @@ export const usersApi = {
       phone: formData.phone.trim() || "",
       address: formData.address?.trim() || "",
       country: formData.country.trim(),
-      role: formData.role,
-      ...(formData.password.trim() && { password: formData.password }),
+      role: "Admin",
       is_super_admin: 1,
+      ...(formData.password.trim() && { password: formData.password }),
     } : {
       name: formData.name.trim(),
       email: formData.email.trim(),

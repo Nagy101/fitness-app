@@ -42,8 +42,7 @@ class CoursesRequestsController extends AbstractController {
       $promoModel = new Promo_Codes();
       $PromoCode = $promoModel->getPromoByPromo($data['promo_code_used']);
       if(empty($PromoCode)){
-        $this->sendError("InValid Promo Code");
-        return;
+        return $this->sendError("Invalid promo code", 422);
       }
       $currentDate = new DateTime();
       $endDate = new DateTime($PromoCode['end_date']);
@@ -54,8 +53,7 @@ class CoursesRequestsController extends AbstractController {
           $data['discount_value'] = $percentageOfDiscount;
           $data['net_total'] = $data['original_total'] - ($data['original_total'] * $percentageOfDiscount / 100) ;
         }else{
-          $this->sendError("Promo Code Not Available");
-          return;
+          return $this->sendError("Promo code is not available", 422);
         }
       }
     }
@@ -84,6 +82,18 @@ class CoursesRequestsController extends AbstractController {
   public function getMyRequests(){
     $user = $this->getUserFromToken();
     $requests = $this->reqModel->getRequestsByUserId($user['id']);
+    $payload = json_decode(file_get_contents("php://input"), true) ?: [];
+
+    if(isset($payload['course_id']) && $payload['course_id'] !== ""){
+      $courseId = (string)$payload['course_id'];
+      $requests = array_values(array_filter((array)$requests, function($req) use ($courseId) {
+        if(!is_array($req) || !array_key_exists('course_id', $req)){
+          return false;
+        }
+        return (string)$req['course_id'] === $courseId;
+      }));
+    }
+
     if(!$requests || $requests === false){
       return $this->json(["status"=>"success","data"=>[]]);
     }

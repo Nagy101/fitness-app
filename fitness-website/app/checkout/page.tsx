@@ -18,6 +18,7 @@ import { ArrowLeft } from "lucide-react";
 import axios from "axios";
 import { API_CONFIG } from "@/config/api";
 import { useAuth } from "@/contexts/auth-context";
+import { extractErrorMessage } from "@/lib/errors";
 
 // Removed detailed form fields; this page now focuses on summary + submit.
 
@@ -30,13 +31,19 @@ export default function CheckoutPage() {
   const [isProcessing, setIsProcessing] = useState(false);
   const { user } = useAuth();
   const [promoCode, setPromoCode] = useState("");
+  const [appliedPromoCode, setAppliedPromoCode] = useState("");
+  const [appliedDiscountPercent, setAppliedDiscountPercent] = useState(0);
+  const [isApplyingPromo, setIsApplyingPromo] = useState(false);
+  const [promoFeedback, setPromoFeedback] = useState<{
+    type: "success" | "error";
+    message: string;
+  } | null>(null);
 
   // Memoized calculations for better performance
   const orderCalculations = useMemo(() => {
     const shipping = total > 50 ? 0 : 9.99;
     const tax = total * 0.08;
-    const discountPercent =
-      promoCode.trim().toUpperCase() === "DISCOUNT10" ? 10 : 0;
+    const discountPercent = appliedDiscountPercent;
     const preDiscountTotal = total + shipping + tax;
     const finalTotal = preDiscountTotal * (1 - discountPercent / 100);
 
@@ -47,7 +54,7 @@ export default function CheckoutPage() {
       preDiscountTotal,
       finalTotal,
     };
-  }, [total, promoCode]);
+  }, [total, appliedDiscountPercent]);
 
   const orderStats = useMemo(
     () => ({
@@ -97,7 +104,7 @@ export default function CheckoutPage() {
             original_total: Number(original_total.toFixed(2)),
             discount_value: orderCalculations.discountPercent,
             net_total: Number(itemNet.toFixed(2)),
-            promo_code_used: promoCode || "",
+            promo_code_used: appliedPromoCode || "",
             status: "pending",
           };
 
@@ -120,12 +127,67 @@ export default function CheckoutPage() {
         setIsProcessing(false);
       }
     },
-    [user, items, orderCalculations, promoCode, router, clearCart],
+    [user, items, orderCalculations, appliedPromoCode, router, clearCart],
   );
 
   const handlePromoChange = useCallback((value: string) => {
     setPromoCode(value);
-  }, []);
+    if (value.trim().toUpperCase() !== appliedPromoCode.trim().toUpperCase()) {
+      setAppliedDiscountPercent(0);
+      setAppliedPromoCode("");
+    }
+    if (promoFeedback) {
+      setPromoFeedback(null);
+    }
+  }, [appliedPromoCode, promoFeedback]);
+
+  const handleApplyPromo = useCallback(async () => {
+    const code = promoCode.trim();
+    if (!code) {
+      setPromoFeedback({ type: "error", message: "Please enter a promo code." });
+      return;
+    }
+
+    setIsApplyingPromo(true);
+    setPromoFeedback(null);
+
+    try {
+      const response = await axios.post(API_CONFIG.USER_FUNCTIONS.promoCodes.validate, {
+        promo_code: code,
+      });
+
+      const data = response?.data?.data || {};
+      const isActive = Boolean(data?.is_active);
+      const discount = Number(data?.discount_percentage ?? 0);
+
+      if (!isActive || !Number.isFinite(discount) || discount <= 0) {
+        setAppliedDiscountPercent(0);
+        setAppliedPromoCode("");
+        setPromoFeedback({
+          type: "error",
+          message: response?.data?.message || "Promo code is not active.",
+        });
+        return;
+      }
+
+      setAppliedPromoCode((data?.promo_code || code).toString());
+      setAppliedDiscountPercent(discount);
+      setPromoFeedback({
+        type: "success",
+        message: `Promo code applied successfully (${discount}% off).`,
+      });
+    } catch (error: any) {
+      setAppliedDiscountPercent(0);
+      setAppliedPromoCode("");
+      const message = extractErrorMessage(
+        error,
+        "Unable to validate promo code right now.",
+      );
+      setPromoFeedback({ type: "error", message });
+    } finally {
+      setIsApplyingPromo(false);
+    }
+  }, [promoCode]);
 
   if (items.length === 0) {
     return (
@@ -334,15 +396,22 @@ export default function CheckoutPage() {
                       <Button
                         type="button"
                         variant="secondary"
-                        disabled={!promoCode}
+                        disabled={!promoCode.trim() || isApplyingPromo}
+                        onClick={handleApplyPromo}
                         className="bg-slate-100 text-slate-900 hover:bg-slate-200"
                       >
-                        Apply
+                        {isApplyingPromo ? "Applying..." : "Apply"}
                       </Button>
                     </div>
-                    {orderCalculations.discountPercent > 0 && (
-                      <p className="text-xs font-medium text-green-600 animate-in fade-in slide-in-from-top-1">
-                        ✓ Discount applied: {orderCalculations.discountPercent}% off
+                    {promoFeedback && (
+                      <p
+                        className={`text-xs font-medium animate-in fade-in slide-in-from-top-1 ${
+                          promoFeedback.type === "success"
+                            ? "text-green-600"
+                            : "text-red-600"
+                        }`}
+                      >
+                        {promoFeedback.message}
                       </p>
                     )}
                   </div>
