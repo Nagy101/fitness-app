@@ -70,7 +70,7 @@ const BlogFilterSection = React.memo<BlogFilterSectionProps>(
                       onCategoryChange("");
                       onSortChange("latest");
                     }}
-                    className="h-9 rounded-full px-4 text-slate-600 hover:bg-slate-100 hover:text-slate-900"
+                    className="h-9 rounded-full px-4 text-slate-600 hover:bg-slate-500 hover:text-slate-900"
                   >
                     <X className="mr-2 h-4 w-4" />
                     Reset filters
@@ -118,7 +118,7 @@ const BlogFilterSection = React.memo<BlogFilterSectionProps>(
                 onClick={() => onCategoryChange("")}
                 className={
                   selectedCategory
-                    ? "rounded-full border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
+                    ? "rounded-full border-slate-200 bg-white text-slate-700 hover:bg-slate-500"
                     : "rounded-full bg-primary text-white hover:bg-primary/90"
                 }
               >
@@ -134,7 +134,7 @@ const BlogFilterSection = React.memo<BlogFilterSectionProps>(
                   className={
                     selectedCategory === category.name
                       ? "rounded-full bg-primary text-white shadow-sm hover:bg-primary/90"
-                      : "rounded-full border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50"
+                      : "rounded-full border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-500"
                   }
                 >
                   <span

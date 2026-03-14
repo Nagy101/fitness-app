@@ -116,7 +116,7 @@ const UnifiedPagination = React.memo<PaginationProps>(
             size="sm"
             onClick={() => onPageChange(currentPage - 1)}
             disabled={currentPage === 1}
-            className="border-gray-300 hover:bg-blue-50 hover:border-blue-300 disabled:opacity-50 transition-colors"
+            className="border-gray-300 bg-white hover:bg-primary/5 hover:border-primary/30 disabled:opacity-50 transition-colors"
           >
             <ChevronLeft className="w-4 h-4 mr-1" />
             <span className="hidden sm:inline">Prev</span>
@@ -133,7 +133,7 @@ const UnifiedPagination = React.memo<PaginationProps>(
                     variant={currentPage === page ? "default" : "outline"}
                     size="sm"
                     onClick={() => onPageChange(page as number)}
-                    className={`min-w-[36px] h-9 transition-all ${currentPage === page ? "bg-blue-600 hover:bg-blue-700 text-white shadow-sm" : "border-gray-300 hover:bg-blue-50 hover:border-blue-300"}`}
+                    className={`min-w-[36px] h-9 transition-all ${currentPage === page ? "bg-primary hover:bg-secondary text-white shadow-sm" : "border-gray-300 bg-white hover:bg-primary/5 hover:border-primary/30"}`}
                   >
                     {page}
                   </Button>
@@ -146,7 +146,7 @@ const UnifiedPagination = React.memo<PaginationProps>(
             size="sm"
             onClick={() => onPageChange(currentPage + 1)}
             disabled={currentPage === totalPages}
-            className="border-gray-300 hover:bg-blue-50 hover:border-blue-300 disabled:opacity-50 transition-colors"
+            className="border-gray-300 bg-white hover:bg-primary/5 hover:border-primary/30 disabled:opacity-50 transition-colors"
           >
             <span className="hidden sm:inline">Next</span>
             <ChevronRight className="w-4 h-4 ml-1" />
@@ -158,7 +158,7 @@ const UnifiedPagination = React.memo<PaginationProps>(
             value={pageSize.toString()}
             onValueChange={handlePageSizeChange}
           >
-            <SelectTrigger className="w-24 h-9 border-gray-300 hover:border-blue-300 transition-colors">
+            <SelectTrigger className="w-24 h-9 border-gray-300 bg-white hover:border-primary/30 transition-colors">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -230,7 +230,7 @@ const CoursesClientPage = React.memo(
       return (
         <div className="flex items-center justify-center min-h-[50vh]">
           <div className="flex items-center space-x-3">
-            <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
+            <Loader2 className="h-8 w-8 animate-spin text-primary" />
             <span className="text-gray-700 text-lg font-medium">
               Loading courses...
             </span>
@@ -248,8 +248,27 @@ const CoursesClientPage = React.memo(
           onSortChange={handleSortChange}
         />
 
-        <section className="py-16 bg-white">
+        <section
+          id="course-catalog"
+          className="py-12 bg-[linear-gradient(180deg,#ffffff_0%,#f8fafc_100%)]"
+        >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="mb-8 mt-2 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">
+                  Course Archive
+                </p>
+                <h2 className="mt-2 text-3xl sm:text-4xl font-bold tracking-tight text-slate-950">
+                  {filter.searchTerm
+                    ? `Results for "${filter.searchTerm}"`
+                    : "Explore Learning Paths"}
+                </h2>
+              </div>
+              <p className="text-slate-600 text-base">
+                {filteredCourses.length} course
+                {filteredCourses.length !== 1 ? "s" : ""} available
+              </p>
+            </div>
             <CourseGrid courses={paginatedCourses} loading={loading} />
 
             {hasValidData && filteredCourses.length > 0 && (

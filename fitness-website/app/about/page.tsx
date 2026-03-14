@@ -32,7 +32,11 @@ const TEAM_MEMBERS = [
     name: "Emily Davis",
     role: "Nutrition Expert",
     bio: "Registered dietitian helping clients achieve their health goals through proper nutrition and lifestyle changes.",
-    specialties: ["Nutrition Planning", "Weight Management", "Wellness Coaching"],
+    specialties: [
+      "Nutrition Planning",
+      "Weight Management",
+      "Wellness Coaching",
+    ],
   },
   {
     name: "David Wilson",
@@ -46,22 +50,26 @@ const VALUES = [
   {
     icon: Target,
     title: "Goal-Oriented",
-    description: "We help you set and achieve realistic fitness goals with personalized programs tailored to your needs.",
+    description:
+      "We help you set and achieve realistic fitness goals with personalized programs tailored to your needs.",
   },
   {
     icon: Heart,
     title: "Health First",
-    description: "Your health and wellbeing are our top priority in everything we do, ensuring safe and effective training.",
+    description:
+      "Your health and wellbeing are our top priority in everything we do, ensuring safe and effective training.",
   },
   {
     icon: Users,
     title: "Community",
-    description: "Building a supportive community where everyone can thrive together and celebrate each other's success.",
+    description:
+      "Building a supportive community where everyone can thrive together and celebrate each other's success.",
   },
   {
     icon: Award,
     title: "Excellence",
-    description: "Committed to delivering the highest quality fitness programs and services with proven results.",
+    description:
+      "Committed to delivering the highest quality fitness programs and services with proven results.",
   },
 ];
 
@@ -75,13 +83,15 @@ const MILESTONES = [
   {
     year: "2019",
     title: "First 1,000 Members",
-    description: "Reached our first major milestone with incredible community support",
+    description:
+      "Reached our first major milestone with incredible community support",
     icon: Users,
   },
   {
     year: "2021",
     title: "Online Platform Launch",
-    description: "Expanded to digital with comprehensive online training programs",
+    description:
+      "Expanded to digital with comprehensive online training programs",
     icon: Zap,
   },
   {
@@ -100,17 +110,41 @@ const STATS_DATA = [
 ];
 
 // --- Reusable Shared Components (DRY) ---
-const SectionHeader = ({ title, subtitle, isDark = false }: { title: string; subtitle: string; isDark?: boolean }) => (
+const SectionHeader = ({
+  title,
+  subtitle,
+  isDark = false,
+}: {
+  title: string;
+  subtitle: string;
+  isDark?: boolean;
+}) => (
   <header className="text-center mb-16 space-y-4">
-    <h2 className={`text-3xl lg:text-4xl font-bold tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>{title}</h2>
-    <p className={`text-lg max-w-2xl mx-auto ${isDark ? 'text-white/90' : 'text-slate-600'}`}>{subtitle}</p>
+    <h2
+      className={`text-3xl lg:text-4xl font-bold tracking-tight ${isDark ? "text-white" : "text-slate-900"}`}
+    >
+      {title}
+    </h2>
+    <p
+      className={`text-lg max-w-2xl mx-auto leading-8 ${isDark ? "text-white/80" : "text-slate-600"}`}
+    >
+      {subtitle}
+    </p>
   </header>
 );
 
-const FeatureCard = ({ icon: Icon, title, description }: { icon: any; title: string; description: string }) => (
-  <Card className="text-center p-8 border-transparent shadow-sm hover:shadow-xl transition-all duration-300 bg-white group">
+const FeatureCard = ({
+  icon: Icon,
+  title,
+  description,
+}: {
+  icon: any;
+  title: string;
+  description: string;
+}) => (
+  <Card className="text-center p-8 border border-slate-200/70 shadow-sm hover:-translate-y-1 hover:shadow-[0_18px_45px_rgba(15,23,42,0.08)] transition-all duration-300 bg-white group rounded-[1.75rem]">
     <CardContent className="p-0 flex flex-col items-center">
-      <div className="w-16 h-16 rounded-2xl mb-6 bg-blue-50 text-blue-600 flex items-center justify-center group-hover:scale-110 group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
+      <div className="w-16 h-16 rounded-2xl mb-6 bg-primary/10 text-primary flex items-center justify-center group-hover:scale-110 group-hover:bg-secondary group-hover:text-white transition-all duration-300">
         <Icon className="w-8 h-8" />
       </div>
       <h3 className="text-xl font-bold mb-3 text-slate-900">{title}</h3>
@@ -121,10 +155,13 @@ const FeatureCard = ({ icon: Icon, title, description }: { icon: any; title: str
 
 export default function AboutPage() {
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col">
+    <div className="min-h-screen bg-[linear-gradient(180deg,#f8fbff_0%,#ffffff_40%,#f6fbf7_100%)] flex flex-col">
       {/* Hero Section */}
-      <section className="relative py-20 lg:py-32 overflow-hidden bg-white">
-        <div className="absolute inset-0 bg-blue-50/50 -skew-y-3 origin-top-left -z-10" />
+      <section className="relative py-20 lg:py-32 overflow-hidden bg-[linear-gradient(180deg,#ffffff_0%,#f8fbff_100%)]">
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute left-[-8%] top-0 h-72 w-72 rounded-full bg-primary/10 blur-3xl" />
+          <div className="absolute right-[-8%] top-4 h-80 w-80 rounded-full bg-secondary/10 blur-3xl" />
+        </div>
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
             <div className="space-y-8">
@@ -137,29 +174,129 @@ export default function AboutPage() {
                 badgeProps={{
                   variant: "secondary",
                   className:
-                    "bg-blue-100 text-blue-800 hover:bg-blue-200 transition-colors uppercase tracking-wider py-1 px-3",
+                    "bg-primary/10 text-primary hover:bg-primary/15 transition-colors uppercase tracking-wider py-1 px-3",
                 }}
                 titleClassName="text-4xl lg:text-6xl font-extrabold tracking-tight text-slate-900 leading-tight"
-                highlightClassName="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600"
+                highlightClassName="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary"
                 descriptionClassName="mx-0 max-w-none text-lg md:text-xl text-slate-600 leading-relaxed"
               />
               <div className="flex flex-col sm:flex-row gap-4 pt-4">
-                <Button size="lg" className="bg-blue-600 hover:bg-blue-700 shadow-md shadow-blue-500/20 text-base">Join Our Community</Button>
-                <Button size="lg" variant="outline" className="border-slate-300 text-slate-700 hover:bg-slate-50 text-base">Meet Our Team</Button>
+                <Button
+                  size="lg"
+                  className="bg-primary hover:bg-secondary shadow-sm text-base rounded-full px-7"
+                >
+                  Join Our Community
+                </Button>
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="border-slate-200 bg-white text-slate-700 hover:bg-slate-50 text-base rounded-full px-7"
+                >
+                  Meet Our Team
+                </Button>
               </div>
             </div>
-            {/* Visual Element replacing skeleton-like div */}
-            <div className="relative group perspective-1000">
-              {/* Note: In a real app, use next/image here with priority={true} for LCP */}
-              <div className="w-full aspect-square md:aspect-[4/3] bg-gradient-to-tr from-blue-600 to-indigo-600 rounded-3xl flex items-center justify-center shadow-2xl shadow-blue-900/20 transition-transform duration-500 group-hover:-translate-y-2">
-                <div className="text-center text-white space-y-4">
-                  <span className="p-4 bg-white/20 rounded-full inline-block backdrop-blur-sm">
-                    <Users className="w-16 h-16 md:w-20 md:h-20" />
-                  </span>
-                  <p className="text-2xl font-bold tracking-tight">{ABOUT_STATS.memberCount} Happy Members</p>
+            <div className="relative">
+              <div className="overflow-hidden rounded-[2rem] border border-white/80 bg-[linear-gradient(160deg,#0f172a_0%,#12314f_52%,#163b2a_100%)] shadow-[0_30px_90px_rgba(15,23,42,0.18)]">
+                <div className="h-1.5 w-full bg-[linear-gradient(90deg,#007BFF,#32CD32)]" />
+                <div className="grid gap-8 p-8 sm:p-10">
+                  <div>
+                    <p className="text-xs font-semibold uppercase tracking-[0.24em] text-white/55">
+                      Community Snapshot
+                    </p>
+                    <h2 className="mt-2 text-2xl font-semibold text-white sm:text-3xl">
+                      Built with people, not just numbers.
+                    </h2>
+                  </div>
+
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    <div className="rounded-[1.5rem] border border-white/10 bg-white/8 p-5 backdrop-blur-sm">
+                      <p className="text-sm text-white/65">Active Members</p>
+                      <p className="mt-2 text-3xl font-bold text-white">
+                        {ABOUT_STATS.memberCount}
+                      </p>
+                      <p className="mt-2 text-sm text-white/55">
+                        A global support-driven fitness community
+                      </p>
+                    </div>
+                    <div className="rounded-[1.5rem] border border-white/10 bg-white/8 p-5 backdrop-blur-sm">
+                      <p className="text-sm text-white/65">
+                        Certified Trainers
+                      </p>
+                      <p className="mt-2 text-3xl font-bold text-white">
+                        {ABOUT_STATS.trainerCount}
+                      </p>
+                      <p className="mt-2 text-sm text-white/55">
+                        Experienced coaches guiding each stage
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="space-y-3">
+                    {[
+                      {
+                        label: "Member trust",
+                        value: "96%",
+                        width: "96%",
+                        color: "bg-primary",
+                      },
+                      {
+                        label: "Program completion",
+                        value: "82%",
+                        width: "82%",
+                        color: "bg-secondary",
+                      },
+                      {
+                        label: "Satisfaction score",
+                        value: "4.9/5",
+                        width: "90%",
+                        color: "bg-white/70",
+                      },
+                    ].map((item) => (
+                      <div key={item.label}>
+                        <div className="mb-1.5 flex items-center justify-between text-sm text-white/75">
+                          <span>{item.label}</span>
+                          <span>{item.value}</span>
+                        </div>
+                        <div className="h-2 rounded-full bg-white/10">
+                          <div
+                            className={`h-2 rounded-full ${item.color}`}
+                            style={{ width: item.width }}
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="flex flex-wrap gap-3 text-sm text-white/80">
+                    <span className="rounded-full bg-white/10 px-4 py-2 backdrop-blur">
+                      Since {ABOUT_STATS.foundedYear}
+                    </span>
+                    <span className="rounded-full bg-white/10 px-4 py-2 backdrop-blur">
+                      Human-first coaching
+                    </span>
+                    <span className="rounded-full bg-white/10 px-4 py-2 backdrop-blur">
+                      Steady growth
+                    </span>
+                  </div>
                 </div>
               </div>
-              <div className="absolute -inset-4 bg-blue-500/20 blur-3xl rounded-full -z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+              <div className="absolute -bottom-6 left-6 hidden rounded-[1.5rem] border border-white/80 bg-white/95 p-5 shadow-[0_20px_50px_rgba(15,23,42,0.10)] sm:block">
+                <div className="flex items-center gap-3">
+                  <div className="rounded-full bg-secondary/15 p-3 text-secondary">
+                    <Users className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-slate-950">
+                      {ABOUT_STATS.successStories} success stories
+                    </p>
+                    <p className="text-sm text-slate-500">
+                      Real people, measurable change
+                    </p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -170,18 +307,33 @@ export default function AboutPage() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
             {[
-              { icon: Target, title: "Our Mission", text: "To empower individuals to transform their lives through fitness, providing accessible, effective, and enjoyable fitness solutions that promote long-term health and wellness for people of all backgrounds and fitness levels." },
-              { icon: Heart, title: "Our Vision", text: "To become the world's leading fitness platform, creating a global community where everyone has the tools, knowledge, and support to live their healthiest life and achieve their personal best." }
+              {
+                icon: Target,
+                title: "Our Mission",
+                text: "To empower individuals to transform their lives through fitness, providing accessible, effective, and enjoyable fitness solutions that promote long-term health and wellness for people of all backgrounds and fitness levels.",
+              },
+              {
+                icon: Heart,
+                title: "Our Vision",
+                text: "To become the world's leading fitness platform, creating a global community where everyone has the tools, knowledge, and support to live their healthiest life and achieve their personal best.",
+              },
             ].map((item, idx) => (
-              <Card key={idx} className="p-8 lg:p-10 border-slate-200 shadow-sm hover:shadow-md transition-shadow bg-white rounded-2xl">
+              <Card
+                key={idx}
+                className="p-8 lg:p-10 border-slate-200 shadow-sm hover:shadow-md transition-shadow bg-white rounded-2xl"
+              >
                 <CardContent className="p-0">
                   <div className="flex items-center mb-6 gap-4">
                     <div className="p-3 bg-blue-50 rounded-xl text-blue-600">
                       <item.icon className="w-8 h-8" />
                     </div>
-                    <h2 className="text-2xl lg:text-3xl font-bold text-slate-900">{item.title}</h2>
+                    <h2 className="text-2xl lg:text-3xl font-bold text-slate-900">
+                      {item.title}
+                    </h2>
                   </div>
-                  <p className="text-lg leading-relaxed text-slate-600">{item.text}</p>
+                  <p className="text-lg leading-relaxed text-slate-600">
+                    {item.text}
+                  </p>
                 </CardContent>
               </Card>
             ))}
@@ -192,31 +344,49 @@ export default function AboutPage() {
       {/* Core Values Section */}
       <section className="py-20 lg:py-24 bg-white">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <SectionHeader title="Our Core Values" subtitle="The absolute principles that guide our training, community, and platform." />
+          <SectionHeader
+            title="Our Core Values"
+            subtitle="The absolute principles that guide our training, community, and platform."
+          />
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {VALUES.map((value, idx) => <FeatureCard key={idx} {...value} />)}
+            {VALUES.map((value, idx) => (
+              <FeatureCard key={idx} {...value} />
+            ))}
           </div>
         </div>
       </section>
 
       {/* Timeline Section */}
-      <section className="py-20 lg:py-24 bg-slate-50 border-y border-slate-200">
+      <section className="py-20 lg:py-24 bg-slate-50/70 border-y border-slate-200">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <SectionHeader title="Our Journey" subtitle="Key milestones in our mission to bring world-class fitness to everyone." />
+          <SectionHeader
+            title="Our Journey"
+            subtitle="Key milestones in our mission to bring world-class fitness to everyone."
+          />
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
             {MILESTONES.map((milestone, idx) => (
-              <Card key={idx} className="border-slate-200 shadow-sm hover:-translate-y-1 transition-transform bg-white">
+              <Card
+                key={idx}
+                className="border-slate-200 shadow-sm hover:-translate-y-1 transition-transform bg-white rounded-[1.5rem]"
+              >
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between mb-4">
-                    <div className="w-12 h-12 rounded-xl bg-indigo-50 flex items-center justify-center text-indigo-600">
+                    <div className="w-12 h-12 rounded-xl bg-secondary/10 flex items-center justify-center text-secondary">
                       <milestone.icon className="w-6 h-6" />
                     </div>
-                    <Badge variant="outline" className="border-indigo-200 text-indigo-700 bg-indigo-50 font-bold tracking-wide">
+                    <Badge
+                      variant="outline"
+                      className="border-secondary/30 text-secondary bg-secondary/10 font-bold tracking-wide"
+                    >
                       {milestone.year}
                     </Badge>
                   </div>
-                  <h3 className="text-lg font-bold mb-2 text-slate-900">{milestone.title}</h3>
-                  <p className="text-sm text-slate-600 leading-relaxed">{milestone.description}</p>
+                  <h3 className="text-lg font-bold mb-2 text-slate-900">
+                    {milestone.title}
+                  </h3>
+                  <p className="text-sm text-slate-600 leading-relaxed">
+                    {milestone.description}
+                  </p>
                 </CardContent>
               </Card>
             ))}
@@ -227,20 +397,36 @@ export default function AboutPage() {
       {/* Team Section */}
       <section className="py-20 lg:py-32 bg-white">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <SectionHeader title="Meet Our Expert Team" subtitle="Elite, certified professionals dedicated to accelerating your fitness journey." />
+          <SectionHeader
+            title="Meet Our Expert Team"
+            subtitle="Elite, certified professionals dedicated to accelerating your fitness journey."
+          />
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {TEAM_MEMBERS.map((member, idx) => (
-              <Card key={idx} className="border-transparent shadow-sm hover:shadow-xl hover:border-blue-100 transition-all duration-300 bg-slate-50/50 group">
+              <Card
+                key={idx}
+                className="border-transparent shadow-sm hover:shadow-xl hover:border-secondary/20 transition-all duration-300 bg-slate-50/50 group rounded-[1.5rem]"
+              >
                 <CardContent className="p-6 md:p-8 text-center">
-                  <div className="w-24 h-24 rounded-full bg-gradient-to-tr from-blue-100 to-indigo-100 mx-auto mb-6 flex items-center justify-center group-hover:scale-105 transition-transform duration-300 ring-4 ring-white shadow-inner">
-                    <Users className="w-10 h-10 text-blue-600/70" />
+                  <div className="w-24 h-24 rounded-full bg-gradient-to-tr from-primary/15 to-secondary/15 mx-auto mb-6 flex items-center justify-center group-hover:scale-105 transition-transform duration-300 ring-4 ring-white shadow-inner">
+                    <Users className="w-10 h-10 text-primary/70" />
                   </div>
-                  <h3 className="text-xl font-bold text-slate-900 mb-1">{member.name}</h3>
-                  <p className="text-sm font-semibold text-blue-600 uppercase tracking-wider mb-4">{member.role}</p>
-                  <p className="text-sm text-slate-600 mb-6 leading-relaxed line-clamp-3">{member.bio}</p>
+                  <h3 className="text-xl font-bold text-slate-900 mb-1">
+                    {member.name}
+                  </h3>
+                  <p className="text-sm font-semibold text-primary uppercase tracking-wider mb-4">
+                    {member.role}
+                  </p>
+                  <p className="text-sm text-slate-600 mb-6 leading-relaxed line-clamp-3">
+                    {member.bio}
+                  </p>
                   <div className="flex flex-wrap gap-2 justify-center">
                     {member.specialties.map((specialty, id) => (
-                      <Badge key={id} variant="secondary" className="bg-white border-slate-200 text-slate-600 text-[10px] font-medium tracking-wide">
+                      <Badge
+                        key={id}
+                        variant="secondary"
+                        className="bg-white border-slate-200 text-slate-600 text-[10px] font-medium tracking-wide"
+                      >
                         {specialty}
                       </Badge>
                     ))}
@@ -253,7 +439,7 @@ export default function AboutPage() {
       </section>
 
       {/* Global Impact & CTA */}
-      <section className="bg-slate-900 mt-auto">
+      <section className="bg-[linear-gradient(135deg,#0f172a_0%,#12314f_55%,#1d4332_100%)] mt-auto">
         {/* Stats Sub-section */}
         <div className="border-b border-slate-800">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-20">
@@ -263,7 +449,9 @@ export default function AboutPage() {
                   <div className="text-4xl lg:text-5xl font-extrabold text-white tracking-tight">
                     {stat.number}
                   </div>
-                  <div className="text-sm lg:text-base font-medium text-slate-400 uppercase tracking-wider">{stat.label}</div>
+                  <div className="text-sm lg:text-base font-medium text-slate-300/80 uppercase tracking-wider">
+                    {stat.label}
+                  </div>
                 </div>
               ))}
             </div>
@@ -276,13 +464,23 @@ export default function AboutPage() {
             Ready to Forge Your Best Self?
           </h2>
           <p className="text-lg lg:text-xl text-slate-400 mb-10 max-w-2xl mx-auto leading-relaxed">
-            Join thousands of others transforming their lives. Get access to elite coaching, premium programs, and an unstoppable community.
+            Join thousands of others transforming their lives. Get access to
+            elite coaching, premium programs, and an unstoppable community.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Button asChild size="lg" className="h-14 px-8 bg-blue-600 hover:bg-blue-500 text-white text-lg rounded-xl shadow-lg shadow-blue-900/40 transition-all font-semibold w-full sm:w-auto">
+            <Button
+              asChild
+              size="lg"
+              className="h-14 px-8 bg-blue-600 hover:bg-blue-500 text-white text-lg rounded-xl shadow-lg shadow-blue-900/40 transition-all font-semibold w-full sm:w-auto"
+            >
               <Link href="/courses">Start Your Journey Now</Link>
             </Button>
-            <Button asChild size="lg" variant="outline" className="h-14 px-8 border-slate-700 bg-slate-800/50 hover:bg-slate-800 text-slate-300 hover:text-white text-lg rounded-xl transition-all font-semibold w-full sm:w-auto backdrop-blur-sm">
+            <Button
+              asChild
+              size="lg"
+              variant="outline"
+              className="h-14 px-8 border-white/30 bg-white/10 hover:bg-white text-white hover:text-slate-950 text-lg rounded-xl transition-all font-semibold w-full sm:w-auto backdrop-blur-sm"
+            >
               <Link href="/contact">Talk to an Expert</Link>
             </Button>
           </div>
@@ -291,4 +489,3 @@ export default function AboutPage() {
     </div>
   );
 }
-

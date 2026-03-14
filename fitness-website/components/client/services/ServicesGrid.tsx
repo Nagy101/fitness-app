@@ -35,8 +35,8 @@ export default function ServicesGrid({ services }: ServicesGridProps) {
         return (
           <Card
             key={key}
-            className={`group relative overflow-hidden shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 bg-white rounded-lg border-0 flex flex-col h-full ${
-              isPopular ? "ring-1 ring-primary" : ""
+            className={`group relative overflow-hidden border border-slate-200/80 shadow-sm hover:shadow-[0_18px_45px_rgba(15,23,42,0.10)] transition-all duration-300 transform hover:-translate-y-1 bg-white rounded-[1.75rem] flex flex-col h-full ${
+              isPopular ? "ring-1 ring-primary/40" : ""
             }`}
           >
             {isPopular && (
@@ -83,7 +83,7 @@ export default function ServicesGrid({ services }: ServicesGridProps) {
               </Link>
             </CardHeader>
 
-            <CardHeader className="p-4 pb-1.5">
+            <CardHeader className="p-5 pb-2">
               <CardTitle
                 className="text-lg font-bold text-foreground group-hover:text-primary transition-colors line-clamp-2 break-words leading-snug"
                 title={service.title}
@@ -91,14 +91,14 @@ export default function ServicesGrid({ services }: ServicesGridProps) {
                 {service.title}
               </CardTitle>
               <CardDescription
-                className="text-sm text-muted-foreground line-clamp-1 leading-relaxed break-words"
+                className="text-sm text-muted-foreground line-clamp-2 leading-relaxed break-words"
                 title={service.description}
               >
                 {service.description}
               </CardDescription>
             </CardHeader>
 
-            <CardContent className="px-4 pb-4 pt-0 flex flex-col flex-1">
+            <CardContent className="px-5 pb-5 pt-0 flex flex-col flex-1">
               <div className="flex items-center text-sm text-muted-foreground mb-2.5">
                 <Clock className="w-4 h-4 mr-2 text-primary flex-shrink-0" />
                 <span className="truncate" title={service.duration}>
@@ -120,7 +120,7 @@ export default function ServicesGrid({ services }: ServicesGridProps) {
                 </ul>
               )}
 
-              <div className="pt-3 mt-auto border-t border-border flex items-center justify-between gap-3">
+              <div className="pt-4 mt-auto border-t border-border flex items-center justify-between gap-3">
                 <div className="shrink-0">
                   <div className="text-xs text-muted-foreground">
                     Starting from
@@ -133,7 +133,7 @@ export default function ServicesGrid({ services }: ServicesGridProps) {
                 <Button
                   asChild
                   size="sm"
-                  className="h-10 px-4 text-sm font-semibold rounded-md shadow-sm hover:shadow-md transition-all duration-300 bg-blue-600 hover:bg-blue-700 text-white"
+                  className="h-10 px-4 text-sm font-semibold rounded-full shadow-sm hover:shadow-md transition-all duration-300 bg-primary hover:bg-secondary text-white"
                 >
                   <Link href={`/services/${service.id}`}>
                     View Details
