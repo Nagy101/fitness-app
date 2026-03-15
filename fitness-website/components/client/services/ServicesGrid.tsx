@@ -133,7 +133,7 @@ export default function ServicesGrid({ services }: ServicesGridProps) {
                 <Button
                   asChild
                   size="sm"
-                  className="h-10 px-4 text-sm font-semibold rounded-full shadow-sm hover:shadow-md transition-all duration-300 bg-primary hover:bg-secondary text-white"
+                  className="h-10 px-4 text-sm font-semibold rounded-full shadow-sm hover:shadow-md transition-all duration-300 bg-primary hover:bg-primary/90 text-white"
                 >
                   <Link href={`/services/${service.id}`}>
                     View Details

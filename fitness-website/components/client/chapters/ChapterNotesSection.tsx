@@ -147,7 +147,7 @@ const ChapterNotesSection = React.memo<ChapterNotesSectionProps>(({
               />
               
               <div className="flex items-center gap-2">
-                <Button onClick={handleAddNote} size="sm" className="bg-primary hover:bg-primary/90">
+                <Button onClick={handleAddNote} size="sm" className="bg-primary hover:bg-[#0056b3]">
                   <Save className="w-4 h-4 mr-2" />
                   Save Note
                 </Button>
@@ -219,7 +219,7 @@ const ChapterNotesSection = React.memo<ChapterNotesSectionProps>(({
                           <Button 
                             onClick={() => handleSaveEdit(note.id)} 
                             size="sm"
-                            className="bg-primary hover:bg-primary/90"
+                            className="bg-primary hover:bg-[#0056b3]"
                           >
                             <Save className="w-3 h-3 mr-1" />
                             Save

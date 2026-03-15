@@ -88,7 +88,7 @@ const ProductDetailsClientPage = React.memo<ProductDetailsClientPageProps>(
               </p>
               <Button
                 onClick={handleProductsRedirect}
-                className="bg-blue-600 hover:bg-blue-700"
+                className="bg-blue-600 hover:bg-[#0056b3] transition-colors duration-200"
               >
                 <ArrowLeft className="w-4 h-4 mr-2" />
                 Back to Products

@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { useAuth } from "@/contexts/auth-context";
 import { useRouter } from "next/navigation";
-import { LogOut, UserCircle } from "lucide-react";
+import { LogOut, LayoutDashboard } from "lucide-react";
 
 // Function to get initials from a full name, with a fallback
 const getUserInitials = (name: string): string => {
@@ -46,8 +46,8 @@ export function UserMenu() {
 
   const menuItems = [
     {
-      label: "Manage Profile",
-      icon: UserCircle,
+      label: "Dashboard",
+      icon: LayoutDashboard,
       path: "/dashboard",
     },
   ];

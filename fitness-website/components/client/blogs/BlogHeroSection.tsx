@@ -147,7 +147,7 @@ const BlogHeroSection = React.memo<BlogHeroSectionProps>(
                           asChild
                           variant="outline"
                           size="lg"
-                          className="rounded-full border-slate-200 bg-white px-6 text-slate-800 hover:bg-slate-500"
+                          className="rounded-full border-slate-200 bg-white px-6 text-slate-800 hover:bg-secondary hover:text-white hover:border-secondary transition-colors duration-200"
                         >
                           <Link href={`/blog/${featuredPost.id}?watch=1#video`}>
                             <PlayCircle className="mr-2 h-4 w-4" />

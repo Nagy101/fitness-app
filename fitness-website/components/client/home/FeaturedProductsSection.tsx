@@ -113,7 +113,7 @@ const FeaturedProductsSection = React.memo<FeaturedProductsSectionProps>(
                         {formatNumber(product.price || 0)} EGP
                       </span>
                       <ProtectedAction onAction={() => onAddToCart(product)}>
-                        <Button className="rounded-full bg-primary text-white hover:bg-secondary">
+                        <Button className="rounded-full bg-primary text-white hover:bg-[#0056b3] transition-colors duration-200">
                           <ShoppingCart className="h-4 w-4 mr-2" />
                           Add to Cart
                         </Button>
@@ -136,7 +136,7 @@ const FeaturedProductsSection = React.memo<FeaturedProductsSectionProps>(
               <Button
                 variant="outline"
                 size="lg"
-                className="inline-flex items-center gap-2 rounded-full border-slate-200 bg-white hover:bg-slate-50"
+                className="inline-flex items-center gap-2 rounded-full border-slate-200 bg-white hover:bg-secondary hover:text-white hover:border-secondary transition-colors duration-200"
               >
                 View All Products
                 <ArrowRight className="h-5 w-5" />

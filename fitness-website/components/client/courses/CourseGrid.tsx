@@ -98,7 +98,7 @@ const CourseGrid = React.memo<CourseGridProps>(({ courses, loading }) => {
           </p>
           <Button
             variant="outline"
-            className="border-slate-200 bg-white hover:bg-slate-50"
+            className="border-slate-200 bg-white hover:bg-secondary hover:text-white transition-colors duration-200"
             onClick={() => window.location.reload()}
           >
             Refresh Page
@@ -209,7 +209,7 @@ const CourseGrid = React.memo<CourseGridProps>(({ courses, loading }) => {
               <Button
                 asChild
                 size="sm"
-                className="h-10 px-4 text-sm font-semibold rounded-full shadow-sm hover:shadow-md transition-all duration-300 bg-primary hover:bg-secondary text-white"
+                className="h-10 px-4 text-sm font-semibold rounded-full shadow-sm hover:shadow-md transition-all duration-300 bg-primary hover:bg-[#0056b3] text-white"
               >
                 <Link href={`/courses/${course.course_id}`}>
                   View Details

@@ -260,7 +260,7 @@ const CourseModulesSection = React.memo<CourseModulesSectionProps>(({ modules, c
                         <div className="ml-12 mt-4">
                           {isEnrolled && enrollmentStatus === 'approved' ? (
                             <Link href={`/courses/${courseId}/modules/${module.module_id}`}>
-                              <Button variant="outline" size="sm" className="text-primary border-primary hover:bg-primary hover:text-white">
+                              <Button variant="outline" size="sm" className="text-primary border-primary hover:bg-[#0056b3] hover:text-white">
                                 <BookOpen className="w-4 h-4 mr-2" />
                                 View Module Details
                               </Button>

@@ -163,7 +163,7 @@ export default function ContactPage() {
                   <Button
                     className={
                       action.available
-                        ? "rounded-full bg-primary hover:bg-secondary"
+                        ? "rounded-full bg-primary hover:bg-[#0056b3] transition-colors duration-200"
                         : ""
                     }
                     disabled={!action.available}
@@ -263,7 +263,7 @@ export default function ContactPage() {
                 <CardContent className="space-y-3">
                   <Button
                     asChild
-                    className="w-full rounded-full bg-primary hover:bg-secondary text-white"
+                    className="w-full rounded-full bg-primary hover:bg-[#0056b3] text-white transition-colors duration-200"
                   >
                     <Link href="/services">
                       Book Consultation
@@ -319,7 +319,7 @@ export default function ContactPage() {
                 <p className="text-muted">
                   123 Fitness Street, Health City, HC 12345
                 </p>
-                <Button className="mt-4 rounded-full bg-primary hover:bg-secondary">
+                <Button className="mt-4 rounded-full bg-primary hover:bg-[#0056b3] transition-colors duration-200">
                   Get Directions
                 </Button>
               </div>

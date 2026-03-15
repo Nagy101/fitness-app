@@ -92,8 +92,8 @@ const ProductsFilterSection = React.memo<ProductsFilterSectionProps>(
                   variant={showFavoritesOnly ? "default" : "outline"}
                   className={`h-12 rounded-2xl ${
                     showFavoritesOnly
-                      ? "bg-primary text-white hover:bg-secondary"
-                      : "bg-white border-slate-300 hover:bg-slate-50"
+                      ? "bg-primary text-white hover:bg-[#0056b3] transition-colors duration-200"
+                      : "bg-white border-slate-300 "
                   }`}
                   onClick={onFavoritesToggle}
                 >

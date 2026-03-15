@@ -38,7 +38,7 @@ export function PageHeroText({
       <Badge
         {...badgeProps}
         className={cn(
-          "bg-primary/10 text-primary hover:bg-primary/20 transition-colors mb-4 px-4 py-1 text-sm font-medium",
+          "bg-primary/10 text-primary hover:bg-[#0056b3] hover:text-white transition-colors mb-4 px-4 py-1 text-sm font-medium",
           badgeProps?.className,
         )}
       >

@@ -173,7 +173,7 @@ export function Footer() {
                   placeholder="Your email"
                   className="bg-gray-800 border-gray-700 text-white"
                 />
-                <Button className="bg-primary hover:bg-primary/90">
+                <Button className="bg-primary hover:bg-[#0056b3] transition-colors duration-200">
                   Subscribe
                 </Button>
               </div>

@@ -126,7 +126,7 @@ export const ModuleForm = React.memo<ModuleFormProps>(({
             <Button
               type="submit"
               disabled={isSubmitting}
-              className="gap-2 bg-blue-600 hover:bg-blue-700 shadow-md hover:shadow-lg transition-all duration-200"
+              className="gap-2 bg-blue-600 hover:bg-[#0056b3] shadow-md hover:shadow-lg transition-all duration-200"
             >
               {isSubmitting ? (
                 <Loader2 className="h-4 w-4 animate-spin" />

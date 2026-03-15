@@ -59,7 +59,7 @@ export default function HeroSection() {
               <Link href="/courses">
                 <Button
                   size="lg"
-                  className="rounded-full bg-primary px-8 text-base text-white shadow-sm hover:bg-secondary"
+                  className="rounded-full bg-primary px-8 text-base text-white shadow-sm hover:bg-[#0056b3] transition-colors duration-200"
                 >
                   Explore Programs
                   <ArrowRight className="ml-2 h-5 w-5" />
@@ -69,7 +69,7 @@ export default function HeroSection() {
                 <Button
                   size="lg"
                   variant="outline"
-                  className="rounded-full border-slate-200 bg-white px-8 text-base text-slate-800 hover:bg-slate-50"
+                  className="rounded-full border-slate-200 bg-white px-8 text-base text-slate-800 hover:bg-secondary hover:text-white hover:border-secondary transition-colors duration-200"
                 >
                   <Play className="mr-2 h-5 w-5" />
                   Learn Our Approach

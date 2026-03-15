@@ -180,7 +180,7 @@ export function ContactForm() {
 
             <Button
               type="submit"
-              className="w-full bg-primary hover:bg-primary/90"
+              className="w-full bg-primary hover:bg-[#0056b3] transition-colors duration-200"
               size="lg"
               disabled={isSubmitting}
             >

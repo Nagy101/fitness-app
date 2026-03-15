@@ -119,7 +119,7 @@ const BlogCard = React.memo<BlogCardProps>(
             <Button
               asChild
               size="sm"
-              className="h-10 rounded-full bg-blue-600 px-4 text-sm font-semibold text-white shadow-sm transition-all duration-300 hover:bg-blue-700 hover:shadow-md"
+              className="h-10 rounded-full bg-blue-600 px-4 text-sm font-semibold text-white shadow-sm transition-all duration-300 hover:bg-[#0056b3] hover:shadow-md"
             >
               <Link href={`/blog/${blog.id}`}>
                 Read Story

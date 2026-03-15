@@ -200,7 +200,7 @@ export default function CheckoutPage() {
             <p className="text-lg text-gray-600">
               Add some items to your cart before checking out.
             </p>
-            <Button asChild size="lg" className="bg-blue-600 hover:bg-blue-700">
+            <Button asChild size="lg" className="bg-blue-600 hover:bg-[#0056b3] transition-colors duration-200">
               <Link href="/products">
                 <ArrowLeft className="h-4 w-4 mr-2" />
                 Continue Shopping
@@ -308,7 +308,7 @@ export default function CheckoutPage() {
                     <Button
                       asChild
                       size="lg"
-                      className="w-full bg-blue-600 hover:bg-blue-700 shadow-md hover:shadow-lg transition-all"
+                      className="w-full bg-blue-600 hover:bg-[#0056b3] transition-colors duration-200 shadow-md hover:shadow-lg"
                     >
                       <Link
                         href="https://ipn.eg/S/shehab_1/instapay/2MI6ho"

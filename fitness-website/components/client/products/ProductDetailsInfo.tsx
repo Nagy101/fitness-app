@@ -126,7 +126,7 @@ const ProductDetailsInfo = React.memo<ProductDetailsInfoProps>(
                 size="icon"
                 variant="outline"
                 onClick={onShare}
-                className="rounded-full w-10 h-10 border-slate-200 text-slate-500 hover:bg-blue-600 hover:text-white hover:border-blue-600 shadow-sm hover:shadow focus-visible:ring-2 focus-visible:ring-blue-500 transition-all duration-200"
+                className="rounded-full w-10 h-10 border-slate-200 text-slate-500 hover:bg-[#0056b3] hover:text-white hover:border-[#0056b3] shadow-sm hover:shadow focus-visible:ring-2 focus-visible:ring-blue-500 transition-all duration-200"
                 title="Share product"
               >
                 <Share2 className="w-5 h-5" />
@@ -179,7 +179,7 @@ const ProductDetailsInfo = React.memo<ProductDetailsInfoProps>(
                   variant="ghost"
                   onClick={handleQuantityDecrease}
                   disabled={!inStock || quantity <= 1}
-                  className="rounded-lg h-10 w-10 text-slate-600 hover:bg-blue-600 hover:text-white hover:shadow-sm disabled:opacity-30 transition-all"
+                  className="rounded-lg h-10 w-10 text-slate-600 hover:bg-[#0056b3] hover:text-white hover:shadow-sm disabled:opacity-30 transition-all"
                   aria-label="Decrease quantity"
                 >
                   <Minus className="w-4 h-4" />
@@ -201,7 +201,7 @@ const ProductDetailsInfo = React.memo<ProductDetailsInfoProps>(
                   variant="ghost"
                   onClick={handleQuantityIncrease}
                   disabled={!inStock || quantity >= 50}
-                  className="rounded-lg h-10 w-10 text-slate-600 hover:bg-blue-600 hover:text-white hover:shadow-sm transition-all disabled:opacity-30"
+                  className="rounded-lg h-10 w-10 text-slate-600 hover:bg-[#0056b3] hover:text-white hover:shadow-sm transition-all disabled:opacity-30"
                   aria-label="Increase quantity"
                 >
                   <Plus className="w-4 h-4" />
@@ -214,7 +214,7 @@ const ProductDetailsInfo = React.memo<ProductDetailsInfoProps>(
                 <ProtectedAction onAction={onAddToCart}>
                   <Button
                     size="lg"
-                    className="w-full h-14 text-lg font-bold bg-blue-600 hover:bg-blue-700 text-white rounded-xl shadow-blue-100 shadow-lg hover:shadow-blue-200 transition-all duration-300 flex items-center justify-center gap-3"
+                    className="w-full h-14 text-lg font-bold bg-blue-600 hover:bg-[#0056b3] text-white rounded-xl shadow-blue-100 shadow-lg hover:shadow-blue-200 transition-all duration-300 flex items-center justify-center gap-3"
                   >
                     <ShoppingCart className="w-6 h-6" />
                     Add to Cart

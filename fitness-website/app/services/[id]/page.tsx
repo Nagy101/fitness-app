@@ -104,7 +104,7 @@ export default function ServiceDetailsPage() {
         let token: string | null = null;
         try {
           token = sessionStorage.getItem("token");
-        } catch {}
+        } catch { }
         if (!token) {
           setRequestStatus("none");
           return;
@@ -142,7 +142,7 @@ export default function ServiceDetailsPage() {
             (a, b) =>
               Number(b.request_id || b.id || 0) - Number(a.request_id || a.id || 0) ||
               new Date(b.created_at || 0).getTime() -
-                new Date(a.created_at || 0).getTime(),
+              new Date(a.created_at || 0).getTime(),
           )[0];
 
         if (!latest) {
@@ -204,7 +204,7 @@ export default function ServiceDetailsPage() {
       let token: string | null = null;
       try {
         token = sessionStorage.getItem("token");
-      } catch {}
+      } catch { }
       if (!token) {
         setSubmitError("You must be logged in to book.");
         return;
@@ -299,7 +299,7 @@ export default function ServiceDetailsPage() {
             </p>
             <Button
               onClick={() => router.push("/services")}
-              className="bg-blue-600 hover:bg-blue-700"
+              className="bg-blue-600 hover:bg-[#0056b3] transition-colors duration-200"
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back to Services
@@ -479,7 +479,7 @@ export default function ServiceDetailsPage() {
               >
                 <Button
                   size="lg"
-                  className="w-full sm:w-auto bg-primary hover:bg-primary/90"
+                  className="w-full sm:w-auto bg-primary hover:bg-[#0056b3] transition-colors duration-200"
                   disabled={
                     requestStatus === "pending" || requestStatus === "approved"
                   }

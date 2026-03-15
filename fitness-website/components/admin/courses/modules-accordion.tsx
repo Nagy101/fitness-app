@@ -127,7 +127,7 @@ export const ModulesAccordion = React.memo<ModulesAccordionProps>(
                       <Button
                         size="sm"
                         onClick={() => onCreateChapter(module)}
-                        className="bg-blue-600 hover:bg-blue-700 h-9 w-full sm:w-auto transition-all duration-200 shadow-sm hover:shadow"
+                        className="bg-blue-600 hover:bg-[#0056b3] h-9 w-full sm:w-auto transition-all duration-200 shadow-sm hover:shadow"
                       >
                         <Plus className="h-4 w-4 mr-1" /> Add Chapter
                       </Button>

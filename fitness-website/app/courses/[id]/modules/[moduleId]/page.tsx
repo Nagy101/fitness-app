@@ -81,7 +81,7 @@ const ModuleDetailsPage = React.memo(() => {
             <AlertCircle className="h-16 w-16 text-red-600 mx-auto mb-4" />
             <h2 className="text-2xl font-bold text-gray-900 mb-2">Module Not Found</h2>
             <p className="text-gray-600 mb-6">The module you are looking for does not exist or has been removed.</p>
-            <Button onClick={handleBack} className="bg-blue-600 hover:bg-blue-700">
+            <Button onClick={handleBack} className="bg-blue-600 hover:bg-[#0056b3] transition-colors duration-200">
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back to Course
             </Button>

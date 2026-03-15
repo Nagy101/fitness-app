@@ -84,7 +84,7 @@ const ChapterNavigationSection = React.memo<ChapterNavigationSectionProps>(({
           {/* Next Chapter */}
           {nextChapter ? (
             <Link href={`/courses/${courseId}/modules/${moduleId}/chapters/${nextChapter.chapter_id}`}>
-              <Button className="w-full justify-between text-left h-auto p-4 bg-primary hover:bg-primary/90">
+              <Button className="w-full justify-between text-left h-auto p-4 bg-primary hover:bg-[#0056b3]">
                 <div className="min-w-0">
                   <div className="text-xs text-primary-foreground/80 mb-1">Next Chapter</div>
                   <div className="font-semibold text-primary-foreground truncate">{nextChapter.title}</div>

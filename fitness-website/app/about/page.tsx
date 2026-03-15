@@ -144,7 +144,7 @@ const FeatureCard = ({
 }) => (
   <Card className="text-center p-8 border border-slate-200/70 shadow-sm hover:-translate-y-1 hover:shadow-[0_18px_45px_rgba(15,23,42,0.08)] transition-all duration-300 bg-white group rounded-[1.75rem]">
     <CardContent className="p-0 flex flex-col items-center">
-      <div className="w-16 h-16 rounded-2xl mb-6 bg-primary/10 text-primary flex items-center justify-center group-hover:scale-110 group-hover:bg-secondary group-hover:text-white transition-all duration-300">
+      <div className="w-16 h-16 rounded-2xl mb-6 bg-primary/10 text-primary flex items-center justify-center group-hover:scale-110 group-hover:bg-[#0056b3] group-hover:text-white transition-all duration-300">
         <Icon className="w-8 h-8" />
       </div>
       <h3 className="text-xl font-bold mb-3 text-slate-900">{title}</h3>
@@ -174,7 +174,7 @@ export default function AboutPage() {
                 badgeProps={{
                   variant: "secondary",
                   className:
-                    "bg-primary/10 text-primary hover:bg-primary/15 transition-colors uppercase tracking-wider py-1 px-3",
+                    "bg-primary/10 text-primary hover:bg-[#0056b3] hover:text-white transition-colors uppercase tracking-wider py-1 px-3",
                 }}
                 titleClassName="text-4xl lg:text-6xl font-extrabold tracking-tight text-slate-900 leading-tight"
                 highlightClassName="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary"
@@ -183,14 +183,14 @@ export default function AboutPage() {
               <div className="flex flex-col sm:flex-row gap-4 pt-4">
                 <Button
                   size="lg"
-                  className="bg-primary hover:bg-secondary shadow-sm text-base rounded-full px-7"
+                  className="bg-primary hover:bg-[#0056b3] shadow-sm text-base rounded-full px-7 transition-colors duration-200"
                 >
                   Join Our Community
                 </Button>
                 <Button
                   size="lg"
                   variant="outline"
-                  className="border-slate-200 bg-white text-slate-700 hover:bg-slate-50 text-base rounded-full px-7"
+                  className="border-slate-200 bg-white text-slate-700  text-base rounded-full px-7"
                 >
                   Meet Our Team
                 </Button>
@@ -371,12 +371,12 @@ export default function AboutPage() {
               >
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between mb-4">
-                    <div className="w-12 h-12 rounded-xl bg-secondary/10 flex items-center justify-center text-secondary">
+                    <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
                       <milestone.icon className="w-6 h-6" />
                     </div>
                     <Badge
                       variant="outline"
-                      className="border-secondary/30 text-secondary bg-secondary/10 font-bold tracking-wide"
+                      className="border-primary/30 text-primary bg-primary/10 font-bold tracking-wide"
                     >
                       {milestone.year}
                     </Badge>
@@ -405,10 +405,10 @@ export default function AboutPage() {
             {TEAM_MEMBERS.map((member, idx) => (
               <Card
                 key={idx}
-                className="border-transparent shadow-sm hover:shadow-xl hover:border-secondary/20 transition-all duration-300 bg-slate-50/50 group rounded-[1.5rem]"
+                className="border-transparent shadow-sm hover:shadow-xl transition-all duration-300 bg-slate-50/50 group rounded-[1.5rem]"
               >
                 <CardContent className="p-6 md:p-8 text-center">
-                  <div className="w-24 h-24 rounded-full bg-gradient-to-tr from-primary/15 to-secondary/15 mx-auto mb-6 flex items-center justify-center group-hover:scale-105 transition-transform duration-300 ring-4 ring-white shadow-inner">
+                  <div className="w-24 h-24 rounded-full bg-gradient-to-tr  mx-auto mb-6 flex items-center justify-center group-hover:scale-105 transition-transform duration-300 ring-4 ring-white shadow-inner">
                     <Users className="w-10 h-10 text-primary/70" />
                   </div>
                   <h3 className="text-xl font-bold text-slate-900 mb-1">
@@ -471,7 +471,7 @@ export default function AboutPage() {
             <Button
               asChild
               size="lg"
-              className="h-14 px-8 bg-blue-600 hover:bg-blue-500 text-white text-lg rounded-xl shadow-lg shadow-blue-900/40 transition-all font-semibold w-full sm:w-auto"
+              className="h-14 px-8 bg-blue-600 hover:bg-[#0056b3] text-white text-lg rounded-xl shadow-lg shadow-blue-900/40 transition-all font-semibold w-full sm:w-auto"
             >
               <Link href="/courses">Start Your Journey Now</Link>
             </Button>

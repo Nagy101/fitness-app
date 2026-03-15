@@ -135,12 +135,12 @@ const BlogPostClientPage = React.memo<BlogPostClientPageProps>(
                 <Button
                   onClick={() => router.back()}
                   variant="outline"
-                  className="border-slate-200 bg-white text-primary hover:bg-primary/5"
+                  className="border-slate-200 bg-white text-primary hover:bg-slate-50"
                 >
                   Go Back
                 </Button>
                 <Link href="/blog">
-                  <Button className="bg-primary hover:bg-primary/90 text-white">
+                  <Button className="bg-primary hover:bg-[#0056b3] text-white">
                     Browse All Blogs
                   </Button>
                 </Link>
@@ -226,7 +226,7 @@ const BlogPostClientPage = React.memo<BlogPostClientPageProps>(
                   {blogStats.hasVideo && (
                     <>
                       <Button
-                        className="rounded-full bg-primary px-6 text-white shadow-sm hover:bg-primary/90"
+                        className="rounded-full bg-primary px-6 text-white shadow-sm hover:bg-[#0056b3]"
                         onClick={onWatchClick}
                       >
                         <Play className="mr-2 h-4 w-4" />
@@ -353,7 +353,7 @@ const BlogPostClientPage = React.memo<BlogPostClientPageProps>(
                   {blogStats.hasVideo && (
                     <div className="space-y-2">
                       <Button
-                        className="w-full rounded-full bg-primary text-white hover:bg-primary/90"
+                        className="w-full rounded-full bg-primary text-white hover:bg-[#0056b3]"
                         onClick={onWatchClick}
                       >
                         <Play className="mr-2 h-4 w-4" />
@@ -426,7 +426,7 @@ const BlogPostClientPage = React.memo<BlogPostClientPageProps>(
                 <Button
                   variant="outline"
                   onClick={handleCloseModal}
-                  className="border-slate-200 bg-white text-primary hover:text-primary/80 hover:bg-primary/5"
+                  className="border-slate-200 bg-white text-primary hover:bg-slate-50"
                 >
                   Close
                 </Button>

@@ -49,7 +49,7 @@ export default function ProductsHeroSection({
               <Button
                 asChild
                 size="lg"
-                className="rounded-full bg-primary px-6 text-white hover:bg-secondary"
+                className="rounded-full bg-primary px-6 text-white hover:bg-[#0056b3] transition-colors duration-200"
               >
                 <Link href="#product-catalog">
                   Shop Collection
@@ -60,7 +60,7 @@ export default function ProductsHeroSection({
                 asChild
                 variant="outline"
                 size="lg"
-                className="rounded-full border-slate-300 bg-white px-6 text-slate-800 hover:bg-slate-50"
+                className="rounded-full border-slate-300 bg-white px-6 text-slate-800 hover:bg-secondary hover:text-white hover:border-secondary transition-colors duration-200"
               >
                 <Link href="/favorites">View Favorites</Link>
               </Button>

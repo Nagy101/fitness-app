@@ -187,7 +187,7 @@ const ModuleChaptersSection = React.memo<ModuleChaptersSectionProps>(({
                   Ready to continue your learning journey?
                 </p>
                 <Link href={`/courses/${courseId}/modules/${moduleId}/chapters/${sortedChapters[completedChapters.size]?.chapter_id}`}>
-                  <Button className="bg-primary hover:bg-primary/90 text-white">
+                  <Button className="bg-primary hover:bg-[#0056b3] text-white">
                     <Play className="w-4 h-4 mr-2" />
                     {completedChapters.size === 0 ? 'Start Module' : 'Continue Learning'}
                   </Button>

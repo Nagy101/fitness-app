@@ -68,7 +68,7 @@ const ProductGrid = React.memo<ProductGridProps>(
             <Button
               onClick={handleClearFilters}
               variant="outline"
-              className="rounded-xl border-slate-300 bg-white hover:bg-primary/5 hover:text-primary hover:border-primary/30"
+              className="rounded-xl border-slate-300 bg-white hover:bg-secondary hover:text-white hover:border-secondary"
             >
               Clear Filters
             </Button>

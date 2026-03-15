@@ -24,7 +24,7 @@ export function EmptyState({
       {actionText && actionHref && (
         <Link
           href={actionHref}
-          className="text-blue-600 hover:text-blue-800 font-medium transition-colors duration-200 inline-flex items-center gap-1"
+          className="text-primary hover:text-[#0056b3] font-medium transition-colors duration-200 inline-flex items-center gap-1"
         >
           {actionText} →
         </Link>

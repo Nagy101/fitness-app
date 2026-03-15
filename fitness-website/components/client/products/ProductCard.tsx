@@ -152,7 +152,7 @@ const ProductCard = React.memo<ProductCardProps>(
               className="col-span-2"
             >
               <Button
-                className="w-full h-11 text-sm font-semibold rounded-xl border border-slate-300 bg-white text-slate-800 hover:bg-primary/5 hover:text-primary hover:border-primary/30 transition-all duration-300"
+                className="w-full h-11 text-sm font-semibold rounded-xl border border-slate-300 bg-white text-slate-800 hover:bg-secondary hover:text-white hover:border-secondary transition-all duration-300"
                 size="lg"
               >
                 View Details
@@ -162,7 +162,7 @@ const ProductCard = React.memo<ProductCardProps>(
             {inStock ? (
               <ProtectedAction onAction={handleAddToCart}>
                 <Button
-                  className="col-span-2 w-full h-11 text-sm font-semibold rounded-xl shadow-sm hover:shadow-md transition-all duration-300 bg-primary hover:bg-secondary text-white"
+                  className="col-span-2 w-full h-11 text-sm font-semibold rounded-xl shadow-sm hover:shadow-md transition-all duration-300 bg-primary hover:bg-[#0056b3] text-white"
                   size="lg"
                 >
                   <ShoppingCart className="w-5 h-5 mr-2" />

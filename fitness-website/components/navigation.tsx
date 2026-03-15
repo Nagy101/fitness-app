@@ -3,7 +3,7 @@
 import { useState, memo } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, Heart } from "lucide-react";
+import { Menu, Heart, LayoutDashboard } from "lucide-react";
 import dynamic from "next/dynamic";
 
 // Dynamically import client-only heavy components to reduce initial bundle size
@@ -133,6 +133,26 @@ function NavigationInner() {
                         />
                       </Link>
                       <CartDrawer />
+                      {user && (
+                        <Link
+                          href="/dashboard"
+                          aria-label="Dashboard"
+                          className={`rounded-full p-2 border transition-colors ${
+                            pathname === "/dashboard" || pathname.startsWith("/dashboard/")
+                              ? "border-blue-500 text-blue-500"
+                              : "border-transparent text-gray-900 hover:text-blue-500 hover:border-blue-200"
+                          }`}
+                          onClick={() => setMobileMenuOpen(false)}
+                        >
+                          <LayoutDashboard
+                            className={`h-5 w-5 ${
+                              pathname === "/dashboard" || pathname.startsWith("/dashboard/")
+                                ? "text-blue-500"
+                                : ""
+                            }`}
+                          />
+                        </Link>
+                      )}
                       {user ? (
                         <UserMenu />
                       ) : (
@@ -161,7 +181,7 @@ function NavigationInner() {
                 className={`text-sm font-semibold leading-6 ${
                   pathname === item.href
                     ? "text-blue-600"
-                    : "text-gray-900 hover:text-blue-600"
+                    : "text-gray-900 hover:text-[#0056b3] transition-colors duration-200"
                 }`}
               >
                 {item.name}
@@ -187,6 +207,23 @@ function NavigationInner() {
               />
             </Link>
             <CartDrawer />
+            {user && (
+              <Link
+                href="/dashboard"
+                aria-label="Dashboard"
+                className={`rounded-full p-2 border transition-colors ${
+                  pathname === "/dashboard" || pathname.startsWith("/dashboard/")
+                    ? "border-blue-500 text-blue-500"
+                    : "border-transparent text-gray-700 hover:text-blue-500 hover:border-blue-200"
+                }`}
+              >
+                <LayoutDashboard
+                  className={`h-5 w-5 ${
+                    pathname === "/dashboard" || pathname.startsWith("/dashboard/") ? "text-blue-500" : ""
+                  }`}
+                />
+              </Link>
+            )}
             {user ? (
               <UserMenu />
             ) : (

@@ -97,7 +97,7 @@ const UnifiedPagination = React.memo<PaginationProps>(
             size="sm"
             onClick={() => onPageChange(currentPage - 1)}
             disabled={currentPage === 1}
-            className="border-gray-200 bg-white text-gray-700 hover:bg-primary/5 hover:text-primary hover:border-primary/30 disabled:opacity-50 transition-all duration-200 shadow-sm"
+            className="border-gray-200 bg-white text-gray-700 hover:bg-secondary hover:text-white hover:border-secondary disabled:opacity-50 transition-all duration-200 shadow-sm"
           >
             <ChevronLeft className="w-4 h-4 mr-1" />
             <span className="hidden sm:inline">Prev</span>
@@ -116,8 +116,8 @@ const UnifiedPagination = React.memo<PaginationProps>(
                     onClick={() => onPageChange(page as number)}
                     className={`min-w-[36px] h-9 transition-all duration-200 ${
                       currentPage === page
-                        ? "bg-primary hover:bg-secondary text-white shadow-md transform scale-105"
-                        : "border-gray-200 bg-white text-gray-600 hover:bg-primary/5 hover:text-primary hover:border-primary/30 hover:shadow-sm"
+                        ? "bg-primary hover:bg-[#0056b3] text-white shadow-md transform scale-105 transition-colors duration-200"
+                        : "border-gray-200 bg-white text-gray-600 hover:bg-secondary hover:text-white hover:border-secondary hover:shadow-sm"
                     }`}
                   >
                     {page}
@@ -131,7 +131,7 @@ const UnifiedPagination = React.memo<PaginationProps>(
             size="sm"
             onClick={() => onPageChange(currentPage + 1)}
             disabled={currentPage === totalPages}
-            className="border-gray-200 bg-white text-gray-700 hover:bg-primary/5 hover:text-primary hover:border-primary/30 disabled:opacity-50 transition-all duration-200 shadow-sm"
+            className="border-gray-200 bg-white text-gray-700 hover:bg-secondary hover:text-white hover:border-secondary disabled:opacity-50 transition-all duration-200 shadow-sm"
           >
             <span className="hidden sm:inline">Next</span>
             <ChevronRight className="w-4 h-4 ml-1" />

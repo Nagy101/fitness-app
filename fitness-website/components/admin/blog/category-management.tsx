@@ -248,7 +248,7 @@ export const CategoryManagement = React.memo(({
             </div>
             <Button
               onClick={openAddCategory}
-              className="bg-blue-600 hover:bg-blue-700 shadow-sm hover:shadow transition-all duration-200 rounded-lg font-medium"
+              className="bg-blue-600 hover:bg-[#0056b3] shadow-sm hover:shadow transition-all duration-200 rounded-lg font-medium"
             >
               <Plus className="h-4 w-4 mr-2" /> Manage Categories
             </Button>

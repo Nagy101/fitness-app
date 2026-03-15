@@ -124,7 +124,7 @@ const UnifiedPagination = React.memo<PaginationProps>(
             size="sm"
             onClick={() => onPageChange(currentPage - 1)}
             disabled={currentPage === 1}
-            className="border-gray-300 bg-white hover:bg-primary/5 hover:border-primary/30 disabled:opacity-50 transition-colors"
+            className="border-gray-300 bg-white hover:bg-secondary hover:text-white hover:border-secondary disabled:opacity-50 transition-colors"
           >
             <ChevronLeft className="w-4 h-4 mr-1" />
             <span className="hidden sm:inline">Prev</span>
@@ -141,7 +141,7 @@ const UnifiedPagination = React.memo<PaginationProps>(
                     variant={currentPage === page ? "default" : "outline"}
                     size="sm"
                     onClick={() => onPageChange(page as number)}
-                    className={`min-w-[36px] h-9 transition-all ${currentPage === page ? "bg-primary hover:bg-primary/90 text-white shadow-sm" : "border-gray-300 bg-white hover:bg-primary/5 hover:border-primary/30"}`}
+                    className={`min-w-[36px] h-9 transition-all ${currentPage === page ? "bg-primary hover:bg-[#0056b3] text-white shadow-sm" : "border-gray-300 bg-white hover:bg-secondary hover:text-white hover:border-secondary"}`}
                   >
                     {page}
                   </Button>
@@ -154,7 +154,7 @@ const UnifiedPagination = React.memo<PaginationProps>(
             size="sm"
             onClick={() => onPageChange(currentPage + 1)}
             disabled={currentPage === totalPages}
-            className="border-gray-300 bg-white hover:bg-primary/5 hover:border-primary/30 disabled:opacity-50 transition-colors"
+            className="border-gray-300 bg-white hover:bg-secondary hover:text-white hover:border-secondary disabled:opacity-50 transition-colors"
           >
             <span className="hidden sm:inline">Next</span>
             <ChevronRight className="w-4 h-4 ml-1" />
@@ -251,7 +251,7 @@ const BlogClientPage = React.memo<BlogPageProps>(
               <div className="space-y-3">
                 <Button
                   onClick={handleRefresh}
-                  className="px-6 bg-primary hover:bg-primary/90"
+                  className="px-6 bg-primary hover:bg-[#0056b3] transition-colors"
                 >
                   Retry Loading
                 </Button>

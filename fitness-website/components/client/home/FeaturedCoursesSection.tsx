@@ -143,7 +143,7 @@ const FeaturedCoursesSection = React.memo<FeaturedCoursesSectionProps>(
                         {formatNumber(course.price)} EGP
                       </span>
                       <ProtectedAction onAction={() => onEnrollment(course)}>
-                        <Button className="rounded-full bg-primary text-white hover:bg-secondary">
+                        <Button className="rounded-full bg-primary text-white hover:bg-[#0056b3] transition-colors duration-200">
                           <Play className="h-4 w-4 mr-2" />
                           Enroll Now
                         </Button>
@@ -166,7 +166,7 @@ const FeaturedCoursesSection = React.memo<FeaturedCoursesSectionProps>(
               <Button
                 variant="outline"
                 size="lg"
-                className="inline-flex items-center gap-2 rounded-full border-slate-200 bg-white hover:bg-slate-50"
+                className="inline-flex items-center gap-2 rounded-full border-slate-200 bg-white hover:bg-secondary hover:text-white hover:border-secondary transition-colors duration-200"
               >
                 View All Courses
                 <ArrowRight className="h-5 w-5" />

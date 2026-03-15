@@ -53,7 +53,7 @@ export const CategoryFilter = React.memo<CategoryFilterProps>(({
             className={`whitespace-nowrap px-4 py-2 rounded-full border text-sm transition-colors shadow-sm ${
               selectedCategory === "all"
                 ? "bg-indigo-600 text-white border-indigo-600"
-                : "bg-white text-slate-700 border-slate-200 hover:bg-slate-50"
+                : "bg-white text-slate-700 border-slate-200 hover:bg-secondary hover:text-white hover:border-secondary transition-colors duration-200"
             }`}
           >
             All
@@ -66,7 +66,7 @@ export const CategoryFilter = React.memo<CategoryFilterProps>(({
               className={`whitespace-nowrap px-4 py-2 rounded-full border text-sm transition-colors shadow-sm ${
                 selectedCategory === String(cat.category_id)
                   ? "bg-indigo-600 text-white border-indigo-600"
-                  : "bg-white text-slate-700 border-slate-200 hover:bg-slate-50"
+                  : "bg-white text-slate-700 border-slate-200 hover:bg-secondary hover:text-white hover:border-secondary transition-colors duration-200"
               }`}
             >
               <span className="inline-block max-w-[180px] truncate align-bottom" title={cat.name}>
@@ -78,7 +78,7 @@ export const CategoryFilter = React.memo<CategoryFilterProps>(({
           {overflowCategories.length > 0 && (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <button className="whitespace-nowrap px-4 py-2 rounded-full border text-sm transition-colors shadow-sm bg-white text-slate-700 border-slate-200 hover:bg-slate-50">
+                <button className="whitespace-nowrap px-4 py-2 rounded-full border text-sm transition-all duration-200 shadow-sm bg-white text-slate-700 border-slate-200 hover:bg-secondary hover:text-white hover:border-secondary">
                   +{overflowCategories.length} more
                 </button>
               </DropdownMenuTrigger>

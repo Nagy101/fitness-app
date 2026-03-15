@@ -75,7 +75,7 @@ export function useCourseRequests() {
           text: "Enroll Now",
           disabled: false,
           className:
-            "w-full bg-primary hover:bg-primary/90 text-white font-semibold py-3 text-lg",
+            "w-full bg-primary hover:bg-[#0056b3] text-white font-semibold py-3 text-lg transition-colors duration-200",
           icon: "ShoppingCart",
         };
       }
@@ -102,7 +102,7 @@ export function useCourseRequests() {
             text: "Request Again",
             disabled: false,
             className:
-              "w-full bg-primary hover:bg-primary/90 text-white font-semibold py-3 text-lg",
+              "w-full bg-primary hover:bg-[#0056b3] text-white font-semibold py-3 text-lg transition-colors duration-200",
             icon: "ShoppingCart",
           };
         default:
@@ -110,7 +110,7 @@ export function useCourseRequests() {
             text: "Enroll Now",
             disabled: false,
             className:
-              "w-full bg-primary hover:bg-primary/90 text-white font-semibold py-3 text-lg",
+              "w-full bg-primary hover:bg-[#0056b3] text-white font-semibold py-3 text-lg transition-colors duration-200",
             icon: "ShoppingCart",
           };
       }
