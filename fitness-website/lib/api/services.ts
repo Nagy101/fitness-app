@@ -144,6 +144,13 @@ export const servicesApi = {
             : [],
         category: raw.category || raw.category_name || undefined,
         created_at: raw.created_at,
+        is_subscribed: Boolean(raw.is_subscribed),
+        training_request_status:
+          raw.training_request_status === "approved" ||
+          raw.training_request_status === "pending" ||
+          raw.training_request_status === "cancelled"
+            ? raw.training_request_status
+            : null,
       };
     } catch (error: any) {
       if (error?.status === 404) return null;

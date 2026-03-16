@@ -72,7 +72,8 @@ export function getUserHttpClient(): AxiosInstance {
 
   userClient.interceptors.request.use((config) => {
     if (typeof window !== "undefined") {
-      const token = sessionStorage.getItem("token");
+      const token =
+        sessionStorage.getItem("token") || localStorage.getItem("userAuth");
       if (token) {
         config.headers = config.headers || {};
         (config.headers as Record<string, string>).Authorization =

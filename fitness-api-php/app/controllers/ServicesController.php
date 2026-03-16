@@ -2,14 +2,19 @@
   namespace App\Controllers;
 
   use App\Core\AbstractController;
+  use App\Core\JWTHandler;
   use App\models\Service;
+  use App\models\TrainingRequest;
   
   class ServicesController extends AbstractController{
     /** @var Service */
     private $serviceModel;
+    /** @var TrainingRequest */
+    private $trainingRequestModel;
 
     public function __construct(){
       $this->serviceModel = new Service();
+      $this->trainingRequestModel = new TrainingRequest();
     }
     public function getAll(){
       $Services = $this->serviceModel->getAll();
@@ -41,11 +46,41 @@
       // نشيل admin_id من كل Service
       unset($Service['admin_id']);
 
+      $userId = $this->getUserIdFromAuthorizationHeader();
+      $serviceTitle = $Service['title'] ?? null;
+      $status = null;
+      $isSubscribed = false;
+
+      if ($userId !== null) {
+        $status = $this->trainingRequestModel->getLatestRequestStatusForService($userId, $id, $serviceTitle);
+        $isSubscribed = $status === 'approved';
+      }
+
+      $Service['training_request_status'] = $status;
+      $Service['is_subscribed'] = $isSubscribed;
+
       return $this->json([
         "status" => "success",
         "Service" => $Service
       ]);
   }
+
+    private function getUserIdFromAuthorizationHeader() {
+      $headers = function_exists('getallheaders') ? getallheaders() : [];
+      $authHeader = $headers['Authorization'] ?? ($headers['authorization'] ?? '');
+
+      if (!$authHeader || !preg_match('/Bearer\s(\S+)/', $authHeader, $matches)) {
+        return null;
+      }
+
+      $decoded = JWTHandler::verifyToken($matches[1]);
+
+      if (!$decoded || !isset($decoded->id)) {
+        return null;
+      }
+
+      return (int) $decoded->id;
+    }
 
       public function searchService(){
       $data = json_decode(file_get_contents("php://input"),true);

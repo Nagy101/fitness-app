@@ -24,6 +24,8 @@ export interface ClientService {
   features?: string[];
   category?: string;
   created_at?: string;
+  is_subscribed?: boolean;
+  training_request_status?: "pending" | "approved" | "cancelled" | null;
 }
 
 export interface ServiceFeature {

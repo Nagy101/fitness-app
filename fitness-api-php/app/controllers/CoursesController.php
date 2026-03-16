@@ -2,6 +2,7 @@
   namespace App\Controllers;
 
   use App\Core\AbstractController;
+  use App\Core\JWTHandler;
   use App\models\Courses;
   use App\models\CoursesRequest;
   use App\models\Modules;
@@ -53,40 +54,51 @@
         return;
     }
 
-    // هات الموديولات
-    $modules = $this->modulModel->getModulesByCrsId($id);
+    $userId = $this->getUserIdFromAuthorizationHeader();
+    $isSubscribed = false;
 
-    foreach ($modules as &$module) {
+    if ($userId !== null) {
+      $isSubscribed = $this->requestModel->hasApprovedRequest($userId, $id);
+    }
+
+    $modules = [];
+    if ($isSubscribed) {
+      // هات الموديولات
+      $modules = $this->modulModel->getModulesByCrsId($id);
+
+      foreach ($modules as &$module) {
         // هات الشابترز الخاصة بالموديول ده
         $chapters = $this->chapterModel->getChaptersByModId($module['module_id']);
 
         // ترتيب الشابترز بالـ order_number
         usort($chapters, function($a, $b) {
-            return $a['order_number'] <=> $b['order_number'];
+          return $a['order_number'] <=> $b['order_number'];
         });
 
         // تنسيق التواريخ للشابترز
         foreach ($chapters as &$ch) {
-            if (!empty($ch['created_at'])) {
-                $ch['created_at'] = date('c', strtotime($ch['created_at'])); // ISO 8601
+          if (!empty($ch['created_at'])) {
+            $ch['created_at'] = date('c', strtotime($ch['created_at'])); // ISO 8601
+          }
             }
-        }
 
         $module['chapters'] = $chapters;
 
         // تنسيق تاريخ الموديول
         if (!empty($module['created_at'])) {
-            $module['created_at'] = date('c', strtotime($module['created_at']));
+          $module['created_at'] = date('c', strtotime($module['created_at']));
         }
-    }
+        }
 
-    // ترتيب الموديولات بالـ order_number
-    usort($modules, function($a, $b) {
+      // ترتيب الموديولات بالـ order_number
+      usort($modules, function($a, $b) {
         return $a['order_number'] <=> $b['order_number'];
-    });
+      });
+    }
 
     // ضيف الموديولات للكورس
     $Course['modules'] = $modules;
+    $Course['is_subscribed'] = $isSubscribed;
     $Course['students_count'] = $this->requestModel->countApprovedByCourseId($id);
 
     // تنسيق تاريخ الكورس
@@ -99,6 +111,24 @@
         "Course" => $Course
     ]);
     }
+
+    private function getUserIdFromAuthorizationHeader() {
+      $headers = function_exists('getallheaders') ? getallheaders() : [];
+      $authHeader = $headers['Authorization'] ?? ($headers['authorization'] ?? '');
+
+      if (!$authHeader || !preg_match('/Bearer\s(\S+)/', $authHeader, $matches)) {
+        return null;
+      }
+
+      $decoded = JWTHandler::verifyToken($matches[1]);
+
+      if (!$decoded || !isset($decoded->id)) {
+        return null;
+      }
+
+      return (int) $decoded->id;
+    }
+
       public function searchCourse(){
       $data = json_decode(file_get_contents("php://input"),true);
       if(!isset($data["keyword"])){

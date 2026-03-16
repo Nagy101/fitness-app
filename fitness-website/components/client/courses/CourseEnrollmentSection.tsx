@@ -56,14 +56,64 @@ interface CourseEnrollmentSectionProps {
   onEnrollment?: (course: Course) => void;
 }
 
+type EnrollmentStatus = "pending" | "approved" | "cancelled" | null;
+
+function getEffectiveEnrollmentButtonState(
+  isSubscribed: boolean,
+  status: EnrollmentStatus,
+) {
+  if (!isSubscribed) {
+    return {
+      text: "Enroll Now",
+      disabled: false,
+      className:
+        "w-full bg-primary hover:bg-[#0056b3] text-white font-semibold py-3 text-lg transition-colors duration-200",
+      icon: "ShoppingCart",
+    };
+  }
+
+  switch (status) {
+    case "approved":
+      return {
+        text: "Enrolled",
+        disabled: true,
+        className:
+          "w-full bg-green-600 text-white font-semibold py-3 text-lg cursor-not-allowed",
+        icon: "CheckCircle",
+      };
+    case "pending":
+      return {
+        text: "Request Pending",
+        disabled: true,
+        className:
+          "w-full bg-yellow-600 text-white font-semibold py-3 text-lg cursor-not-allowed",
+        icon: "Eye",
+      };
+    case "cancelled":
+      return {
+        text: "Request Again",
+        disabled: false,
+        className:
+          "w-full bg-primary hover:bg-[#0056b3] text-white font-semibold py-3 text-lg transition-colors duration-200",
+        icon: "ShoppingCart",
+      };
+    default:
+      return {
+        text: "Enroll Now",
+        disabled: false,
+        className:
+          "w-full bg-primary hover:bg-[#0056b3] text-white font-semibold py-3 text-lg transition-colors duration-200",
+        icon: "ShoppingCart",
+      };
+  }
+}
+
 const CourseEnrollmentSection = React.memo<CourseEnrollmentSectionProps>(
   ({ course, onEnrollment }) => {
     const { user } = useAuth();
     const { makeAuthenticatedRequest } = useUserApi();
     const {
       getCourseRequestStatus,
-      canEnroll,
-      getEnrollmentButtonState,
       refetch,
     } = useCourseRequests();
 
@@ -99,16 +149,24 @@ const CourseEnrollmentSection = React.memo<CourseEnrollmentSectionProps>(
 
     // Get current course request status
     const { isSubscribed, status } = getCourseRequestStatus(course.course_id);
-    const buttonState = getEnrollmentButtonState(course.course_id);
-    const canEnrollInCourse = canEnroll(course.course_id);
+    const hasBackendAccess = Boolean(course.is_subscribed);
+    const effectiveIsSubscribed = hasBackendAccess || isSubscribed;
+    const effectiveStatus: EnrollmentStatus =
+      hasBackendAccess && status !== "approved" ? "approved" : status;
+    const canEnrollInCourse =
+      !effectiveIsSubscribed || effectiveStatus === "cancelled";
+    const buttonState = getEffectiveEnrollmentButtonState(
+      effectiveIsSubscribed,
+      effectiveStatus,
+    );
 
     const openEnroll = () => {
       // Check if user can enroll
       if (!canEnrollInCourse) {
-        if (status === "approved") {
+        if (effectiveStatus === "approved") {
           toast.info("You are already enrolled in this course!");
           return;
-        } else if (status === "pending") {
+        } else if (effectiveStatus === "pending") {
           toast.info("Your enrollment request is pending admin approval.");
           return;
         }
@@ -202,42 +260,42 @@ const CourseEnrollmentSection = React.memo<CourseEnrollmentSectionProps>(
             </Button>
 
             {/* Status Display */}
-            {isSubscribed && (
+            {effectiveIsSubscribed && (
               <div className="p-3 rounded-lg border text-sm">
                 <div className="flex items-center justify-between">
                   <span className="font-medium">Enrollment Status:</span>
                   <Badge
                     variant={
-                      status === "approved"
+                      effectiveStatus === "approved"
                         ? "default"
-                        : status === "pending"
+                        : effectiveStatus === "pending"
                           ? "secondary"
                           : "destructive"
                     }
                     className={
-                      status === "approved"
+                      effectiveStatus === "approved"
                         ? "bg-green-100 text-green-800"
-                        : status === "pending"
+                        : effectiveStatus === "pending"
                           ? "bg-yellow-100 text-yellow-800"
                           : "bg-red-100 text-red-800"
                     }
                   >
-                    {status === "approved"
+                    {effectiveStatus === "approved"
                       ? "Approved"
-                      : status === "pending"
+                      : effectiveStatus === "pending"
                         ? "Pending Review"
-                        : status === "cancelled"
+                        : effectiveStatus === "cancelled"
                           ? "Cancelled"
                           : "Unknown"}
                   </Badge>
                 </div>
-                {status === "pending" && (
+                {effectiveStatus === "pending" && (
                   <p className="text-muted-foreground mt-2 text-xs">
                     Your enrollment request is being reviewed by our team.
                     You'll be notified once it's approved.
                   </p>
                 )}
-                {status === "cancelled" && (
+                {effectiveStatus === "cancelled" && (
                   <p className="text-muted-foreground mt-2 text-xs">
                     Your previous request was cancelled. You can submit a new
                     request.

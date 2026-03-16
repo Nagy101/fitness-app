@@ -100,6 +100,21 @@ class CoursesRequest{
     }
   }
 
+  public function hasApprovedRequest($userId, $courseId){
+    try {
+      $request = $this->db
+                  ->select("request_id")
+                  ->where("user_id", "=", $userId)
+                  ->andWhere("course_id", "=", $courseId)
+                  ->andWhere("status", "=", "approved")
+                  ->getRow();
+
+      return !empty($request);
+    } catch(Exception $e) {
+      return false;
+    }
+  }
+
   // update status or fields
   public function update($id,$data){
     try {

@@ -76,16 +76,36 @@ export default function ServiceDetailsPage() {
 
   // React Query handles fetching
   const serviceId = params?.id as string;
+  const mapBackendStatus = useCallback((rawStatus?: string | null) => {
+    const status = (rawStatus || "").toString().toLowerCase().trim();
+    if (status === "approved") return "approved" as const;
+    if (status === "pending") return "pending" as const;
+    if (status === "cancelled") return "cancelled" as const;
+    return "none" as const;
+  }, []);
+
   const {
     data: serviceData,
     isLoading: serviceLoading,
     error: serviceError,
   } = useServiceDetail(serviceId || "");
 
+  useEffect(() => {
+    // Prevent carrying over status from a previous service while route param changes.
+    setRequestStatus("none");
+    setJustSubmitted(false);
+  }, [serviceId]);
+
   // Sync React Query data into local state for the rest of the component
   useEffect(() => {
     if (serviceData) {
       setService(serviceData);
+      const backendStatus = mapBackendStatus(serviceData.training_request_status);
+      if (serviceData.is_subscribed) {
+        setRequestStatus("approved");
+      } else {
+        setRequestStatus(backendStatus);
+      }
       setLoading(false);
     } else if (serviceError) {
       setError((serviceError as Error)?.message || "Failed to load service");
@@ -94,7 +114,7 @@ export default function ServiceDetailsPage() {
     } else {
       setLoading(serviceLoading);
     }
-  }, [serviceData, serviceLoading, serviceError]);
+  }, [serviceData, serviceLoading, serviceError, mapBackendStatus]);
 
   // Fetch my training requests to show current status (pending/approved/cancelled)
   useEffect(() => {
@@ -135,8 +155,32 @@ export default function ServiceDetailsPage() {
             ? data
             : [];
 
+        const normalizedServiceId = (serviceId || "").toString().trim();
+        const normalizedServiceName = (service?.title || "")
+          .toString()
+          .toLowerCase()
+          .trim();
+
+        const serviceRequests = list.filter((req) => {
+          const reqServiceId = (req?.service_id ?? "").toString().trim();
+          const reqServiceName = (req?.service_name ?? "")
+            .toString()
+            .toLowerCase()
+            .trim();
+
+          if (normalizedServiceId && reqServiceId) {
+            return reqServiceId === normalizedServiceId;
+          }
+
+          if (normalizedServiceName && reqServiceName) {
+            return reqServiceName === normalizedServiceName;
+          }
+
+          return false;
+        });
+
         // Determine request status for this service only (latest matching request)
-        const latest = list
+        const latest = serviceRequests
           .slice()
           .sort(
             (a, b) =>
@@ -159,8 +203,15 @@ export default function ServiceDetailsPage() {
         setIsCheckingStatus(false);
       }
     };
+
+    // Backend is the source of truth when it provides status on singleService response.
+    if (serviceData?.is_subscribed || serviceData?.training_request_status) {
+      setIsCheckingStatus(false);
+      return;
+    }
+
     fetchMyRequests();
-  }, [serviceId, service?.title]);
+  }, [serviceId, service?.title, serviceData?.is_subscribed, serviceData?.training_request_status]);
 
   const priceFormatted = useMemo(() => {
     const p = service?.price ?? 0;
@@ -219,6 +270,8 @@ export default function ServiceDetailsPage() {
 
         // Minimal snake_case payload to match likely DB columns and avoid unknown column errors
         const payload = {
+          service_id: service.id,
+          service_name: service.title,
           start_date: form.startDate,
           end_date: endDateStr,
           injury_details: form.injuryDetails || "",

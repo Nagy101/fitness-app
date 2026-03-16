@@ -125,6 +125,15 @@ export function normalizeHomeCourse(raw: Record<string, any>): HomeCourse {
 }
 
 export function normalizeService(item: Record<string, any>): ClientService {
+  const rawStatus = String(item.training_request_status || "")
+    .toLowerCase()
+    .trim();
+
+  const normalizedStatus =
+    rawStatus === "approved" || rawStatus === "pending" || rawStatus === "cancelled"
+      ? (rawStatus as "approved" | "pending" | "cancelled")
+      : null;
+
   return {
     id: parseInt(item.service_id || item.id, 10) || 0,
     title: item.name || item.title || "Unnamed Service",
@@ -138,6 +147,8 @@ export function normalizeService(item: Record<string, any>): ClientService {
       item.main_image_url ||
       null,
     created_at: item.created_at || "",
+    is_subscribed: Boolean(item.is_subscribed),
+    training_request_status: normalizedStatus,
   };
 }
 

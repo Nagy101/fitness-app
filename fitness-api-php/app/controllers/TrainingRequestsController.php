@@ -20,6 +20,18 @@ class TrainingRequestsController extends AbstractController {
 
     $data = json_decode(file_get_contents("php://input"), true);
     $data['user_id'] = $user['id'];
+
+    $serviceId = isset($data['service_id']) ? (string)$data['service_id'] : null;
+    $serviceName = isset($data['service_name']) ? trim((string)$data['service_name']) : null;
+
+    if (($serviceId === null || $serviceId === '') && ($serviceName === null || $serviceName === '')) {
+      return $this->sendError("Service context is required", 422);
+    }
+
+    if ($this->reqModel->hasApprovedRequestForService($data['user_id'], $serviceId, $serviceName)) {
+      return $this->sendError("You already have an approved training request for this service", 409);
+    }
+
     $ok = $this->reqModel->create($data);
     if (!$ok) 
       return $this->sendError("Cannot submit request",500);

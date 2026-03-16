@@ -33,6 +33,11 @@ const CourseDetailsClientPage = React.memo<CourseDetailsClientPageProps>(
       ? getCourseRequestStatus(state.course.course_id)
       : { isSubscribed: false, status: null };
 
+    const hasBackendAccess = Boolean(state.course?.is_subscribed);
+    const effectiveIsEnrolled = hasBackendAccess || isSubscribed;
+    const effectiveEnrollmentStatus =
+      hasBackendAccess && status !== "approved" ? "approved" : status;
+
     // Memoized handlers for better performance
     const handleBack = useCallback(() => {
       router.back();
@@ -157,8 +162,8 @@ const CourseDetailsClientPage = React.memo<CourseDetailsClientPageProps>(
             <CourseModulesSection
               modules={state.course.modules || []}
               courseId={courseId}
-              isEnrolled={isSubscribed}
-              enrollmentStatus={status}
+              isEnrolled={effectiveIsEnrolled}
+              enrollmentStatus={effectiveEnrollmentStatus}
             />
           </div>
         </div>
