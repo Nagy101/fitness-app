@@ -37,7 +37,6 @@ Duplicate this file and rename the copy to .env (or .env.local for local develop
 
 Update the value to match your running backend:
 
-مقتطف الرمز
 # Example for local development
 NEXT_PUBLIC_API_URL=http://localhost:8000
 ### 4. Run the Development Server
@@ -48,7 +47,7 @@ Open http://localhost:3000 in your browser to see the result.
 🚀 Production Deployment Guide
 If you are deploying this project to a live server (e.g., Vercel, VPS, cPanel with Node.js), follow these instructions to ensure a smooth deployment.
 
-1. Backend Pre-requisites
+### 1. Backend Pre-requisites
 Before building the frontend, ensure the backend is fully deployed:
 
 The database (tst_fitness.sql) is imported.
@@ -57,19 +56,19 @@ The backend domain is active (e.g., https://api.yourdomain.com).
 
 Images: Ensure that the uploads folder (containing product images like uploads/Products/...) is present in the backend's public directory so Next.js can fetch them.
 
-2. Frontend Environment Setup
+### 2. Frontend Environment Setup
 On your hosting platform, set the following environment variable before running the build process:
 
 NEXT_PUBLIC_API_URL = https://api.yourdomain.com (Replace with your actual backend URL)
 
-3. Build Command
+### 3. Build Command
 Run the following command to create an optimized production build:
 
 Bash
 npm run build
 (Note: The build process is strictly typed. It will check for TypeScript and ESLint errors to guarantee code stability in production.)
 
-4. Start the Production Server
+### 4. Start the Production Server
 Bash
 npm run start
 📂 Key Architecture Notes for Developers
