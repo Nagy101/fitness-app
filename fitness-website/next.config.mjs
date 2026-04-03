@@ -37,6 +37,12 @@ const nextConfig = {
       },
     ],
     remotePatterns: [
+      // 1. للإنتاج (Production) - يقبل أي صور من أي سيرفر آمن
+      {
+        protocol: "https",
+        hostname: "**",
+      },
+      // 2. للتطوير المحلي (Local Development) - بتاع جهازك
       {
         protocol: "http",
         hostname: "localhost",
@@ -49,6 +55,7 @@ const nextConfig = {
         port: "8000",
         pathname: "/**",
       },
+      // 3. صور خارجية إضافية (موجودة عندك)
       {
         protocol: "https",
         hostname: "images.unsplash.com",
@@ -130,8 +137,9 @@ const nextConfig = {
     ];
   },
   async rewrites() {
-    // Keep env handling consistent with lib/env.ts: prefer TARGET over BASE, fallback to localhost
+    // Keep env handling consistent with lib/env.ts: prefer NEXT_PUBLIC_API_URL over BASE, fallback to localhost
     const target =
+      process.env.NEXT_PUBLIC_API_URL ||
       process.env.NEXT_PUBLIC_API_TARGET_URL ||
       process.env.NEXT_PUBLIC_API_BASE_URL ||
       "http://localhost:8000";
